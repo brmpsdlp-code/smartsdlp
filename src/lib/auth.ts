@@ -7,6 +7,19 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  databaseHooks: {
+    session: {
+      create: {
+        async before(session) {
+          const user = await prisma.user.findUnique({
+            where: { id: session.userId },
+            select: { isActive: true },
+          });
+          return user?.isActive === true;
+        },
+      },
+    },
+  },
   emailAndPassword: {
     enabled: true,
     async sendResetPassword({ user, url }) {

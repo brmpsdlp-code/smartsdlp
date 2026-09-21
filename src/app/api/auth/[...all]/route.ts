@@ -8,7 +8,8 @@ export const GET = handler.GET;
 
 export async function POST(request: Request) {
   const url = new URL(request.url);
-  if (url.pathname.endsWith("/sign-up/email")) {
+  const normalizedPath = url.pathname.replace(/\/+/g, "/").toLowerCase().replace(/\/$/, "");
+  if (normalizedPath.startsWith("/api/auth/sign-up")) {
     return NextResponse.json(
       { message: "Pendaftaran publik dinonaktifkan. Hubungi administrator." },
       { status: 403 },
