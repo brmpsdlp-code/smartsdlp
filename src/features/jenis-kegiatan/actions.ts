@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { Prisma } from "@/generated/prisma/client";
 import { z } from "zod";
 
 const nameSchema = z.string().trim().min(1, "Nama jenis kegiatan wajib diisi");
@@ -65,15 +66,27 @@ export async function updateJenisKegiatan(input: { id: string; nama: string }) {
 export async function deleteJenisKegiatan(id: string) {
   const admin = await requireAdmin();
   if (admin.error) return { success: false as const, error: admin.error };
-  const target = await prisma.jenisKegiatan.findUnique({ where: { id }, include: { _count: { select: { kegiatan: true } } } });
-  if (!target) return { success: false as const, error: "Jenis kegiatan tidak ditemukan." };
-  if (isBuiltIn(target.nama)) {
-    return { success: false as const, error: "Jenis bawaan APBN dan NON_APBN tidak boleh dihapus." };
-  }
-  if (target._count.kegiatan > 0) {
-    return { success: false as const, error: "Jenis kegiatan masih dipakai kegiatan dan tidak boleh dihapus." };
-  }
-  await prisma.jenisKegiatan.delete({ where: { id } });
+  const result = await prisma.$transaction(async (tx) => {
+    const target = await tx.jenisKegiatan.findUnique({ where: { id } });
+    if (!target) return { success: false as const, error: "Jenis kegiatan tidak ditemukan." };
+    if (isBuiltIn(target.nama)) {
+      return { success: false as const, error: "Jenis bawaan APBN dan NON_APBN tidak boleh dihapus." };
+    }
+    const used = await tx.kegiatan.count({ where: { jenisKegiatanId: id } });
+    if (used > 0) {
+      return { success: false as const, error: "Jenis kegiatan masih dipakai kegiatan dan tidak boleh dihapus." };
+    }
+    try {
+      await tx.jenisKegiatan.delete({ where: { id } });
+      return { success: true as const };
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2003") {
+        return { success: false as const, error: "Jenis kegiatan masih dipakai kegiatan dan tidak dapat dihapus." };
+      }
+      throw error;
+    }
+  });
+  if (!result.success) return result;
   revalidatePath("/admin/jenis-kegiatan");
   revalidatePath("/admin/master");
   return { success: true as const };

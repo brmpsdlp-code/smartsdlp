@@ -7,6 +7,10 @@ async function main() {
   const dokumen = await prisma.dokumen.count();
   const jenisKegiatan = await prisma.jenisKegiatan.count();
   const kegiatanWithJenis = await prisma.kegiatan.count({ where: { jenisKegiatanId: { not: null } } });
+  const legacyKegiatan = await prisma.kegiatan.findMany({
+    select: { kode: true, jenis: true, jenisKegiatanId: true },
+    orderBy: { kode: "asc" },
+  });
   
   console.log(`User: ${users}`);
   console.log(`Kegiatan: ${kegiatan}`);
@@ -14,5 +18,6 @@ async function main() {
   console.log(`Dokumen: ${dokumen}`);
   console.log(`JenisKegiatan: ${jenisKegiatan}`);
   console.log(`Kegiatan dengan jenisKegiatanId terisi: ${kegiatanWithJenis} / ${kegiatan}`);
+  console.log("Kegiatan lama:", legacyKegiatan);
 }
 main().catch(console.error).finally(() => prisma.$disconnect());

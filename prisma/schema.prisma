@@ -125,7 +125,7 @@ model Kegiatan {
   nama            String
   jenis           JenisAnggaran?
   jenisKegiatanId String?
-  jenisKegiatan   JenisKegiatan? @relation(fields: [jenisKegiatanId], references: [id])
+  jenisKegiatan   JenisKegiatan? @relation(fields: [jenisKegiatanId], references: [id], onDelete: Restrict)
   programCategory String?
   pagu            BigInt
   realisasi       BigInt         @default(0)
