@@ -1,0 +1,231 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ── Enums ──────────────────────────────────────────────────────────────────
+
+enum UserRole {
+  ADMIN
+  USER
+
+  @@map("user_role")
+}
+
+// ── Auth Models (Better Auth Compatible) ──────────────────────────────────
+
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // SMART-SDLP Custom Fields
+  role      UserRole @default(USER)
+  nip       String?  @unique
+  jabatan   String?
+  unitKerja String?
+  isActive  Boolean  @default(true)
+
+  sessions          Session[]
+  accounts          Account[]
+  kegiatanSebagaiPJ Kegiatan[] @relation("KegiatanPJ")
+  laporanSubmitted  Laporan[]  @relation("LaporanSubmitter")
+  dokumenUploaded   Dokumen[]  @relation("DokumenUploader")
+  laporans          Laporan[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  issuer String
+
+  @@unique([issuer, accountId], map: "account_issuer_accountId_uidx")
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+enum JenisAnggaran {
+  APBN
+  NON_APBN
+}
+
+enum StatusAnggaran {
+  DIBUKA
+  DIBLOKIR
+
+  @@map("status_anggaran")
+}
+
+model JenisKegiatan {
+  id        String     @id @default(cuid())
+  nama      String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  kegiatan  Kegiatan[]
+
+  @@map("jenis_kegiatan")
+}
+
+model Kegiatan {
+  id              String         @id @default(cuid())
+  kode            String         @unique
+  nama            String
+  jenis           JenisAnggaran?
+  jenisKegiatanId String?
+  jenisKegiatan   JenisKegiatan? @relation(fields: [jenisKegiatanId], references: [id])
+  programCategory String?
+  pagu            BigInt
+  realisasi       BigInt         @default(0)
+  fisik           Int?           @default(0)
+  uraian          String?
+  statusAnggaran  StatusAnggaran @default(DIBUKA)
+  realLalu        BigInt?        @default(0)
+  realIni         BigInt?        @default(0)
+  wajib           Boolean        @default(false)
+  sudahLapor      Boolean        @default(false)
+
+  pjId String?
+  pj   User?   @relation("KegiatanPJ", fields: [pjId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  laporan   Laporan[]
+  dokumen   Dokumen[]
+
+  @@index([pjId])
+  @@index([kode])
+  @@map("kegiatan")
+}
+
+model Laporan {
+  id         String   @id @default(cuid())
+  kegiatanId String
+  kegiatan   Kegiatan @relation(fields: [kegiatanId], references: [id], onDelete: Cascade)
+
+  periodeBulan Int
+  periodeTahun Int
+
+  uraian         String
+  fisik          Float
+  statusAnggaran StatusAnggaran @default(DIBUKA)
+
+  realLalu  BigInt
+  realIni   BigInt
+  realisasi BigInt
+
+  submittedById String?
+  submittedBy   User?   @relation("LaporanSubmitter", fields: [submittedById], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+
+  @@unique([kegiatanId, periodeBulan, periodeTahun])
+  @@index([kegiatanId])
+  @@map("laporan")
+}
+
+model AuditLog {
+  id           String   @id @default(cuid())
+  action       String   @default("DELETE_LAPORAN")
+  namaFile     String
+  kodeKegiatan String
+  namaKegiatan String
+  pemilikNama  String
+  pemilikEmail String
+  adminNama    String
+  adminEmail   String
+  alasan       String
+  notifStatus  String   @default("Terkirim ke Email")
+  createdAt    DateTime @default(now())
+
+  @@map("audit_log")
+}
+
+enum KategoriDokumen {
+  SK
+  DIPA
+  KONTRAK
+  LAPORAN
+  ESURAT
+  LAINNYA
+
+  @@map("kategori_dokumen")
+}
+
+model Dokumen {
+  id       String          @id @default(cuid())
+  nama     String
+  kategori KategoriDokumen @default(SK)
+  fileUrl  String?
+  fileType String?         @default("pdf")
+  ukuran   String?         @default("1.2 MB")
+  tanggal  DateTime        @default(now())
+
+  kegiatanId String?
+  kegiatan   Kegiatan? @relation(fields: [kegiatanId], references: [id], onDelete: SetNull)
+
+  uploaderId String?
+  uploader   User?   @relation("DokumenUploader", fields: [uploaderId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([kegiatanId])
+  @@index([uploaderId])
+  @@map("dokumen")
+}
