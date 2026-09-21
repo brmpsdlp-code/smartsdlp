@@ -1,13 +1,12 @@
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
+import { getActiveSession } from "@/lib/active-session";
 import { prisma } from "@/lib/prisma";
 import { UserDashboard } from "@/components/UserDashboard";
 import type { Activity } from "@/types";
 
 export default async function DashboardPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) redirect("/login");
+  const session = await getActiveSession();
+  if (!session) redirect("/login?error=inactive");
 
   const now = new Date();
   const currentMonth = now.getMonth() + 1;

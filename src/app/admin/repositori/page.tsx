@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
+import { getActiveSession } from "@/lib/active-session";
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@/generated/prisma/client";
 import { RepositoriPage } from "@/components/RepositoriPage";
@@ -25,9 +24,9 @@ export default async function RepositoriRoute({
     kategori?: string;
   }>;
 }) {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getActiveSession();
 
-  if (!session) redirect("/login");
+  if (!session) redirect("/login?error=inactive");
   if (session.user.role?.toLowerCase() !== "admin") redirect("/dashboard");
 
   const params = await searchParams;

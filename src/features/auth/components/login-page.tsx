@@ -2,18 +2,23 @@
 
 import kemEntanLogo from "@/imports/Kementerian_Pertanian_Kementan_Logo.svg";
 import { signIn } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 
 export function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(
+    searchParams.get("error") === "inactive"
+      ? "Akun tidak aktif. Hubungi administrator."
+      : "",
+  );
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const logoSrc = (kemEntanLogo as any)?.src || kemEntanLogo;
 

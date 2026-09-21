@@ -29,15 +29,20 @@ export async function createAdminUser(input: { name: string; email: string }) {
     isActive: true,
   }, { method: "admin" });
   const passwordHash = await context.password.hash(password);
-  await context.internalAdapter.createAccount({
-    accountId: user.id,
-    providerId: "credential",
-    issuer: createLocalAccountIssuer("credential"),
-    userId: user.id,
-    password: passwordHash,
-  });
+  try {
+    await context.internalAdapter.createAccount({
+      accountId: user.id,
+      providerId: "credential",
+      issuer: createLocalAccountIssuer("credential"),
+      userId: user.id,
+      password: passwordHash,
+    });
+  } catch (error) {
+    await context.internalAdapter.deleteUser(user.id);
+    throw error;
+  }
   revalidatePath("/admin/users");
-  return { success: true as const, user: { id: user.id, name: user.name, email: user.email }, adminSessionId: admin.session.id };
+  return { success: true as const, user: { id: user.id, name: user.name, email: user.email }, temporaryPassword: password, adminSessionId: admin.session.id };
 }
 
 export async function setUserActive(userId: string, isActive: boolean) {

@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
+import { getActiveSession } from "@/lib/active-session";
 import { prisma } from "@/lib/prisma";
 import {
   MasterArsipSMARTPage,
@@ -34,9 +33,9 @@ export default async function ArsipPage({
     status?: string;
   }>;
 }) {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getActiveSession();
 
-  if (!session) redirect("/login");
+  if (!session) redirect("/login?error=inactive");
   if (session.user.role?.toLowerCase() !== "admin") redirect("/dashboard");
 
   const params = await searchParams;

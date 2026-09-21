@@ -1,9 +1,8 @@
 "use server";
 
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
-import { headers } from "next/headers";
+import { getActiveSession } from "@/lib/active-session";
 import { z } from "zod";
 
 const createKegiatanSchema = z.object({
@@ -37,7 +36,7 @@ type CreateKegiatanResult =
 export async function createKegiatan(
   input: CreateKegiatanInput,
 ): Promise<CreateKegiatanResult> {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getActiveSession();
 
   if (!session) {
     return { success: false, error: "Sesi tidak valid, silakan login ulang." };
@@ -135,7 +134,7 @@ type MutateKegiatanResult =
 export async function updateKegiatan(
   input: UpdateKegiatanInput,
 ): Promise<MutateKegiatanResult> {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getActiveSession();
 
   if (!session) {
     return { success: false, error: "Sesi tidak valid, silakan login ulang." };
@@ -214,7 +213,7 @@ type DeleteKegiatanResult =
 export async function deleteKegiatan(
   id: string,
 ): Promise<DeleteKegiatanResult> {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getActiveSession();
 
   if (!session) {
     return { success: false, error: "Sesi tidak valid, silakan login ulang." };
@@ -249,7 +248,7 @@ export async function toggleWajibLapor(
   id: string,
   wajib: boolean,
 ): Promise<ToggleWajibResult> {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getActiveSession();
 
   if (!session) {
     return { success: false, error: "Sesi tidak valid, silakan login ulang." };
@@ -287,7 +286,7 @@ export async function toggleStatusAnggaran(
   id: string,
   statusAnggaran: "DIBUKA" | "DIBLOKIR",
 ): Promise<ToggleStatusResult> {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getActiveSession();
 
   if (!session) {
     return { success: false, error: "Sesi tidak valid, silakan login ulang." };

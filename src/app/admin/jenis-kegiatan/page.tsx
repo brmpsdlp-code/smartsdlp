@@ -1,12 +1,11 @@
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
+import { getActiveSession } from "@/lib/active-session";
 import { prisma } from "@/lib/prisma";
 import { JenisKegiatanPage } from "@/features/jenis-kegiatan/components/jenis-kegiatan-page";
 
 export default async function Page() {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) redirect("/login");
+  const session = await getActiveSession();
+  if (!session) redirect("/login?error=inactive");
   if (session.user.role?.toLowerCase() !== "admin") redirect("/dashboard");
 
   const jenis = await prisma.jenisKegiatan.findMany({

@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
+import { getActiveSession } from "@/lib/active-session";
 import { prisma } from "@/lib/prisma";
 import { InputLaporanPage } from "@/components/InputLaporanPage";
 
@@ -9,8 +8,8 @@ export default async function Page({
 }: {
   searchParams: Promise<{ kode?: string }>;
 }) {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) redirect("/login");
+  const session = await getActiveSession();
+  if (!session) redirect("/login?error=inactive");
 
   const params = await searchParams;
 

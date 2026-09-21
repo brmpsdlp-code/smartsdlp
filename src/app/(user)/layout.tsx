@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
+import { getActiveSession } from "@/lib/active-session";
 import { Sidebar } from "@/components/Sidebar";
 
 export default async function UserLayout({
@@ -8,9 +7,9 @@ export default async function UserLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getActiveSession();
 
-  if (!session) redirect("/login");
+  if (!session) redirect("/login?error=inactive");
   if (session.user.role?.toLowerCase() === "admin")
     redirect("/admin/dashboard");
 

@@ -1,9 +1,8 @@
 "use server";
 
-import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/lib/auth";
+import { getActiveSession } from "@/lib/active-session";
 import {
   isGoogleDriveConfigured,
   isValidGoogleDriveUrl,
@@ -11,7 +10,7 @@ import {
 } from "@/lib/gdrive";
 
 export async function createDokumenWithFormData(formData: FormData) {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getActiveSession();
   if (!session || session.user.role?.toLowerCase() !== "admin") {
     return {
       success: false,
@@ -123,7 +122,7 @@ export async function createDokumenWithFormData(formData: FormData) {
 }
 
 export async function deleteDokumen(id: string) {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getActiveSession();
   if (!session || session.user.role?.toLowerCase() !== "admin") {
     return {
       success: false,

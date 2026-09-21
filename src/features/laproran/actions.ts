@@ -1,10 +1,9 @@
 "use server";
 
-import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/lib/auth";
+import { getActiveSession } from "@/lib/active-session";
 
 const submitLaporanSchema = z.object({
   kegiatanId: z.string().min(1),
@@ -33,7 +32,7 @@ type SubmitLaporanResult =
 export async function submitLaporan(
   input: SubmitLaporanInput,
 ): Promise<SubmitLaporanResult> {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getActiveSession();
   if (!session) {
     return { success: false, error: "Sesi tidak valid, silakan login ulang." };
   }

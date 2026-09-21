@@ -39,6 +39,12 @@ const adminMenu: MenuItem[] = [
     path: "/admin/jenis-kegiatan",
   },
   {
+    id: "users",
+    label: "Pengguna",
+    icon: Icons.user,
+    path: "/admin/users",
+  },
+  {
     id: "repositori",
     label: "Dokumen",
     icon: Icons.archive,

@@ -1,8 +1,7 @@
 "use server";
 
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { headers } from "next/headers";
+import { getActiveSession } from "@/lib/active-session";
 import { revalidatePath } from "next/cache";
 import { Prisma } from "@/generated/prisma/client";
 import { z } from "zod";
@@ -10,7 +9,7 @@ import { z } from "zod";
 const nameSchema = z.string().trim().min(1, "Nama jenis kegiatan wajib diisi");
 
 async function requireAdmin() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getActiveSession();
   if (!session || session.user.role?.toLowerCase() !== "admin") {
     return { error: "Hanya admin yang bisa mengelola jenis kegiatan." };
   }

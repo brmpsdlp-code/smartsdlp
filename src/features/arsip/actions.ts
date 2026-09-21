@@ -1,12 +1,11 @@
 "use server";
 
-import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/lib/auth";
+import { getActiveSession } from "@/lib/active-session";
 
 export async function deleteLaporan(laporanId: string, alasan: string) {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getActiveSession();
 
   if (!session || session.user.role?.toLowerCase() !== "admin") {
     return {
@@ -125,7 +124,7 @@ export async function deleteLaporan(laporanId: string, alasan: string) {
 }
 
 export async function ingatkanPJ(kegiatanId: string, periode: string) {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getActiveSession();
   if (!session || session.user.role?.toLowerCase() !== "admin") {
     return {
       success: false,
