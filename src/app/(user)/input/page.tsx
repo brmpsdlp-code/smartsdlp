@@ -16,7 +16,17 @@ export default async function Page({
   const [kegiatanRows, laporanHistory] = await Promise.all([
     prisma.kegiatan.findMany({
       where: { pjId: session.user.id },
-      include: {},
+      include: {
+        programCategoryRef: {
+          select: {
+            id: true,
+            name: true,
+            sortOrder: true,
+            colorKey: true,
+            isActive: true,
+          },
+        },
+      },
       orderBy: { nama: "asc" },
     }),
     prisma.laporan.findMany({
@@ -60,6 +70,15 @@ export default async function Page({
     realLalu: k.realLalu !== null ? Number(k.realLalu) : 0,
     realIni: k.realIni !== null ? Number(k.realIni) : 0,
     realisasi: Number(k.realisasi),
+    programCategory: k.programCategoryRef
+      ? {
+          id: k.programCategoryRef.id,
+          name: k.programCategoryRef.name,
+          sortOrder: k.programCategoryRef.sortOrder,
+          colorKey: k.programCategoryRef.colorKey,
+          isActive: k.programCategoryRef.isActive,
+        }
+      : undefined,
   }));
 
   const initialSelectedKode =

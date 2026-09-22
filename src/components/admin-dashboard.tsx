@@ -34,12 +34,14 @@ interface LineDataPoint {
 
 interface AdminDashboardProps {
   activities: Activity[];
+  categories: { name: string; colorKey: string }[];
   barData: BarDataPoint[];
   lineDataFull: LineDataPoint[];
 }
 
 export function AdminDashboard({
   activities,
+  categories,
   barData,
   lineDataFull,
 }: AdminDashboardProps) {
@@ -290,7 +292,7 @@ export function AdminDashboard({
               </div>
 
               <div className="lg:col-span-5 xl:col-span-4 h-full">
-                <DistribusiPaguWidget activities={activities} />
+                <DistribusiPaguWidget activities={activities} categories={categories} />
               </div>
             </div>
           </div>

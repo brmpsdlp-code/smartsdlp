@@ -402,6 +402,7 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   JenisKegiatan: 'JenisKegiatan',
+  ProgramCategory: 'ProgramCategory',
   Kegiatan: 'Kegiatan',
   Laporan: 'Laporan',
   AuditLog: 'AuditLog',
@@ -421,7 +422,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "jenisKegiatan" | "kegiatan" | "laporan" | "auditLog" | "dokumen"
+    modelProps: "user" | "session" | "account" | "verification" | "jenisKegiatan" | "programCategory" | "kegiatan" | "laporan" | "auditLog" | "dokumen"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -792,6 +793,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.JenisKegiatanCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.JenisKegiatanCountAggregateOutputType> | number
+        }
+      }
+    }
+    ProgramCategory: {
+      payload: Prisma.$ProgramCategoryPayload<ExtArgs>
+      fields: Prisma.ProgramCategoryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProgramCategoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramCategoryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProgramCategoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramCategoryPayload>
+        }
+        findFirst: {
+          args: Prisma.ProgramCategoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramCategoryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProgramCategoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramCategoryPayload>
+        }
+        findMany: {
+          args: Prisma.ProgramCategoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramCategoryPayload>[]
+        }
+        create: {
+          args: Prisma.ProgramCategoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramCategoryPayload>
+        }
+        createMany: {
+          args: Prisma.ProgramCategoryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProgramCategoryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramCategoryPayload>[]
+        }
+        delete: {
+          args: Prisma.ProgramCategoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramCategoryPayload>
+        }
+        update: {
+          args: Prisma.ProgramCategoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramCategoryPayload>
+        }
+        deleteMany: {
+          args: Prisma.ProgramCategoryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProgramCategoryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProgramCategoryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramCategoryPayload>[]
+        }
+        upsert: {
+          args: Prisma.ProgramCategoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramCategoryPayload>
+        }
+        aggregate: {
+          args: Prisma.ProgramCategoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProgramCategory>
+        }
+        groupBy: {
+          args: Prisma.ProgramCategoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProgramCategoryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProgramCategoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProgramCategoryCountAggregateOutputType> | number
         }
       }
     }
@@ -1204,6 +1279,19 @@ export const JenisKegiatanScalarFieldEnum = {
 export type JenisKegiatanScalarFieldEnum = (typeof JenisKegiatanScalarFieldEnum)[keyof typeof JenisKegiatanScalarFieldEnum]
 
 
+export const ProgramCategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  sortOrder: 'sortOrder',
+  colorKey: 'colorKey',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProgramCategoryScalarFieldEnum = (typeof ProgramCategoryScalarFieldEnum)[keyof typeof ProgramCategoryScalarFieldEnum]
+
+
 export const KegiatanScalarFieldEnum = {
   id: 'id',
   kode: 'kode',
@@ -1211,6 +1299,7 @@ export const KegiatanScalarFieldEnum = {
   jenis: 'jenis',
   jenisKegiatanId: 'jenisKegiatanId',
   programCategory: 'programCategory',
+  programCategoryId: 'programCategoryId',
   pagu: 'pagu',
   realisasi: 'realisasi',
   fisik: 'fisik',
@@ -1363,6 +1452,20 @@ export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
 
 
 /**
+ * Reference to a field of type 'Int'
+ */
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+/**
+ * Reference to a field of type 'Int[]'
+ */
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
  * Reference to a field of type 'JenisAnggaran'
  */
 export type EnumJenisAnggaranFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JenisAnggaran'>
@@ -1387,20 +1490,6 @@ export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
  * Reference to a field of type 'BigInt[]'
  */
 export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>
-    
-
-
-/**
- * Reference to a field of type 'Int'
- */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-/**
- * Reference to a field of type 'Int[]'
- */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -1601,6 +1690,7 @@ export type GlobalOmitConfig = {
   account?: Prisma.AccountOmit
   verification?: Prisma.VerificationOmit
   jenisKegiatan?: Prisma.JenisKegiatanOmit
+  programCategory?: Prisma.ProgramCategoryOmit
   kegiatan?: Prisma.KegiatanOmit
   laporan?: Prisma.LaporanOmit
   auditLog?: Prisma.AuditLogOmit

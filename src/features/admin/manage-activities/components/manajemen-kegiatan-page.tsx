@@ -20,7 +20,6 @@ import {
 } from "@/features/kegiatan/actions";
 import { fmtRupiah, Icons } from "@/utils/formatters";
 import {
-  MAIN_PROGRAM_CATEGORIES,
   PROGRAM_COLORS,
   resolveProgramCategory,
 } from "@/utils/programCategorization";
@@ -34,6 +33,7 @@ type KegiatanFromDb = {
   nama: string;
   jenis: string;
   programCategory: string | null;
+  programCategoryId: string | null;
   pagu: number;
   realisasi: number;
   fisik: number | null;
@@ -48,6 +48,7 @@ type KegiatanFromDb = {
 };
 
 type PjOption = { id: string; name: string; email: string };
+type ProgramCategoryOption = { id: string; name: string; sortOrder: number; colorKey: string; isActive: boolean };
 
 interface ManajemenKegiatanPageProps {
   data: KegiatanFromDb[];
@@ -57,6 +58,7 @@ interface ManajemenKegiatanPageProps {
   sort: string;
   order: "asc" | "desc";
   pjOptions: PjOption[];
+  programCategories: ProgramCategoryOption[];
   wajibLaporData: KegiatanFromDb[];
   wajibPage: number;
   wajibPageSize: number;
@@ -132,6 +134,7 @@ export function ManajemenKegiatanPage({
   sort,
   order,
   pjOptions,
+  programCategories,
   wajibLaporData,
   belumLaporCount,
   sudahLaporCount,
@@ -188,7 +191,7 @@ export function ManajemenKegiatanPage({
   const [formPjId, setFormPjId] = useState<string>(pjOptions[0]?.id ?? "");
   const [formJenis, setFormJenis] = useState<"APBN" | "NON_APBN">("APBN");
   const [formPagu, setFormPagu] = useState("500000000");
-  const [formCategory, setFormCategory] = useState<string>("");
+  const [formCategoryId, setFormCategoryId] = useState<string>("");
   const [formError, setFormError] = useState<string | null>(null);
 
   const [deleteTarget, setDeleteTarget] = useState<KegiatanFromDb | null>(null);
@@ -269,7 +272,7 @@ export function ManajemenKegiatanPage({
     setFormPjId(pjOptions[0]?.id ?? "");
     setFormJenis("APBN");
     setFormPagu("450000000");
-    setFormCategory("");
+    setFormCategoryId("");
     setModalOpen(true);
   };
 
@@ -281,7 +284,7 @@ export function ManajemenKegiatanPage({
     setFormPjId(k.pjId ?? pjOptions[0]?.id ?? "");
     setFormJenis(k.jenis === "NON_APBN" ? "NON_APBN" : "APBN");
     setFormPagu(String(k.pagu));
-    setFormCategory(k.programCategory ?? "");
+    setFormCategoryId(k.programCategoryId ?? "");
     setModalOpen(true);
   };
 
@@ -289,7 +292,7 @@ export function ManajemenKegiatanPage({
     e.preventDefault();
     setFormError(null);
     if (!formKode.trim() || !formNama.trim()) return;
-    if (!formCategory) {
+    if (!formCategoryId) {
       setFormError("Pilih kategori program utama terlebih dahulu.");
       return;
     }
@@ -301,7 +304,7 @@ export function ManajemenKegiatanPage({
             kode: formKode,
             nama: formNama,
             jenis: formJenis,
-            programCategory: formCategory,
+            programCategoryId: formCategoryId,
             pagu: Number(formPagu),
             pjId: formPjId || undefined,
           })
@@ -309,7 +312,7 @@ export function ManajemenKegiatanPage({
             kode: formKode,
             nama: formNama,
             jenis: formJenis,
-            programCategory: formCategory,
+            programCategoryId: formCategoryId,
             pagu: Number(formPagu),
             pjId: formPjId || undefined,
           });
@@ -321,8 +324,8 @@ export function ManajemenKegiatanPage({
 
       toast.success(
         editId
-          ? `Kegiatan "${result.kegiatan.kode}" berhasil diperbarui (Kategori: ${formCategory})`
-          : `Kegiatan "${result.kegiatan.kode}" berhasil disimpan (Kategori: ${formCategory})`,
+          ? `Kegiatan "${result.kegiatan.kode}" berhasil diperbarui (Kategori: ${formCategoryId})`
+          : `Kegiatan "${result.kegiatan.kode}" berhasil disimpan (Kategori: ${formCategoryId})`,
       );
       setModalOpen(false);
       router.refresh();
@@ -905,33 +908,30 @@ export function ManajemenKegiatanPage({
                   </label>
                   <select
                     required
-                    value={formCategory}
-                    onChange={(e) => setFormCategory(e.target.value)}
+value={formCategoryId}
+                     onChange={(e) => setFormCategoryId(e.target.value)}
                     className="w-full h-9 px-2 text-xs bg-white border border-slate-300 rounded-md font-semibold text-slate-800"
                   >
                     <option value="" disabled>
                       — Pilih kategori —
                     </option>
-                    {MAIN_PROGRAM_CATEGORIES.map((c) => (
-                      <option key={c.name} value={c.name}>
+                    {programCategories.filter((c) => c.isActive || c.id === formCategoryId).map((c) => (
+                      <option key={c.id} value={c.id}>
                         {c.name}
                       </option>
                     ))}
-                    <option value="Program Lainnya/Unassigned">
-                      Program Lainnya / Unassigned
-                    </option>
                   </select>
-                  {formCategory && (
+                  {formCategoryId && (
                     <div className="flex items-center gap-1.5 pt-1">
                       <span
                         className="w-2 h-2 rounded-full"
                         style={{
                           backgroundColor:
-                            PROGRAM_COLORS[formCategory] || "#64748B",
+                            programCategories.find((c) => c.id === formCategoryId)?.colorKey || "#64748B",
                         }}
                       />
                       <span className="text-[11px] text-slate-500">
-                        {formCategory}
+                        {programCategories.find((c) => c.id === formCategoryId)?.name}
                       </span>
                     </div>
                   )}

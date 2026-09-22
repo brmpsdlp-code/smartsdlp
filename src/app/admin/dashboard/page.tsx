@@ -18,14 +18,44 @@ const NAMA_BULAN_SINGKAT = [
 ];
 
 export default async function Page() {
-  const [kegiatanRows, laporanRows] = await Promise.all([
+  const [kegiatanRows, laporanRows, categories] = await Promise.all([
     prisma.kegiatan.findMany({
-      include: { pj: { select: { id: true, name: true, email: true } },  },
+      include: {
+        pj: { select: { id: true, name: true, email: true } },
+        programCategoryRef: {
+                select: {
+                  id: true,
+                  name: true,
+                  sortOrder: true,
+                  colorKey: true,
+                  isActive: true,
+                },
+              },
+      },
       orderBy: { createdAt: "desc" },
     }),
     prisma.laporan.findMany({
-      include: { kegiatan: { select: { jenis: true,  } } },
+      include: {
+        kegiatan: {
+          select: {
+            jenis: true,
+programCategoryRef: {
+          select: {
+            id: true,
+            name: true,
+            sortOrder: true,
+            colorKey: true,
+            isActive: true,
+          },
+        },
+          },
+        },
+      },
       orderBy: [{ periodeTahun: "asc" }, { periodeBulan: "asc" }],
+    }),
+    prisma.programCategory.findMany({
+      orderBy: { sortOrder: "asc" },
+      select: { name: true, sortOrder: true, colorKey: true, isActive: true },
     }),
   ]);
 
@@ -34,7 +64,9 @@ export default async function Page() {
     kode: k.kode,
     nama: k.nama,
      jenis: k.jenis || "APBN",
-    programCategory: k.programCategory ?? undefined,
+    programCategory: k.programCategoryRef?.id
+      ? k.programCategoryRef.name
+      : k.programCategory ?? undefined,
     pagu: Number(k.pagu),
     realisasi: Number(k.realisasi),
     fisik: k.fisik ?? 0,
@@ -97,6 +129,7 @@ export default async function Page() {
   return (
     <AdminDashboard
       activities={activities}
+      categories={categories.filter((category) => category.isActive).map(({ name, colorKey }) => ({ name, colorKey }))}
       barData={barData}
       lineDataFull={lineDataFull}
     />

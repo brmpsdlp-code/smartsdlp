@@ -54,7 +54,18 @@ export default async function CetakPage({
 
   const [kegiatanList, laporanList] = await Promise.all([
     prisma.kegiatan.findMany({
-      include: { pj: { select: { name: true } } },
+      include: {
+        pj: { select: { name: true } },
+        programCategoryRef: {
+           select: {
+             id: true,
+             name: true,
+             sortOrder: true,
+             colorKey: true,
+             isActive: true,
+           },
+         },
+      },
       orderBy: { kode: "asc" },
     }),
     prisma.laporan.findMany({

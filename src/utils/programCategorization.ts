@@ -28,6 +28,29 @@ export const MAIN_PROGRAM_CATEGORIES = [
   },
 ] as const;
 
+export type ProgramCategoryDefinition = {
+  name: string;
+  colorKey?: string;
+  color?: string;
+};
+
+const COLOR_TOKENS: Record<string, string> = {
+  blue: "var(--chart-1)",
+  green: "var(--chart-2)",
+  orange: "var(--chart-3)",
+  purple: "var(--chart-4)",
+  slate: "var(--chart-5)",
+  chart1: "var(--chart-1)",
+  chart2: "var(--chart-2)",
+  chart3: "var(--chart-3)",
+  chart4: "var(--chart-4)",
+  chart5: "var(--chart-5)",
+};
+
+function resolveCategoryColor(category: ProgramCategoryDefinition): string {
+  return category.color || (category.colorKey ? COLOR_TOKENS[category.colorKey.toLowerCase()] : undefined) || PROGRAM_COLORS[category.name] || "var(--chart-5)";
+}
+
 export type ProgramCategoryType =
   | "Layanan Perkantoran"
   | "Fasilitas Kinerja"
@@ -123,20 +146,24 @@ export function resolveProgramCategory(
 /**
  * Real-time dynamic aggregation of Activities into Program Donut Chart Segments
  */
-export function aggregateProgramPagu(activities: Activity[]): DonutChartSegment[] {
+export function aggregateProgramPagu(
+  activities: Activity[],
+  categories: readonly ProgramCategoryDefinition[] = MAIN_PROGRAM_CATEGORIES,
+): DonutChartSegment[] {
   const totals: Record<string, { totalPagu: number; count: number; color: string }> = {};
 
-  MAIN_PROGRAM_CATEGORIES.forEach((cat) => {
+  categories.forEach((cat) => {
     totals[cat.name] = {
       totalPagu: 0,
       count: 0,
-      color: cat.color,
+      color: resolveCategoryColor(cat),
     };
   });
 
   activities.forEach((act) => {
     const category = resolveProgramCategory(act.kode, act.nama, act.programCategory);
-    const color = PROGRAM_COLORS[category] || "#64748B";
+    const configuredCategory = categories.find((cat) => cat.name === category);
+    const color = configuredCategory ? resolveCategoryColor(configuredCategory) : PROGRAM_COLORS[category] || "var(--chart-5)";
 
     if (!totals[category]) {
       totals[category] = {
@@ -153,7 +180,7 @@ export function aggregateProgramPagu(activities: Activity[]): DonutChartSegment[
   const grandTotal = Object.values(totals).reduce((sum, item) => sum + item.totalPagu, 0);
 
   const segments: DonutChartSegment[] = Object.entries(totals)
-    .filter(([_, data]) => data.totalPagu > 0 || data.count > 0)
+    .filter(([, data]) => data.totalPagu > 0 || data.count > 0)
     .map(([name, data]) => {
       const pct = grandTotal > 0 ? (data.totalPagu / grandTotal) * 100 : 0;
       return {
@@ -165,11 +192,11 @@ export function aggregateProgramPagu(activities: Activity[]): DonutChartSegment[
     });
 
   if (segments.length === 0) {
-    return MAIN_PROGRAM_CATEGORIES.map((c) => ({
+    return categories.map((c) => ({
       label: c.name,
       value: 0,
       percentage: 0,
-      color: c.color,
+      color: c.color || PROGRAM_COLORS[c.name] || "#64748B",
     }));
   }
 

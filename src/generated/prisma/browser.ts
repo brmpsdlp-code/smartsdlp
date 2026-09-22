@@ -43,6 +43,11 @@ export type Verification = Prisma.VerificationModel
  */
 export type JenisKegiatan = Prisma.JenisKegiatanModel
 /**
+ * Model ProgramCategory
+ * 
+ */
+export type ProgramCategory = Prisma.ProgramCategoryModel
+/**
  * Model Kegiatan
  * 
  */

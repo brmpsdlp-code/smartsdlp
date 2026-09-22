@@ -119,6 +119,19 @@ model JenisKegiatan {
   @@map("jenis_kegiatan")
 }
 
+model ProgramCategory {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  sortOrder Int
+  colorKey  String
+  isActive  Boolean    @default(true)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  kegiatan  Kegiatan[]
+
+  @@map("program_category")
+}
+
 model Kegiatan {
   id              String         @id @default(cuid())
   kode            String         @unique
@@ -126,7 +139,9 @@ model Kegiatan {
   jenis           JenisAnggaran?
   jenisKegiatanId String?
   jenisKegiatan   JenisKegiatan? @relation(fields: [jenisKegiatanId], references: [id], onDelete: Restrict)
-  programCategory String?
+  programCategory   String?
+  programCategoryId String?
+  programCategoryRef ProgramCategory? @relation(fields: [programCategoryId], references: [id], onDelete: Restrict)
   pagu            BigInt
   realisasi       BigInt         @default(0)
   fisik           Int?           @default(0)

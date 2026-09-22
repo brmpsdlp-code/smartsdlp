@@ -48,7 +48,18 @@ export default async function ArsipPage({
 
   const [kegiatanList, laporanList, availablePeriods] = await Promise.all([
     prisma.kegiatan.findMany({
-      include: { pj: true },
+      include: {
+        pj: true,
+        programCategoryRef: {
+          select: {
+            id: true,
+            name: true,
+            sortOrder: true,
+            colorKey: true,
+            isActive: true,
+          },
+        },
+      },
       orderBy: { kode: "asc" },
     }),
     prisma.laporan.findMany({

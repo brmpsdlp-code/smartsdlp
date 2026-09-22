@@ -9,7 +9,7 @@ const createKegiatanSchema = z.object({
   kode: z.string().min(1, "Kode kegiatan wajib diisi"),
   nama: z.string().min(1, "Nama kegiatan wajib diisi"),
   jenis: z.enum(["APBN", "NON_APBN"]),
-  programCategory: z.string().min(1, "Kategori program wajib dipilih"),
+  programCategoryId: z.string().min(1, "Kategori program wajib dipilih"),
   pagu: z.coerce.number().int().positive("Pagu harus lebih dari 1"),
   pjId: z.string().optional(),
   uraian: z.string().optional(),
@@ -57,6 +57,9 @@ export async function createKegiatan(
   }
   const data = parsed.data;
 
+  const category = await prisma.programCategory.findUnique({ where: { id: data.programCategoryId } });
+  if (!category || !category.isActive) return { success: false, error: "Kategori program tidak aktif atau tidak ditemukan." };
+
   const existing = await prisma.kegiatan.findUnique({
     where: { kode: data.kode },
   });
@@ -72,7 +75,7 @@ export async function createKegiatan(
       kode: data.kode,
       nama: data.nama,
       jenis: data.jenis,
-      programCategory: data.programCategory || null,
+      programCategoryId: data.programCategoryId,
       pagu: BigInt(data.pagu),
       uraian: data.uraian || null,
       pjId: data.pjId || null,
@@ -107,7 +110,7 @@ const updateKegiatanSchema = z.object({
   kode: z.string().min(1, "Kode kegiatan wajib diisi"),
   nama: z.string().min(1, "Nama kegiatan wajib diisi"),
   jenis: z.enum(["APBN", "NON_APBN"]),
-  programCategory: z.string().optional(),
+  programCategoryId: z.string().min(1, "Kategori program wajib dipilih"),
   pagu: z.coerce.number().int().positive("Pagu harus lebih dari 0"),
   pjId: z.string().optional(),
   uraian: z.string().optional(),
@@ -155,6 +158,12 @@ export async function updateKegiatan(
   }
   const data = parsed.data;
 
+  const category = await prisma.programCategory.findUnique({ where: { id: data.programCategoryId } });
+  if (!category || !category.isActive) {
+    const current = await prisma.kegiatan.findUnique({ where: { id: data.id }, select: { programCategoryId: true } });
+    if (!current || current.programCategoryId !== data.programCategoryId) return { success: false, error: "Kategori program tidak aktif atau tidak ditemukan." };
+  }
+
   const existingWithSameKode = await prisma.kegiatan.findFirst({
     where: { kode: data.kode, NOT: { id: data.id } },
   });
@@ -179,7 +188,7 @@ export async function updateKegiatan(
       kode: data.kode,
       nama: data.nama,
       jenis: data.jenis,
-      programCategory: data.programCategory || null,
+      programCategoryId: data.programCategoryId,
       pagu: BigInt(data.pagu),
       uraian: data.uraian || null,
       pjId: data.pjId || null,

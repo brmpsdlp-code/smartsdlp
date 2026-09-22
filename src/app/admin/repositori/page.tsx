@@ -68,7 +68,20 @@ export default async function RepositoriRoute({
       prisma.dokumen.count({ where: { kategori: "DIPA" } }),
       prisma.dokumen.count({ where: { kategori: "LAPORAN" } }),
       prisma.kegiatan.findMany({
-        select: { id: true, kode: true, nama: true },
+        select: {
+          id: true,
+          kode: true,
+          nama: true,
+          programCategoryRef: {
+            select: {
+              id: true,
+              name: true,
+              sortOrder: true,
+              colorKey: true,
+              isActive: true,
+            },
+          },
+        },
         orderBy: { kode: "asc" },
       }),
     ]);

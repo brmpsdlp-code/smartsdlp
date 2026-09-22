@@ -62,11 +62,13 @@ export default async function Page({
     totalWajibCount,
     sudahLaporCount,
     pjOptions,
+    programCategories,
   ] = await Promise.all([
     prisma.kegiatan.findMany({
       where,
       include: {
         pj: { select: { id: true, name: true, email: true } },
+        programCategoryRef: { select: { id: true, name: true, sortOrder: true, colorKey: true, isActive: true } },
       },
       orderBy: { [sort]: order },
       skip: (page - 1) * PAGE_SIZE,
@@ -78,6 +80,7 @@ export default async function Page({
     prisma.kegiatan.findMany({
       include: {
         pj: { select: { id: true, name: true, email: true } },
+        programCategoryRef: { select: { id: true, name: true, sortOrder: true, colorKey: true, isActive: true } },
       },
       orderBy: { nama: "asc" },
       skip: (wajibPage - 1) * WAJIB_PAGE_SIZE,
@@ -92,6 +95,7 @@ export default async function Page({
       select: { id: true, name: true, email: true },
       orderBy: { name: "asc" },
     }),
+    prisma.programCategory.findMany({ orderBy: { sortOrder: "asc" } }),
   ]);
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
@@ -118,6 +122,10 @@ export default async function Page({
       realLalu: k.realLalu !== null ? Number(k.realLalu) : null,
       realIni: k.realIni !== null ? Number(k.realIni) : null,
        jenis: k.jenis || "APBN",
+       programCategory: k.programCategoryRef?.id
+          ? k.programCategoryRef.name
+          : k.programCategory,
+       programCategoryId: k.programCategoryId,
 
     }));
 
@@ -130,6 +138,7 @@ export default async function Page({
       sort={sort}
       order={order}
       pjOptions={pjOptions}
+      programCategories={programCategories}
 
       wajibLaporData={serialize(wajibRows)}
       wajibPage={wajibPage}

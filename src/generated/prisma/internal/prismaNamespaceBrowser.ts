@@ -56,6 +56,7 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   JenisKegiatan: 'JenisKegiatan',
+  ProgramCategory: 'ProgramCategory',
   Kegiatan: 'Kegiatan',
   Laporan: 'Laporan',
   AuditLog: 'AuditLog',
@@ -152,6 +153,19 @@ export const JenisKegiatanScalarFieldEnum = {
 export type JenisKegiatanScalarFieldEnum = (typeof JenisKegiatanScalarFieldEnum)[keyof typeof JenisKegiatanScalarFieldEnum]
 
 
+export const ProgramCategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  sortOrder: 'sortOrder',
+  colorKey: 'colorKey',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProgramCategoryScalarFieldEnum = (typeof ProgramCategoryScalarFieldEnum)[keyof typeof ProgramCategoryScalarFieldEnum]
+
+
 export const KegiatanScalarFieldEnum = {
   id: 'id',
   kode: 'kode',
@@ -159,6 +173,7 @@ export const KegiatanScalarFieldEnum = {
   jenis: 'jenis',
   jenisKegiatanId: 'jenisKegiatanId',
   programCategory: 'programCategory',
+  programCategoryId: 'programCategoryId',
   pagu: 'pagu',
   realisasi: 'realisasi',
   fisik: 'fisik',

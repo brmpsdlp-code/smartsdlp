@@ -9,11 +9,13 @@ import { ProgramDetailModal } from "./ProgramDetailModal";
 
 interface DistribusiPaguWidgetProps {
   activities: Activity[];
+  categories: { name: string; colorKey: string }[];
   onNavigate?: (menu: string) => void;
 }
 
 export function DistribusiPaguWidget({
   activities,
+  categories,
   onNavigate,
 }: DistribusiPaguWidgetProps) {
   const [hoveredLabel, setHoveredLabel] = useState<string | null>(null);
@@ -24,8 +26,8 @@ export function DistribusiPaguWidget({
   } | null>(null);
 
   const programPaguData = useMemo(() => {
-    return aggregateProgramPagu(activities);
-  }, [activities]);
+    return aggregateProgramPagu(activities, categories);
+  }, [activities, categories]);
 
   const totalPaguValue = useMemo(() => {
     return programPaguData.reduce((sum, d) => sum + d.value, 0);

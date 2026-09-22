@@ -23,6 +23,13 @@ type KegiatanForInput = {
   realLalu: number;
   realIni: number;
   realisasi: number;
+  programCategory?: {
+    id: string;
+    name: string;
+    sortOrder: number;
+    colorKey: string | null;
+    isActive: boolean;
+  };
 };
 
 type SessionUser = {
