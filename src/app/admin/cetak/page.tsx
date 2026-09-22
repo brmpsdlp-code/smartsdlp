@@ -54,7 +54,7 @@ export default async function CetakPage({
 
   const [kegiatanList, laporanList] = await Promise.all([
     prisma.kegiatan.findMany({
-      include: { pj: { select: { name: true } }, jenisKegiatan: { select: { nama: true } } },
+      include: { pj: { select: { name: true } } },
       orderBy: { kode: "asc" },
     }),
     prisma.laporan.findMany({
@@ -169,7 +169,7 @@ export default async function CetakPage({
       no: idx + 1,
       kode: k.kode,
       nama: k.nama,
-      jenis: k.jenisKegiatan?.nama || k.jenis || "Unassigned",
+      jenis: k.jenis || "APBN",
       pj: k.pj?.name || "Belum Ditugaskan",
       uraian,
       fisik,

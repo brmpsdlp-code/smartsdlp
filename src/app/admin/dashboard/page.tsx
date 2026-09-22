@@ -20,11 +20,11 @@ const NAMA_BULAN_SINGKAT = [
 export default async function Page() {
   const [kegiatanRows, laporanRows] = await Promise.all([
     prisma.kegiatan.findMany({
-      include: { pj: { select: { id: true, name: true, email: true } }, jenisKegiatan: { select: { nama: true } } },
+      include: { pj: { select: { id: true, name: true, email: true } },  },
       orderBy: { createdAt: "desc" },
     }),
     prisma.laporan.findMany({
-      include: { kegiatan: { select: { jenis: true, jenisKegiatan: { select: { nama: true } } } } },
+      include: { kegiatan: { select: { jenis: true,  } } },
       orderBy: [{ periodeTahun: "asc" }, { periodeBulan: "asc" }],
     }),
   ]);
@@ -33,7 +33,7 @@ export default async function Page() {
     id: k.id,
     kode: k.kode,
     nama: k.nama,
-    jenis: k.jenisKegiatan?.nama || k.jenis || "Unassigned",
+     jenis: k.jenis || "APBN",
     programCategory: k.programCategory ?? undefined,
     pagu: Number(k.pagu),
     realisasi: Number(k.realisasi),
@@ -60,10 +60,10 @@ export default async function Page() {
       (l) => l.periodeBulan === bulan && l.periodeTahun === currentYear,
     );
     const apbn_real = laporanBulanIni
-      .filter((l) => (l.kegiatan.jenisKegiatan?.nama || l.kegiatan.jenis) === "APBN")
+      .filter((l) => (l.kegiatan.jenis || "APBN") === "APBN")
       .reduce((sum, l) => sum + Number(l.realIni), 0);
     const non_real = laporanBulanIni
-      .filter((l) => (l.kegiatan.jenisKegiatan?.nama || l.kegiatan.jenis) !== "APBN")
+      .filter((l) => (l.kegiatan.jenis || "APBN") !== "APBN")
       .reduce((sum, l) => sum + Number(l.realIni), 0);
     return { name: NAMA_BULAN_SINGKAT[i], apbn_real, non_real };
   });

@@ -62,13 +62,11 @@ export default async function Page({
     totalWajibCount,
     sudahLaporCount,
     pjOptions,
-    jenisKegiatanOptions,
   ] = await Promise.all([
     prisma.kegiatan.findMany({
       where,
       include: {
         pj: { select: { id: true, name: true, email: true } },
-        jenisKegiatan: { select: { id: true, nama: true } },
       },
       orderBy: { [sort]: order },
       skip: (page - 1) * PAGE_SIZE,
@@ -80,7 +78,6 @@ export default async function Page({
     prisma.kegiatan.findMany({
       include: {
         pj: { select: { id: true, name: true, email: true } },
-        jenisKegiatan: { select: { id: true, nama: true } },
       },
       orderBy: { nama: "asc" },
       skip: (wajibPage - 1) * WAJIB_PAGE_SIZE,
@@ -94,10 +91,6 @@ export default async function Page({
       where: { isActive: true },
       select: { id: true, name: true, email: true },
       orderBy: { name: "asc" },
-    }),
-    prisma.jenisKegiatan.findMany({
-      select: { id: true, nama: true },
-      orderBy: { nama: "asc" },
     }),
   ]);
 
@@ -124,8 +117,8 @@ export default async function Page({
       realisasi: Number(k.realisasi),
       realLalu: k.realLalu !== null ? Number(k.realLalu) : null,
       realIni: k.realIni !== null ? Number(k.realIni) : null,
-      jenis: k.jenisKegiatan?.nama || k.jenis || "Unassigned",
-      jenisKegiatanId: k.jenisKegiatanId,
+       jenis: k.jenis || "APBN",
+
     }));
 
   return (
@@ -137,7 +130,7 @@ export default async function Page({
       sort={sort}
       order={order}
       pjOptions={pjOptions}
-      jenisKegiatanOptions={jenisKegiatanOptions}
+
       wajibLaporData={serialize(wajibRows)}
       wajibPage={wajibPage}
       wajibPageSize={WAJIB_PAGE_SIZE}

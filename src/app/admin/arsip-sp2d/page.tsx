@@ -48,12 +48,12 @@ export default async function ArsipPage({
 
   const [kegiatanList, laporanList, availablePeriods] = await Promise.all([
     prisma.kegiatan.findMany({
-      include: { pj: true, jenisKegiatan: { select: { nama: true } } },
+      include: { pj: true },
       orderBy: { kode: "asc" },
     }),
     prisma.laporan.findMany({
       include: {
-        kegiatan: { include: { pj: true, jenisKegiatan: { select: { nama: true } } } },
+        kegiatan: { include: { pj: true } },
         submittedBy: true,
       },
       orderBy: [
@@ -106,7 +106,7 @@ export default async function ArsipPage({
         periode: activeLabel,
         periodeBulan: l.periodeBulan,
         periodeTahun: l.periodeTahun,
-        jenis: l.kegiatan.jenisKegiatan?.nama || l.kegiatan.jenis || "Unassigned",
+        jenis: l.kegiatan.jenis || "APBN",
         pjNama: l.submittedBy?.name || l.kegiatan.pj?.name || "PJ Kegiatan",
         pjEmail: l.submittedBy?.email || l.kegiatan.pj?.email || "-",
         waktuUpload:
@@ -138,7 +138,7 @@ export default async function ArsipPage({
           periode: activeLabel,
           periodeBulan: targetMonth,
           periodeTahun: targetYear,
-          jenis: k.jenisKegiatan?.nama || k.jenis || "Unassigned",
+          jenis: k.jenis || "APBN",
           pjNama: k.pj?.name || "PJ Belum Ditentukan",
           pjEmail: k.pj?.email || "-",
           waktuUpload: "—",
@@ -164,7 +164,7 @@ export default async function ArsipPage({
         periode: `${NAMA_BULAN[l.periodeBulan - 1]} ${l.periodeTahun}`,
         periodeBulan: l.periodeBulan,
         periodeTahun: l.periodeTahun,
-        jenis: l.kegiatan.jenisKegiatan?.nama || l.kegiatan.jenis || "Unassigned",
+        jenis: l.kegiatan.jenis || "APBN",
         pjNama: l.submittedBy?.name || l.kegiatan.pj?.name || "PJ Kegiatan",
         pjEmail: l.submittedBy?.email || l.kegiatan.pj?.email || "-",
         waktuUpload:
@@ -206,7 +206,7 @@ export default async function ArsipPage({
           periode: activePeriodLabel,
           periodeBulan: activeMonth,
           periodeTahun: activeYear,
-          jenis: k.jenisKegiatan?.nama || k.jenis || "Unassigned",
+          jenis: k.jenis || "APBN",
           pjNama: k.pj?.name || "PJ Belum Ditentukan",
           pjEmail: k.pj?.email || "-",
           waktuUpload: "—",

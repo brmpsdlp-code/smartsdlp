@@ -33,7 +33,6 @@ type KegiatanFromDb = {
   kode: string;
   nama: string;
   jenis: string;
-  jenisKegiatanId: string | null;
   programCategory: string | null;
   pagu: number;
   realisasi: number;
@@ -58,7 +57,6 @@ interface ManajemenKegiatanPageProps {
   sort: string;
   order: "asc" | "desc";
   pjOptions: PjOption[];
-  jenisKegiatanOptions: { id: string; nama: string }[];
   wajibLaporData: KegiatanFromDb[];
   wajibPage: number;
   wajibPageSize: number;
@@ -134,7 +132,6 @@ export function ManajemenKegiatanPage({
   sort,
   order,
   pjOptions,
-  jenisKegiatanOptions,
   wajibLaporData,
   belumLaporCount,
   sudahLaporCount,
@@ -189,7 +186,7 @@ export function ManajemenKegiatanPage({
   const [formKode, setFormKode] = useState("");
   const [formNama, setFormNama] = useState("");
   const [formPjId, setFormPjId] = useState<string>(pjOptions[0]?.id ?? "");
-  const [formJenis, setFormJenis] = useState<string>(jenisKegiatanOptions[0]?.id ?? "");
+  const [formJenis, setFormJenis] = useState<"APBN" | "NON_APBN">("APBN");
   const [formPagu, setFormPagu] = useState("500000000");
   const [formCategory, setFormCategory] = useState<string>("");
   const [formError, setFormError] = useState<string | null>(null);
@@ -270,7 +267,7 @@ export function ManajemenKegiatanPage({
     setFormKode("7912.SDA.015.051A");
     setFormNama("");
     setFormPjId(pjOptions[0]?.id ?? "");
-    setFormJenis(jenisKegiatanOptions[0]?.id ?? "");
+    setFormJenis("APBN");
     setFormPagu("450000000");
     setFormCategory("");
     setModalOpen(true);
@@ -282,7 +279,7 @@ export function ManajemenKegiatanPage({
     setFormKode(k.kode);
     setFormNama(k.nama);
     setFormPjId(k.pjId ?? pjOptions[0]?.id ?? "");
-    setFormJenis(k.jenisKegiatanId ?? jenisKegiatanOptions[0]?.id ?? "");
+    setFormJenis(k.jenis === "NON_APBN" ? "NON_APBN" : "APBN");
     setFormPagu(String(k.pagu));
     setFormCategory(k.programCategory ?? "");
     setModalOpen(true);
@@ -303,7 +300,7 @@ export function ManajemenKegiatanPage({
             id: editId,
             kode: formKode,
             nama: formNama,
-            jenisKegiatanId: formJenis,
+            jenis: formJenis,
             programCategory: formCategory,
             pagu: Number(formPagu),
             pjId: formPjId || undefined,
@@ -311,7 +308,7 @@ export function ManajemenKegiatanPage({
         : await createKegiatan({
             kode: formKode,
             nama: formNama,
-            jenisKegiatanId: formJenis,
+            jenis: formJenis,
             programCategory: formCategory,
             pagu: Number(formPagu),
             pjId: formPjId || undefined,
@@ -965,15 +962,12 @@ export function ManajemenKegiatanPage({
                     <select
                       value={formJenis}
                       onChange={(e) =>
-                        setFormJenis(e.target.value)
+                        setFormJenis(e.target.value as "APBN" | "NON_APBN")
                       }
                       className="w-full h-9 px-2 text-xs bg-white border border-slate-300 rounded-md"
                     >
-                      {jenisKegiatanOptions.map((jk) => (
-                        <option key={jk.id} value={jk.id}>
-                          {jk.nama}
-                        </option>
-                      ))}
+                      <option value="APBN">APBN</option>
+                      <option value="NON_APBN">NON_APBN</option>
                     </select>
                   </div>
                 </div>

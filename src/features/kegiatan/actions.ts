@@ -8,7 +8,7 @@ import { z } from "zod";
 const createKegiatanSchema = z.object({
   kode: z.string().min(1, "Kode kegiatan wajib diisi"),
   nama: z.string().min(1, "Nama kegiatan wajib diisi"),
-  jenisKegiatanId: z.string().min(1, "Jenis kegiatan wajib dipilih"),
+  jenis: z.enum(["APBN", "NON_APBN"]),
   programCategory: z.string().min(1, "Kategori program wajib dipilih"),
   pagu: z.coerce.number().int().positive("Pagu harus lebih dari 1"),
   pjId: z.string().optional(),
@@ -71,7 +71,7 @@ export async function createKegiatan(
     data: {
       kode: data.kode,
       nama: data.nama,
-      jenisKegiatanId: data.jenisKegiatanId,
+      jenis: data.jenis,
       programCategory: data.programCategory || null,
       pagu: BigInt(data.pagu),
       uraian: data.uraian || null,
@@ -81,7 +81,7 @@ export async function createKegiatan(
     },
     include: {
       pj: { select: { id: true, name: true, email: true } },
-      jenisKegiatan: { select: { nama: true } },
+
     },
   });
 
@@ -93,7 +93,7 @@ export async function createKegiatan(
       id: kegiatan.id,
       kode: kegiatan.kode,
       nama: kegiatan.nama,
-      jenis: kegiatan.jenisKegiatan?.nama ?? kegiatan.jenis ?? "",
+      jenis: kegiatan.jenis || "APBN",
       programCategory: kegiatan.programCategory,
       pagu: Number(kegiatan.pagu),
       realisasi: Number(kegiatan.realisasi),
@@ -106,7 +106,7 @@ const updateKegiatanSchema = z.object({
   id: z.string().min(1),
   kode: z.string().min(1, "Kode kegiatan wajib diisi"),
   nama: z.string().min(1, "Nama kegiatan wajib diisi"),
-  jenisKegiatanId: z.string().min(1, "Jenis kegiatan wajib dipilih"),
+  jenis: z.enum(["APBN", "NON_APBN"]),
   programCategory: z.string().optional(),
   pagu: z.coerce.number().int().positive("Pagu harus lebih dari 0"),
   pjId: z.string().optional(),
@@ -178,7 +178,7 @@ export async function updateKegiatan(
     data: {
       kode: data.kode,
       nama: data.nama,
-      jenisKegiatanId: data.jenisKegiatanId,
+      jenis: data.jenis,
       programCategory: data.programCategory || null,
       pagu: BigInt(data.pagu),
       uraian: data.uraian || null,
@@ -186,7 +186,7 @@ export async function updateKegiatan(
     },
     include: {
       pj: { select: { id: true, name: true, email: true } },
-      jenisKegiatan: { select: { nama: true } },
+
     },
   });
 
@@ -198,7 +198,7 @@ export async function updateKegiatan(
       id: kegiatan.id,
       kode: kegiatan.kode,
       nama: kegiatan.nama,
-      jenis: kegiatan.jenisKegiatan?.nama ?? kegiatan.jenis ?? "",
+      jenis: kegiatan.jenis || "APBN",
       programCategory: kegiatan.programCategory,
       pagu: Number(kegiatan.pagu),
       realisasi: Number(kegiatan.realisasi),

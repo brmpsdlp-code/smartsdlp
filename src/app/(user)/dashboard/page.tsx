@@ -15,7 +15,7 @@ export default async function DashboardPage() {
   const [rows, laporanRows, laporanBulanIni] = await Promise.all([
     prisma.kegiatan.findMany({
       where: { pjId: session.user.id },
-      include: { pj: { select: { id: true, name: true, email: true } }, jenisKegiatan: { select: { nama: true } } },
+      include: { pj: { select: { id: true, name: true, email: true } } },
       orderBy: { createdAt: "desc" },
     }),
     prisma.laporan.findMany({
@@ -41,7 +41,7 @@ export default async function DashboardPage() {
     id: k.id,
     kode: k.kode,
     nama: k.nama,
-    jenis: k.jenisKegiatan?.nama || k.jenis || "Unassigned",
+    jenis: k.jenis || "APBN",
     programCategory: k.programCategory ?? undefined,
     pagu: Number(k.pagu),
     realisasi: Number(k.realisasi),

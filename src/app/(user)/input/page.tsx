@@ -16,7 +16,7 @@ export default async function Page({
   const [kegiatanRows, laporanHistory] = await Promise.all([
     prisma.kegiatan.findMany({
       where: { pjId: session.user.id },
-      include: { jenisKegiatan: { select: { nama: true } } },
+      include: {},
       orderBy: { nama: "asc" },
     }),
     prisma.laporan.findMany({
@@ -49,7 +49,7 @@ export default async function Page({
     id: k.id,
     kode: k.kode,
     nama: k.nama,
-    jenis: k.jenisKegiatan?.nama || k.jenis || "Unassigned",
+    jenis: k.jenis || "APBN",
     pagu: Number(k.pagu),
     statusAnggaran:
       k.statusAnggaran === "DIBLOKIR"
