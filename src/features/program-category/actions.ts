@@ -6,13 +6,18 @@ import { revalidatePath } from "next/cache";
 
 const fallback = "Program Lainnya/Unassigned";
 async function guard() { await requireAdminSession(); }
-export async function createProgramCategory(input: { name: string; sortOrder: number; colorKey: string }) {
-  await guard(); const name = input.name.trim();
-  if (!name || name === fallback) return { success: false, error: "Nama kategori tidak valid." };
+export async function createProgramCategory(input: { name: string }) {
+  await guard();
+  const name = input.name.trim();
+  if (!name || name.toLowerCase() === fallback.toLowerCase()) return { success: false, error: "Nama kategori tidak valid." };
   const exists = await prisma.programCategory.findFirst({ where: { name: { equals: name, mode: "insensitive" } } });
   if (exists) return { success: false, error: "Nama kategori sudah digunakan." };
-  await prisma.programCategory.create({ data: { name, sortOrder: input.sortOrder, colorKey: input.colorKey.trim() || "muted" } });
-  revalidatePath("/admin/program-category"); return { success: true };
+  const last = await prisma.programCategory.findFirst({ orderBy: { sortOrder: "desc" }, select: { sortOrder: true } });
+  const colors = ["green", "green-light", "green-dark", "gold", "muted"];
+  const count = await prisma.programCategory.count();
+  const category = await prisma.programCategory.create({ data: { name, sortOrder: (last?.sortOrder ?? 0) + 1, colorKey: colors[count % colors.length] } });
+  revalidatePath("/admin/master");
+  return { success: true, category };
 }
 export async function updateProgramCategory(id: string, input: { name: string; sortOrder: number; colorKey: string; isActive: boolean }) {
   await guard(); const name = input.name.trim();
@@ -21,9 +26,9 @@ export async function updateProgramCategory(id: string, input: { name: string; s
   const exists = await prisma.programCategory.findFirst({ where: { name: { equals: name, mode: "insensitive" }, NOT: { id } } });
   if (exists) return { success: false, error: "Nama kategori sudah digunakan." };
   await prisma.programCategory.update({ where: { id }, data: { name, sortOrder: input.sortOrder, colorKey: input.colorKey.trim() || "muted", isActive: input.isActive } });
-  revalidatePath("/admin/program-category"); return { success: true };
+  revalidatePath("/admin/master"); return { success: true };
 }
 export async function deleteProgramCategory(id: string) {
   await guard();
-  try { await prisma.$transaction(async (tx) => { const row = await tx.programCategory.findUnique({ where: { id } }); if (!row || row.name === fallback) throw new Error("Kategori fallback tidak boleh dihapus."); const used = await tx.kegiatan.count({ where: { programCategoryId: id } }); if (used) throw new Error("Kategori masih digunakan kegiatan."); await tx.programCategory.delete({ where: { id } }); }); revalidatePath("/admin/program-category"); return { success: true }; } catch (e) { return { success: false, error: e instanceof Error ? e.message : "Kategori gagal dihapus." }; }
+  try { await prisma.$transaction(async (tx) => { const row = await tx.programCategory.findUnique({ where: { id } }); if (!row || row.name === fallback) throw new Error("Kategori fallback tidak boleh dihapus."); const used = await tx.kegiatan.count({ where: { programCategoryId: id } }); if (used) throw new Error("Kategori masih digunakan kegiatan."); await tx.programCategory.delete({ where: { id } }); }); revalidatePath("/admin/master"); return { success: true }; } catch (e) { return { success: false, error: e instanceof Error ? e.message : "Kategori gagal dihapus." }; }
 }

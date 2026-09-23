@@ -13,9 +13,11 @@ export interface SmartTableRow {
   fisik?: number;
   pagu: number;
   statusAnggaran?: "Dibuka" | "Diblokir";
-  realLalu?: number;
-  realIni?: number;
-  realisasi?: number;
+  realLalu: number;
+  realIni: number;
+  sdPeriode: number;
+  sisa: number;
+  persentaseRealisasi: number;
 }
 
 interface SmartDetailTableProps {
@@ -28,18 +30,11 @@ interface SmartDetailTableProps {
 
 export function SmartDetailTable({
   data,
-  compact = false,
   title,
 }: SmartDetailTableProps) {
   const calculatedRows = data.map((row, idx) => {
     const pagu = row.pagu || 0;
-    const realLalu =
-      row.realLalu !== undefined ? row.realLalu : (row.realisasi || 0) * 0.55;
-    const realIni =
-      row.realIni !== undefined ? row.realIni : (row.realisasi || 0) * 0.45;
-    const sdPeriode = realLalu + realIni;
-    const pctSerapan = pagu > 0 ? (sdPeriode / pagu) * 100 : 0;
-    const sisa = pagu - sdPeriode;
+    const { realLalu, realIni, sdPeriode, sisa, persentaseRealisasi } = row;
     const statusAnggaran = row.statusAnggaran || "Dibuka";
     const fisik = row.fisik !== undefined ? row.fisik : 75.0;
     const uraian =
@@ -55,7 +50,7 @@ export function SmartDetailTable({
       realLalu,
       realIni,
       sdPeriode,
-      pctSerapan,
+      pctSerapan: persentaseRealisasi,
       sisa,
       statusAnggaran,
       fisik,

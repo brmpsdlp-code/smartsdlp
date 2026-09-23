@@ -37,6 +37,14 @@ export type ProgramCategoryDefinition = {
 const COLOR_TOKENS: Record<string, string> = {
   blue: "var(--chart-1)",
   green: "var(--chart-2)",
+  "green-light": "var(--chart-3)",
+  "green-dark": "var(--chart-4)",
+  gold: "var(--chart-5)",
+  muted: "var(--chart-6)",
+  govGreen: "var(--primary)",
+  govRed: "var(--destructive)",
+  govBlue: "var(--report-accent)",
+  border: "var(--chart-9)",
   orange: "var(--chart-3)",
   purple: "var(--chart-4)",
   slate: "var(--chart-5)",
@@ -66,81 +74,12 @@ export const PROGRAM_COLORS: Record<string, string> = {
   "Program Lainnya/Unassigned": "#64748B",
 };
 
-/**
- * Auto-categorization engine:
- * 1. Checks explicit manual category if set
- * 2. Matches keywords in name/code
- * 3. Matches 4-digit code prefixes (6918, 7911, 7912)
- * 4. Fallback: "Program Lainnya/Unassigned"
- */
 export function resolveProgramCategory(
-  kode: string,
-  nama?: string,
-  manualCategory?: string
+  _kode: string,
+  _nama?: string,
+  manualCategory?: string,
 ): string {
-  if (manualCategory && manualCategory.trim()) {
-    return manualCategory.trim();
-  }
-
-  const cleanKode = (kode || "").toUpperCase().trim();
-  const cleanNama = (nama || "").toLowerCase();
-
-  // Priority 1: Keyword-based high accuracy detection
-  if (
-    cleanNama.includes("gaji") ||
-    cleanNama.includes("perkantoran") ||
-    cleanNama.includes("gedung") ||
-    cleanKode.includes("994")
-  ) {
-    return "Layanan Perkantoran";
-  }
-
-  if (
-    cleanNama.includes("sakip") ||
-    cleanNama.includes("akuntabilitas") ||
-    cleanNama.includes("evaluasi") ||
-    cleanNama.includes("pendampingan") ||
-    cleanKode.includes("962") ||
-    cleanKode.includes("963")
-  ) {
-    return "Fasilitas Kinerja";
-  }
-
-  if (
-    cleanNama.includes("alat") ||
-    cleanNama.includes("laboratorium") ||
-    cleanNama.includes("sensor") ||
-    cleanNama.includes("drone") ||
-    cleanNama.includes("sarana")
-  ) {
-    return "Alat & Sarana";
-  }
-
-  if (
-    cleanNama.includes("klinik") ||
-    cleanNama.includes("lahan") ||
-    cleanNama.includes("gambut") ||
-    cleanNama.includes("citarum") ||
-    cleanNama.includes("pemupukan") ||
-    cleanNama.includes("tanah")
-  ) {
-    return "Klinik Modernisasi/KMP";
-  }
-
-  // Priority 2: 4-Digit Prefix Fallback
-  if (cleanKode.startsWith("6918")) {
-    return "Fasilitas Kinerja";
-  }
-
-  if (cleanKode.startsWith("7911")) {
-    return "Alat & Sarana";
-  }
-
-  if (cleanKode.startsWith("7912")) {
-    return "Klinik Modernisasi/KMP";
-  }
-
-  return "Program Lainnya/Unassigned";
+  return manualCategory?.trim() || "Program Lainnya/Unassigned";
 }
 
 /**

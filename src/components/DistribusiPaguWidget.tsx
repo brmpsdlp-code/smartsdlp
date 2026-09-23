@@ -10,12 +10,14 @@ import { ProgramDetailModal } from "./ProgramDetailModal";
 interface DistribusiPaguWidgetProps {
   activities: Activity[];
   categories: { name: string; colorKey: string }[];
+  metrics: Record<string, { realLalu: number; realIni: number; sdPeriode: number; sisa: number; persentaseRealisasi: number }>;
   onNavigate?: (menu: string) => void;
 }
 
 export function DistribusiPaguWidget({
   activities,
   categories,
+  metrics,
   onNavigate,
 }: DistribusiPaguWidgetProps) {
   const [hoveredLabel, setHoveredLabel] = useState<string | null>(null);
@@ -206,6 +208,7 @@ export function DistribusiPaguWidget({
         programColor={selectedProgram?.color}
         programPagu={selectedProgram?.value}
         activities={activities}
+        metrics={metrics}
         onNavigate={onNavigate}
       />
     </div>

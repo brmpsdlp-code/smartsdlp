@@ -22,7 +22,6 @@ type KegiatanForInput = {
   fisik: number;
   realLalu: number;
   realIni: number;
-  realisasi: number;
   programCategory?: {
     id: string;
     name: string;

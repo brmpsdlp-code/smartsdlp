@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@/generated/prisma/client";
 import { ManajemenKegiatanPage } from "@/features/admin/manage-activities/components/manajemen-kegiatan-page";
 import { redirect } from "next/navigation";
+import { aggregateActivityReports } from "@/utils/reportAggregation";
 
 const PAGE_SIZE = 5;
 const WAJIB_PAGE_SIZE = 5;
@@ -113,12 +114,18 @@ export default async function Page({
   }
 
   const belumLaporCount = totalWajibCount - sudahLaporCount;
+  const now = new Date();
+  const laporanRows = await prisma.laporan.findMany({ select: { kegiatanId: true, periodeBulan: true, periodeTahun: true, realIni: true } });
+  const reportMetrics = aggregateActivityReports(rows.map((k) => ({ id: k.id, pagu: Number(k.pagu) })), laporanRows.map((l) => ({ ...l, realIni: Number(l.realIni) })), { month: now.getMonth() + 1, year: now.getFullYear() });
 
   const serialize = (list: typeof rows) =>
     list.map((k) => ({
       ...k,
       pagu: Number(k.pagu),
-      realisasi: Number(k.realisasi),
+      realisasi: reportMetrics.get(k.id)?.sdPeriode ?? 0,
+      sdPeriode: reportMetrics.get(k.id)?.sdPeriode ?? 0,
+      sisa: reportMetrics.get(k.id)?.sisa ?? Number(k.pagu),
+      persentaseRealisasi: reportMetrics.get(k.id)?.persentaseRealisasi ?? 0,
       realLalu: k.realLalu !== null ? Number(k.realLalu) : null,
       realIni: k.realIni !== null ? Number(k.realIni) : null,
        jenis: k.jenis || "APBN",

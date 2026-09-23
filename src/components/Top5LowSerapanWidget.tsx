@@ -23,10 +23,12 @@ const HIGH_COLORS = [
 
 interface Top5LowSerapanWidgetProps {
   activities: Activity[];
+  metrics: Record<string, { persentaseRealisasi: number; realLalu: number; realIni: number; sdPeriode: number; sisa: number }>;
 }
 
 export function Top5LowSerapanWidget({
   activities,
+  metrics,
 }: Top5LowSerapanWidgetProps) {
   const [activeSegment, setActiveSegment] = useState<"masalah" | "tren">(
     "masalah",
@@ -38,13 +40,13 @@ export function Top5LowSerapanWidget({
       .map((a) => ({
         nama: a.nama,
         pj: a.pj,
-        pct: Number(((a.realisasi / a.pagu) * 100).toFixed(1)),
+        pct: Number((metrics[a.id]?.persentaseRealisasi ?? 0).toFixed(1)),
       }));
 
     const low = [...withPct].sort((a, b) => a.pct - b.pct).slice(0, 5);
     const high = [...withPct].sort((a, b) => b.pct - a.pct).slice(0, 5);
     return { lowData: low, highData: high };
-  }, [activities]);
+  }, [activities, metrics]);
 
   const displayData = activeSegment === "masalah" ? lowData : highData;
   const colors = activeSegment === "masalah" ? LOW_COLORS : HIGH_COLORS;

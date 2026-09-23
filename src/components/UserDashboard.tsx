@@ -42,11 +42,13 @@ type LaporanHistoryItem = {
 
 interface UserDashboardProps {
   activities: Activity[];
+  metrics: Record<string, { realLalu: number; realIni: number; sdPeriode: number; sisa: number; persentaseRealisasi: number }>;
   laporanHistory: LaporanHistoryItem[];
 }
 
 export function UserDashboard({
   activities,
+  metrics,
   laporanHistory,
 }: UserDashboardProps) {
   const [filterStatus, setFilterStatus] = useState<
@@ -55,7 +57,7 @@ export function UserDashboard({
   const [historyTarget, setHistoryTarget] = useState<Activity | null>(null);
 
   const totalPagu = activities.reduce((a, b) => a + b.pagu, 0);
-  const totalReal = activities.reduce((a, b) => a + b.realisasi, 0);
+  const totalReal = activities.reduce((sum, activity) => sum + (metrics[activity.id]?.sdPeriode ?? 0), 0);
   const sisaAnggaran = totalPagu - totalReal;
   const persenSerapan = totalPagu > 0 ? (totalReal / totalPagu) * 100 : 0;
 
@@ -137,7 +139,7 @@ export function UserDashboard({
         <KpiCard
           label="Realisasi Keuangan"
           value={fmtRupiah(totalReal)}
-          sub={`Serapan Anggaran: ${persenSerapan.toFixed(1)}%`}
+          sub={`Persentase Realisasi: ${persenSerapan.toFixed(1)}%`}
           accent="#236437"
           icon={Icons.excel}
         />
@@ -221,7 +223,7 @@ export function UserDashboard({
                 ) : (
                   filteredActivities.map((act) => {
                     const pctKeu =
-                      act.pagu > 0 ? (act.realisasi / act.pagu) * 100 : 0;
+                      metrics[act.id]?.persentaseRealisasi ?? 0;
                     return (
                       <tr
                         key={act.id}
@@ -262,7 +264,7 @@ export function UserDashboard({
                           {fmtRupiah(act.pagu)}
                         </td>
                         <td className="py-3 px-3 text-right font-bold text-emerald-800 whitespace-nowrap">
-                          {fmtRupiah(act.realisasi)}
+                          {fmtRupiah(metrics[act.id]?.sdPeriode ?? 0)}
                         </td>
                         <td className="py-3 px-3 min-w-[140px]">
                           <ProgressBar value={pctKeu} color="#236437" />

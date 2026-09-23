@@ -69,7 +69,6 @@ export default async function Page({
     fisik: k.fisik ?? 0,
     realLalu: k.realLalu !== null ? Number(k.realLalu) : 0,
     realIni: k.realIni !== null ? Number(k.realIni) : 0,
-    realisasi: Number(k.realisasi),
     programCategory: k.programCategoryRef
       ? {
           id: k.programCategoryRef.id,

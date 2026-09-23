@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { AdminDashboard } from "@/components/admin-dashboard";
 import type { Activity } from "@/types";
+import { aggregateActivityReports } from "@/utils/reportAggregation";
 
 const NAMA_BULAN_SINGKAT = [
   "Jan",
@@ -59,6 +60,11 @@ programCategoryRef: {
     }),
   ]);
 
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth() + 1;
+  const period = { month: currentMonth, year: currentYear };
+  const aggregates = aggregateActivityReports(kegiatanRows.map((k) => ({ id: k.id, pagu: Number(k.pagu) })), laporanRows.map((l) => ({ ...l, realIni: Number(l.realIni) })), period);
   const activities: Activity[] = kegiatanRows.map((k) => ({
     id: k.id,
     kode: k.kode,
@@ -68,22 +74,18 @@ programCategoryRef: {
       ? k.programCategoryRef.name
       : k.programCategory ?? undefined,
     pagu: Number(k.pagu),
-    realisasi: Number(k.realisasi),
+    realisasi: aggregates.get(k.id)?.sdPeriode ?? 0,
     fisik: k.fisik ?? 0,
     uraian: k.uraian ?? undefined,
     statusAnggaran: k.statusAnggaran === "DIBLOKIR" ? "Diblokir" : "Dibuka",
-    realLalu: k.realLalu !== null ? Number(k.realLalu) : 0,
-    realIni: k.realIni !== null ? Number(k.realIni) : 0,
+    realLalu: aggregates.get(k.id)?.realLalu ?? 0,
+    realIni: aggregates.get(k.id)?.realIni ?? 0,
     pj: k.pj?.name,
     email: k.pj?.email,
     wajib: k.wajib,
-    sudahLapor: k.sudahLapor,
-    status: k.sudahLapor ? "done" : "pending",
+    sudahLapor: aggregates.get(k.id)?.sudahLaporPeriode ?? false,
+    status: aggregates.get(k.id)?.sudahLaporPeriode ? "done" : "pending",
   }));
-
-  const now = new Date();
-  const currentYear = now.getFullYear();
-  const currentMonth = now.getMonth() + 1;
 
   // Bar chart: total realisasi PER BULAN (bukan kumulatif), Januari s.d. bulan berjalan.
   const barData = Array.from({ length: currentMonth }, (_, i) => {
@@ -109,7 +111,7 @@ programCategoryRef: {
     const target = Number(((bulanKe / 12) * 100).toFixed(1));
 
     if (bulanKe > currentMonth) {
-      return { name: NAMA_BULAN_SINGKAT[i], target, realisasi: undefined };
+      return { name: NAMA_BULAN_SINGKAT[i], target, nilaiRealisasi: undefined };
     }
 
     const laporanBulanIni = laporanRows.filter(
@@ -120,15 +122,18 @@ programCategoryRef: {
       (sum, l) => sum + Number(l.realIni),
       0,
     );
-    const realisasi =
+    const nilaiRealisasi =
       totalPagu > 0 ? Number(((runningTotal / totalPagu) * 100).toFixed(1)) : 0;
 
-    return { name: NAMA_BULAN_SINGKAT[i], target, realisasi };
+    return { name: NAMA_BULAN_SINGKAT[i], target, nilaiRealisasi };
   });
+
+  const metrics = Object.fromEntries(aggregates.entries());
 
   return (
     <AdminDashboard
       activities={activities}
+      metrics={metrics}
       categories={categories.filter((category) => category.isActive).map(({ name, colorKey }) => ({ name, colorKey }))}
       barData={barData}
       lineDataFull={lineDataFull}

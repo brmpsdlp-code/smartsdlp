@@ -29,12 +29,13 @@ interface BarDataPoint {
 interface LineDataPoint {
   name: string;
   target: number;
-  realisasi: number | undefined;
+  nilaiRealisasi: number | undefined;
 }
 
 interface AdminDashboardProps {
   activities: Activity[];
   categories: { name: string; colorKey: string }[];
+  metrics: Record<string, { realLalu: number; realIni: number; sdPeriode: number; sisa: number; persentaseRealisasi: number }>;
   barData: BarDataPoint[];
   lineDataFull: LineDataPoint[];
 }
@@ -42,6 +43,7 @@ interface AdminDashboardProps {
 export function AdminDashboard({
   activities,
   categories,
+  metrics,
   barData,
   lineDataFull,
 }: AdminDashboardProps) {
@@ -54,7 +56,7 @@ export function AdminDashboard({
   );
 
   const totalPagu = activities.reduce((a, b) => a + b.pagu, 0);
-  const totalReal = activities.reduce((a, b) => a + b.realisasi, 0);
+  const totalReal = activities.reduce((sum, activity) => sum + (metrics[activity.id]?.sdPeriode ?? 0), 0);
   const totalWajib = activities.filter((a) => a.wajib).length;
   const sudahLapor = activities.filter((a) => a.wajib && a.sudahLapor).length;
   const belumLapor = totalWajib - sudahLapor;
@@ -82,9 +84,9 @@ export function AdminDashboard({
 
   const lastDataPoint = [...lineDataFull]
     .reverse()
-    .find((d) => d.realisasi !== undefined);
+    .find((d) => d.nilaiRealisasi !== undefined);
   const statusLabel = lastDataPoint
-    ? `${lastDataPoint.realisasi! >= lastDataPoint.target ? "On-Track" : "Perlu Percepatan"} (${lastDataPoint.realisasi!.toFixed(1)}% vs ${lastDataPoint.target.toFixed(1)}%)`
+    ? `${lastDataPoint.nilaiRealisasi! >= lastDataPoint.target ? "On-Track" : "Perlu Percepatan"} (${lastDataPoint.nilaiRealisasi!.toFixed(1)}% vs ${lastDataPoint.target.toFixed(1)}%)`
     : "Belum ada data";
 
   return (
@@ -146,7 +148,7 @@ export function AdminDashboard({
         <KpiCard
           label="Total Realisasi Keuangan"
           value={fmtRupiah(totalReal)}
-          sub={`Serapan Real: ${persenSerapan.toFixed(1)}%`}
+          sub={`Realisasi %: ${persenSerapan.toFixed(1)}%`}
           accent="#236437"
           icon={Icons.excel}
         />
@@ -292,7 +294,7 @@ export function AdminDashboard({
               </div>
 
               <div className="lg:col-span-5 xl:col-span-4 h-full">
-                <DistribusiPaguWidget activities={activities} categories={categories} />
+                <DistribusiPaguWidget activities={activities} categories={categories} metrics={metrics} />
               </div>
             </div>
           </div>
@@ -353,7 +355,7 @@ export function AdminDashboard({
                       />
                       <Line
                         type="monotone"
-                        dataKey="realisasi"
+                        dataKey="nilaiRealisasi"
                         name="Realisasi Aktual (%)"
                         stroke="#236437"
                         strokeWidth={2.5}
@@ -364,7 +366,7 @@ export function AdminDashboard({
                 </div>
               </div>
 
-              <Top5LowSerapanWidget activities={activities} />
+              <Top5LowSerapanWidget activities={activities} metrics={metrics} />
             </div>
           </div>
         )}
@@ -446,7 +448,7 @@ export function AdminDashboard({
                   ) : (
                     filtered.map((item, idx) => {
                       const pct =
-                        item.pagu > 0 ? (item.realisasi / item.pagu) * 100 : 0;
+                        metrics[item.id]?.persentaseRealisasi ?? 0;
                       return (
                         <tr
                           key={item.id}
@@ -480,7 +482,7 @@ export function AdminDashboard({
                             {fmtRupiah(item.pagu)}
                           </td>
                           <td className="py-2.5 px-3 text-right font-bold text-emerald-800 whitespace-nowrap">
-                            {fmtRupiah(item.realisasi)}
+                            {fmtRupiah(metrics[item.id]?.sdPeriode ?? 0)}
                           </td>
                           <td className="py-2.5 px-3 min-w-[130px]">
                             <ProgressBar value={pct} color="#236437" />

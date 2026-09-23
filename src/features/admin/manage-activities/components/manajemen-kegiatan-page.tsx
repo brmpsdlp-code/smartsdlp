@@ -26,6 +26,10 @@ import {
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { createProgramCategory, deleteProgramCategory, updateProgramCategory } from "@/features/program-category/actions";
 
 type KegiatanFromDb = {
   id: string;
@@ -136,7 +140,7 @@ export function ManajemenKegiatanPage({
   pjOptions,
   programCategories,
   wajibLaporData,
-  belumLaporCount,
+
   sudahLaporCount,
   totalWajibCount,
   wajibPage,
@@ -192,6 +196,13 @@ export function ManajemenKegiatanPage({
   const [formJenis, setFormJenis] = useState<"APBN" | "NON_APBN">("APBN");
   const [formPagu, setFormPagu] = useState("500000000");
   const [formCategoryId, setFormCategoryId] = useState<string>("");
+  const [categoryList, setCategoryList] = useState(programCategories);
+  const [categoryOpen, setCategoryOpen] = useState(false);
+  const [creatingCategory, setCreatingCategory] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [categoryError, setCategoryError] = useState<string | null>(null);
+  const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
+  const [editingCategoryName, setEditingCategoryName] = useState("");
   const [formError, setFormError] = useState<string | null>(null);
 
   const [deleteTarget, setDeleteTarget] = useState<KegiatanFromDb | null>(null);
@@ -286,6 +297,29 @@ export function ManajemenKegiatanPage({
     setFormPagu(String(k.pagu));
     setFormCategoryId(k.programCategoryId ?? "");
     setModalOpen(true);
+  };
+
+  const saveNewCategory = async () => {
+    const result = await createProgramCategory({ name: newCategoryName });
+    if (!result.success || !result.category) { setCategoryError(result.error ?? "Kategori gagal dibuat."); return; }
+    const created = result.category;
+    setCategoryList((prev) => [...prev, created].sort((a, b) => a.sortOrder - b.sortOrder));
+    setFormCategoryId(created.id); setCreatingCategory(false); setNewCategoryName(""); setCategoryError(null);
+  };
+
+  const renameCategory = async (category: ProgramCategoryOption) => {
+    const name = editingCategoryName.trim();
+    const result = await updateProgramCategory(category.id, { name, sortOrder: category.sortOrder, colorKey: category.colorKey, isActive: category.isActive });
+    if (!result.success) { setCategoryError(result.error ?? "Operasi kategori gagal."); return; }
+    setCategoryList((prev) => prev.map((item) => item.id === category.id ? { ...item, name } : item));
+    setEditingCategoryId(null); setCategoryError(null);
+  };
+
+  const removeCategory = async (id: string) => {
+    const result = await deleteProgramCategory(id);
+    if (!result.success) { setCategoryError(result.error ?? "Operasi kategori gagal."); return; }
+    setCategoryList((prev) => prev.filter((item) => item.id !== id));
+    if (formCategoryId === id) setFormCategoryId(""); setCategoryError(null);
   };
 
   const handleSaveActivity = (e: React.FormEvent) => {
@@ -906,21 +940,148 @@ export function ManajemenKegiatanPage({
                     Kategori Program Utama{" "}
                     <span className="text-rose-600">*</span>
                   </label>
-                  <select
-                    required
-value={formCategoryId}
-                     onChange={(e) => setFormCategoryId(e.target.value)}
-                    className="w-full h-9 px-2 text-xs bg-white border border-slate-300 rounded-md font-semibold text-slate-800"
-                  >
-                    <option value="" disabled>
-                      — Pilih kategori —
-                    </option>
-                    {programCategories.filter((c) => c.isActive || c.id === formCategoryId).map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.name}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="relative space-y-2">
+                    <div className="flex items-center gap-2">
+                      <select
+                        required
+                        value={formCategoryId}
+                        onChange={(e) => {
+                          if (e.target.value === "__new__") {
+                            setCreatingCategory(true);
+                            setCategoryError(null);
+                            return;
+                          }
+                          setFormCategoryId(e.target.value);
+                        }}
+                        className="h-9 min-w-0 flex-1 rounded-md border border-slate-300 bg-white px-2 text-xs font-semibold text-slate-800"
+                      >
+                        <option value="" disabled>
+                          Pilih kategori
+                        </option>
+                        {categoryList
+                          .filter((category) => category.isActive || category.id === formCategoryId)
+                          .map((category) => (
+                            <option key={category.id} value={category.id}>
+                              {category.name}
+                            </option>
+                          ))}
+                        <option disabled>────────────</option>
+                        <option value="__new__">+ Tambah kategori baru</option>
+                      </select>
+
+                      <Popover open={categoryOpen} onOpenChange={setCategoryOpen}>
+                        <PopoverTrigger
+                          render={
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="icon-xs"
+                              aria-label="Kelola kategori"
+                            >
+                              ...
+                            </Button>
+                          }
+                        />
+                        <PopoverContent className="w-80">
+                          <div className="text-xs font-semibold">Kelola kategori</div>
+                          {categoryList
+                            .filter((category) => category.isActive)
+                            .map((category) => {
+                              const isFallback =
+                                category.name === "Program Lainnya/Unassigned";
+                              return isFallback ? (
+                                <div
+                                  key={category.id}
+                                  className="text-xs text-muted-foreground"
+                                >
+                                  {category.name}
+                                </div>
+                              ) : (
+                                <div
+                                  key={category.id}
+                                  className="space-y-1 border-b pb-2 last:border-0"
+                                >
+                                  <div className="flex items-center justify-between gap-2 text-xs">
+                                    <span>{category.name}</span>
+                                    <span className="flex gap-1">
+                                      <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="xs"
+                                        onClick={() => {
+                                          setEditingCategoryId(category.id);
+                                          setEditingCategoryName(category.name);
+                                        }}
+                                      >
+                                        Ubah nama
+                                      </Button>
+                                      <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="xs"
+                                        onClick={() => removeCategory(category.id)}
+                                      >
+                                        Hapus
+                                      </Button>
+                                    </span>
+                                  </div>
+                                  {editingCategoryId === category.id && (
+                                    <div className="flex gap-1">
+                                      <Input
+                                        value={editingCategoryName}
+                                        onChange={(e) =>
+                                          setEditingCategoryName(e.target.value)
+                                        }
+                                      />
+                                      <Button
+                                        type="button"
+                                        size="xs"
+                                        onClick={() => renameCategory(category)}
+                                      >
+                                        Simpan
+                                      </Button>
+                                    </div>
+                                  )}
+                                </div>
+                              );
+                            })}
+                          {categoryError && (
+                            <p className="text-xs text-destructive">{categoryError}</p>
+                          )}
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+
+                    {creatingCategory && (
+                      <div className="rounded-md border border-slate-200 bg-slate-50 p-2">
+                        <div className="flex items-center gap-1">
+                          <Input
+                            autoFocus
+                            placeholder="Nama kategori baru"
+                            value={newCategoryName}
+                            onChange={(e) => setNewCategoryName(e.target.value)}
+                          />
+                          <Button type="button" size="xs" onClick={saveNewCategory}>
+                            Simpan
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="xs"
+                            onClick={() => {
+                              setCreatingCategory(false);
+                              setCategoryError(null);
+                            }}
+                          >
+                            Batal
+                          </Button>
+                        </div>
+                        {categoryError && (
+                          <p className="mt-1 text-xs text-destructive">{categoryError}</p>
+                        )}
+                      </div>
+                    )}
+                  </div>
                   {formCategoryId && (
                     <div className="flex items-center gap-1.5 pt-1">
                       <span
@@ -1041,3 +1202,6 @@ value={formCategoryId}
     </>
   );
 }
+
+
+

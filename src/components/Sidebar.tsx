@@ -33,12 +33,6 @@ const adminMenu: MenuItem[] = [
     path: "/admin/master",
   },
   {
-    id: "program-category",
-    label: "Kategori Program",
-    icon: Icons.dashboard,
-    path: "/admin/program-category",
-  },
-  {
     id: "users",
     label: "Pengguna",
     icon: Icons.user,

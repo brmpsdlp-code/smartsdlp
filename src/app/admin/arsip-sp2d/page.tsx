@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getActiveSession } from "@/lib/active-session";
 import { prisma } from "@/lib/prisma";
+import { aggregateActivityReports } from "@/utils/reportAggregation";
 import {
   MasterArsipSMARTPage,
   type ArsipItem,
@@ -95,6 +96,7 @@ export default async function ArsipPage({
   }
 
   // ── Bangun Matriks Arsip ────────────────────────────────────────────────
+  const reportMetrics = aggregateActivityReports(kegiatanList.map((k) => ({ id: k.id, pagu: Number(k.pagu) })), laporanList.map((l) => ({ kegiatanId: l.kegiatanId, periodeBulan: l.periodeBulan, periodeTahun: l.periodeTahun, realIni: Number(l.realIni) })), { month: activeMonth, year: activeYear });
   const allItems: ArsipItem[] = [];
 
   if (targetMonth && targetYear) {
@@ -155,7 +157,7 @@ export default async function ArsipPage({
           waktuUpload: "—",
           status: "BELUM_UPLOAD",
           pagu: Number(k.pagu),
-          realisasi: Number(k.realisasi),
+          realisasi: reportMetrics.get(k.id)?.sdPeriode ?? 0,
           realIni: Number(k.realIni || 0),
           fisik: k.fisik || 0,
           statusAnggaran: k.statusAnggaran,
@@ -223,7 +225,7 @@ export default async function ArsipPage({
           waktuUpload: "—",
           status: "BELUM_UPLOAD",
           pagu: Number(k.pagu),
-          realisasi: Number(k.realisasi),
+          realisasi: reportMetrics.get(k.id)?.sdPeriode ?? 0,
           realIni: Number(k.realIni || 0),
           fisik: k.fisik || 0,
           statusAnggaran: k.statusAnggaran,

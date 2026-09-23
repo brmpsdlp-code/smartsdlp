@@ -3,6 +3,7 @@ import { getActiveSession } from "@/lib/active-session";
 import { prisma } from "@/lib/prisma";
 import { UserDashboard } from "@/components/UserDashboard";
 import type { Activity } from "@/types";
+import { aggregateActivityReports } from "@/utils/reportAggregation";
 
 export default async function DashboardPage() {
   const session = await getActiveSession();
@@ -44,6 +45,7 @@ export default async function DashboardPage() {
     }),
   ]);
 
+  const aggregates = aggregateActivityReports(rows.map((k) => ({ id: k.id, pagu: Number(k.pagu) })), laporanRows.map((l) => ({ ...l, realIni: Number(l.realIni) })), { month: currentMonth, year: currentYear });
   const kegiatanSudahLaporBulanIni = new Set(
     laporanBulanIni.map((l) => l.kegiatanId),
   );
@@ -57,12 +59,12 @@ export default async function DashboardPage() {
       ? k.programCategoryRef.name
       : k.programCategory ?? undefined,
     pagu: Number(k.pagu),
-    realisasi: Number(k.realisasi),
+    realisasi: aggregates.get(k.id)?.sdPeriode ?? 0,
     fisik: k.fisik ?? 0,
     uraian: k.uraian ?? undefined,
     statusAnggaran: k.statusAnggaran === "DIBLOKIR" ? "Diblokir" : "Dibuka",
-    realLalu: k.realLalu !== null ? Number(k.realLalu) : 0,
-    realIni: k.realIni !== null ? Number(k.realIni) : 0,
+    realLalu: aggregates.get(k.id)?.realLalu ?? 0,
+    realIni: aggregates.get(k.id)?.realIni ?? 0,
     pj: k.pj?.name,
     email: k.pj?.email,
     wajib: k.wajib,
@@ -87,7 +89,8 @@ export default async function DashboardPage() {
     realisasi: Number(l.realisasi),
   }));
 
+  const metrics = Object.fromEntries(aggregates.entries());
   return (
-    <UserDashboard activities={activities} laporanHistory={laporanHistory} />
+    <UserDashboard activities={activities} metrics={metrics} laporanHistory={laporanHistory} />
   );
 }

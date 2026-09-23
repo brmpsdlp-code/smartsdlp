@@ -12,6 +12,7 @@ interface ProgramDetailModalProps {
   programColor?: string;
   programPagu?: number;
   activities: Activity[];
+  metrics: Record<string, { realLalu: number; realIni: number; sdPeriode: number; sisa: number; persentaseRealisasi: number }>;
   onNavigate?: (menu: string) => void;
 }
 
@@ -22,13 +23,16 @@ export function ProgramDetailModal({
   programColor = "#134B88",
   programPagu,
   activities,
+  metrics,
   onNavigate,
 }: ProgramDetailModalProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterJenis, setFilterJenis] = useState<"ALL" | "APBN" | "NON-APBN">("ALL");
 
+  // Reset filters when modal opens; state synchronization is intentional.
   useEffect(() => {
     if (isOpen) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSearchTerm("");
       setFilterJenis("ALL");
     }
@@ -57,8 +61,8 @@ export function ProgramDetailModal({
   }, [programActivities, programPagu]);
 
   const totalRealisasi = useMemo(() => {
-    return programActivities.reduce((acc, curr) => acc + curr.realisasi, 0);
-  }, [programActivities]);
+    return programActivities.reduce((acc, curr) => acc + (metrics[curr.id]?.sdPeriode ?? 0), 0);
+  }, [programActivities, metrics]);
 
   const serapanPct = totalPagu > 0 ? (totalRealisasi / totalPagu) * 100 : 0;
   const sisaAnggaran = totalPagu - totalRealisasi;
@@ -264,7 +268,7 @@ export function ProgramDetailModal({
                   </tr>
                 ) : (
                   displayedActivities.map((act, index) => {
-                    const pctKeu = act.pagu > 0 ? (act.realisasi / act.pagu) * 100 : 0;
+                    const pctKeu = metrics[act.id]?.persentaseRealisasi ?? 0;
                     return (
                       <tr
                         key={act.id}
@@ -308,7 +312,7 @@ export function ProgramDetailModal({
                           {fmtRupiah(act.pagu)}
                         </td>
                         <td className="py-3 px-3 text-right font-bold text-emerald-800 whitespace-nowrap">
-                          {fmtRupiah(act.realisasi)}
+                          {fmtRupiah(metrics[act.id]?.sdPeriode ?? 0)}
                         </td>
                         <td className="py-3 px-3 min-w-[130px]">
                           <ProgressBar
@@ -343,7 +347,7 @@ export function ProgramDetailModal({
             <div className="text-xs text-slate-500 text-center sm:text-left">
               Menampilkan <span className="font-bold text-slate-800">{displayedActivities.length}</span> dari{" "}
               <span className="font-bold text-slate-800">{programActivities.length}</span> kegiatan pada program{" "}
-              <span className="font-bold text-slate-800">"{programName}"</span>
+              <span className="font-bold text-slate-800">&quot;{programName}&quot;</span>
             </div>
 
             <div className="flex items-center gap-2.5 w-full sm:w-auto justify-end">
