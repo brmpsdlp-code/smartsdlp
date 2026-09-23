@@ -55,7 +55,7 @@ const COLOR_TOKENS: Record<string, string> = {
   chart5: "var(--chart-5)",
 };
 
-function resolveCategoryColor(category: ProgramCategoryDefinition): string {
+export function resolveCategoryColor(category: ProgramCategoryDefinition): string {
   return category.color || (category.colorKey ? COLOR_TOKENS[category.colorKey.toLowerCase()] : undefined) || PROGRAM_COLORS[category.name] || "var(--chart-5)";
 }
 

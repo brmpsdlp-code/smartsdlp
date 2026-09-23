@@ -161,8 +161,8 @@ export function AdminDashboard({
         />
         <KpiCard
           label="Kepatuhan Laporan Kegiatan"
-          value={`${sudahLapor} / ${totalWajib} PJ`}
-          sub={`${belumLapor} PJ Kegiatan Belum Lapor`}
+          value={`${sudahLapor} / ${totalWajib} Kegiatan`}
+          sub={`${belumLapor} Kegiatan Belum Lapor`}
           accent="#C0392B"
           icon={Icons.users}
         />
@@ -341,7 +341,22 @@ export function AdminDashboard({
                         domain={[0, 100]}
                       />
                       <Tooltip
-                        formatter={(val) => [fmtRupiah(Number(val)), ""]}
+                        content={({ active, payload, label }) => {
+                          if (!active || !payload?.length) return null;
+                          const target = Number(payload.find((item) => item.dataKey === "target")?.value ?? 0);
+                          const actual = Number(payload.find((item) => item.dataKey === "nilaiRealisasi")?.value ?? 0);
+                          const gap = target - actual;
+                          return (
+                            <div className="rounded border border-slate-200 bg-white px-3 py-2 text-xs shadow-md">
+                              <p className="mb-1 font-semibold text-slate-700">{label}</p>
+                              <p>Realisasi Aktual (%): {actual.toFixed(1)}%</p>
+                              <p>Target Linear (Asumsi): {target.toFixed(1)}%</p>
+                              <p className={gap >= 0 ? "text-rose-700" : "text-emerald-700"}>
+                                Gap: {gap >= 0 ? "-" : "+"}{Math.abs(gap).toFixed(1)} poin ({gap >= 0 ? "tertinggal dari target" : "di atas target"})
+                              </p>
+                            </div>
+                          );
+                        }}
                       />
                       <Legend wrapperStyle={{ fontSize: 11 }} />
                       <Line

@@ -47,6 +47,7 @@ export function CetakLaporanPage({
   const [isSettingsOpen, setIsSettingsOpen] = useState(true);
   const [useDualTtd, setUseDualTtd] = useState(false);
   const [extraSpace, setExtraSpace] = useState(true);
+  const logoSrc = kemEntanLogo?.src || kemEntanLogo;
 
   // Penanggung Jawab Kegiatan (Kiri - Default & Always Active)
   const [labelPj, setLabelPj] = useState(
@@ -121,7 +122,7 @@ export function CetakLaporanPage({
             <select
               value={currentPeriode}
               onChange={(e) => handlePeriodeChange(e.target.value)}
-              className="h-8 px-2.5 text-xs bg-white border border-slate-300 rounded-md font-medium text-slate-800 focus:outline-none focus:ring-1 focus:ring-report-accent"
+              className="h-8 px-2.5 text-xs bg-white border border-slate-300 rounded-md font-medium text-slate-800 focus:outline-none focus:ring-1 focus:ring-primary"
             >
               <optgroup label="Bulanan">
                 {monthOptions.map((o) => (
@@ -140,7 +141,7 @@ export function CetakLaporanPage({
             </select>
           </div>
 
-          <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-amber-50 border border-amber-200 text-[11px] font-bold text-report-accentmber-900">
+          <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-amber-50 border border-amber-200 text-[11px] font-bold text-amber-900">
             Format: Dokumen Cetak A4 Landscape
           </span>
 
@@ -172,7 +173,7 @@ export function CetakLaporanPage({
           <button
             type="button"
             onClick={handleExportExcel}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-report-accent hover:bg-report-accent/90 text-white rounded-md text-xs font-bold shadow-xs transition cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary hover:bg-primary/90 text-white rounded-md text-xs font-bold shadow-xs transition cursor-pointer"
           >
             <svg
               width={14}
@@ -213,14 +214,14 @@ export function CetakLaporanPage({
       {isSettingsOpen && (
         <div className="w-full bg-white rounded-lg border border-slate-200/90 shadow-xs overflow-hidden print:hidden text-xs">
           {/* Panel Header */}
-          <div className="bg-report-accent text-white px-4 py-2.5 flex items-center justify-between">
+          <div className="bg-primary text-white px-4 py-2.5 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
               <h3 className="font-bold text-xs tracking-tight">
                 Panel Pengaturan Cetak &amp; Penandatanganan Dokumen
               </h3>
             </div>
-            <span className="text-[11px] text-report-accentmber-100">
+            <span className="text-[11px] text-amber-100">
               Konfigurasi Tanda Tangan &amp; Opsi Lembar A4 Landscape
             </span>
           </div>
@@ -228,16 +229,16 @@ export function CetakLaporanPage({
           <div className="p-4 space-y-4">
             {/* Opsi Mode Tanda Tangan & Ruang Cap */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-amber-50/60 p-3 rounded-lg border border-amber-200/80">
-              <label className="flex items-start gap-2.5 text-xs font-bold text-report-accentmber-950 cursor-pointer select-none">
+              <label className="flex items-start gap-2.5 text-xs font-bold text-amber-950 cursor-pointer select-none">
                 <input
                   type="checkbox"
                   checked={useDualTtd}
                   onChange={(e) => setUseDualTtd(e.target.checked)}
-                  className="mt-0.5 w-4 h-4 rounded border-amber-400 text-report-accent focus:ring-report-accent"
+                  className="mt-0.5 w-4 h-4 rounded border-amber-400 text-primary focus:ring-primary"
                 />
                 <div>
                   <span>Gunakan Dual TTD (2 Kolom Tanda Tangan)</span>
-                  <p className="font-normal text-[11px] text-report-accentmber-800/90 mt-0.5">
+                  <p className="font-normal text-[11px] text-amber-800/90 mt-0.5">
                     {useDualTtd
                       ? "Aktif: Menampilkan 2 kolom (Kiri: PJ Kegiatan, Kanan: Kepala Balai/Verifikator)."
                       : "Nonaktif (Default): Hanya 1 kolom TTD di KIRI BAWAH (Penanggung Jawab Kegiatan). Kolom kanan disembunyikan."}
@@ -245,18 +246,18 @@ export function CetakLaporanPage({
                 </div>
               </label>
 
-              <label className="flex items-start gap-2.5 text-xs font-bold text-report-accentmber-950 cursor-pointer select-none">
+              <label className="flex items-start gap-2.5 text-xs font-bold text-amber-950 cursor-pointer select-none">
                 <input
                   type="checkbox"
                   checked={extraSpace}
                   onChange={(e) => setExtraSpace(e.target.checked)}
-                  className="mt-0.5 w-4 h-4 rounded border-amber-400 text-report-accent focus:ring-report-accent"
+                  className="mt-0.5 w-4 h-4 rounded border-amber-400 text-primary focus:ring-primary"
                 />
                 <div>
                   <span>
                     Sediakan Ruang Luas untuk TTD &amp; Cap Basah (64px)
                   </span>
-                  <p className="font-normal text-[11px] text-report-accentmber-800/90 mt-0.5">
+                  <p className="font-normal text-[11px] text-amber-800/90 mt-0.5">
                     Memberikan ruang vertikal ekstra untuk pembubuhan stempel
                     dan tanda tangan fisik.
                   </p>
@@ -270,10 +271,10 @@ export function CetakLaporanPage({
               <div className="p-3.5 bg-slate-50/80 border border-slate-200 rounded-lg space-y-2.5">
                 <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
                   <span className="text-[11px] font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                    <span className="w-1.5 h-3 bg-report-accent rounded-xs" />
+                    <span className="w-1.5 h-3 bg-primary rounded-xs" />
                     KOLOM KIRI — PENANGGUNG JAWAB KEGIATAN
                   </span>
-                  <span className="text-[10px] font-bold text-report-accentmerald-700 bg-emerald-100 px-2 py-0.5 rounded">
+                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">
                     Wajib / Utama
                   </span>
                 </div>
@@ -286,7 +287,7 @@ export function CetakLaporanPage({
                     type="text"
                     value={labelPj}
                     onChange={(e) => setLabelPj(e.target.value)}
-                    className="w-full h-8 px-2.5 text-xs bg-white border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-report-accent"
+                    className="w-full h-8 px-2.5 text-xs bg-white border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-primary"
                   />
                 </div>
 
@@ -299,7 +300,7 @@ export function CetakLaporanPage({
                       type="text"
                       value={namaPj}
                       onChange={(e) => setNamaPj(e.target.value)}
-                      className="w-full h-8 px-2.5 text-xs bg-white border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-report-accent"
+                      className="w-full h-8 px-2.5 text-xs bg-white border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-primary"
                     />
                   </div>
 
@@ -311,7 +312,7 @@ export function CetakLaporanPage({
                       type="text"
                       value={nipPj}
                       onChange={(e) => setNipPj(e.target.value)}
-                      className="w-full h-8 px-2.5 text-xs bg-white border border-slate-300 rounded font-mono focus:outline-none focus:ring-1 focus:ring-report-accent"
+                      className="w-full h-8 px-2.5 text-xs bg-white border border-slate-300 rounded font-mono focus:outline-none focus:ring-1 focus:ring-primary"
                     />
                   </div>
                 </div>
@@ -324,7 +325,7 @@ export function CetakLaporanPage({
                     type="text"
                     value={jabatanPj}
                     onChange={(e) => setJabatanPj(e.target.value)}
-                    className="w-full h-8 px-2.5 text-xs bg-white border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-report-accent"
+                    className="w-full h-8 px-2.5 text-xs bg-white border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-primary"
                   />
                 </div>
               </div>
@@ -345,7 +346,7 @@ export function CetakLaporanPage({
                   <span
                     className={`text-[10px] font-bold px-2 py-0.5 rounded ${
                       useDualTtd
-                        ? "text-blue-800 bg-blue-100"
+                        ? "text-primary bg-emerald-100"
                         : "text-slate-500 bg-slate-200"
                     }`}
                   >
@@ -362,7 +363,7 @@ export function CetakLaporanPage({
                     value={labelAtasan}
                     onChange={(e) => setLabelAtasan(e.target.value)}
                     disabled={!useDualTtd}
-                    className="w-full p-2 text-xs bg-white border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-report-accent resize-none"
+                    className="w-full p-2 text-xs bg-white border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-primary resize-none"
                   />
                 </div>
 
@@ -376,7 +377,7 @@ export function CetakLaporanPage({
                       value={namaAtasan}
                       onChange={(e) => setNamaAtasan(e.target.value)}
                       disabled={!useDualTtd}
-                      className="w-full h-8 px-2.5 text-xs bg-white border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-report-accent"
+                      className="w-full h-8 px-2.5 text-xs bg-white border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-primary"
                     />
                   </div>
 
@@ -389,7 +390,7 @@ export function CetakLaporanPage({
                       value={nipAtasan}
                       onChange={(e) => setNipAtasan(e.target.value)}
                       disabled={!useDualTtd}
-                      className="w-full h-8 px-2.5 text-xs bg-white border border-slate-300 rounded font-mono focus:outline-none focus:ring-1 focus:ring-report-accent"
+                      className="w-full h-8 px-2.5 text-xs bg-white border border-slate-300 rounded font-mono focus:outline-none focus:ring-1 focus:ring-primary"
                     />
                   </div>
                 </div>
@@ -403,7 +404,7 @@ export function CetakLaporanPage({
                     value={jabatanAtasan}
                     onChange={(e) => setJabatanAtasan(e.target.value)}
                     disabled={!useDualTtd}
-                    className="w-full h-8 px-2.5 text-xs bg-white border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-report-accent"
+                    className="w-full h-8 px-2.5 text-xs bg-white border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-primary"
                   />
                 </div>
               </div>
@@ -434,7 +435,7 @@ export function CetakLaporanPage({
         {/* ── Lembar Dokumen Kertas A4 Landscape (1060px) ── */}
         <div
           id="printable-paper"
-          className="bg-white text-black p-6 sm:p-8 shadow-xl print:shadow-none border border-slate-300 print:border-none w-[1060px] max-w-[1060px] text-[9px] leading-tight"
+          className="bg-white text-black p-6 sm:p-8 shadow-xl print:shadow-none border border-slate-300 print:border-none w-full max-w-[1120px] text-[9px] leading-tight"
           style={{
             fontFamily: "'Times New Roman', Times, Georgia, serif",
           }}
@@ -442,7 +443,7 @@ export function CetakLaporanPage({
           {/* ── Kop Surat Resmi Kementerian Pertanian ── */}
           <div className="flex items-center gap-4 pb-2">
             <img
-              src={kemEntanLogo}
+              src={logoSrc}
               alt="Logo Kementan"
               className="h-16 w-auto object-contain flex-shrink-0"
             />
@@ -451,9 +452,9 @@ export function CetakLaporanPage({
                 KEMENTERIAN PERTANIAN REPUBLIK INDONESIA
               </p>
               <p className="text-[12px] font-bold uppercase tracking-wide">
-                BADAN STANDARDISASI INSTRUMEN PERTANIAN
+                BADAN PERAKITAN DAN MODERNISASI PERTANIAN
               </p>
-              <p className="text-[13px] font-bold uppercase tracking-wide text-report-accent">
+              <p className="text-[13px] font-bold uppercase tracking-wide text-primary">
                 BALAI BESAR PERAKITAN DAN MODERNISASI SUMBER DAYA LAHAN
                 PERTANIAN
               </p>
@@ -501,24 +502,23 @@ export function CetakLaporanPage({
 
           {/* ── Tabel Laporan Resmi dengan Multi-Row Header & Persentase Lebar Presisi ── */}
           <table className="w-full table-fixed border-collapse border border-black text-[8.5px] leading-tight">
-            <colgroup>
-              <col style={{ width: "3%" }} />
-              <col style={{ width: "9%" }} />
-              <col style={{ width: "17%" }} />
-              <col style={{ width: "4.5%" }} />
-              <col style={{ width: "16%" }} />
-              <col style={{ width: "4.5%" }} />
-              <col style={{ width: "8.5%" }} />
-              <col style={{ width: "5%" }} />
-              <col style={{ width: "7.5%" }} />
-              <col style={{ width: "7.5%" }} />
-              <col style={{ width: "7.5%" }} />
-              <col style={{ width: "3.5%" }} />
-              <col style={{ width: "6.5%" }} />
-            </colgroup>
+                         <colgroup>
+               <col style={{ width: "3%" }} />
+               <col style={{ width: "8.5%" }} />
+               <col style={{ width: "16%" }} />
+               <col style={{ width: "4.5%" }} />
+               <col style={{ width: "15%" }} />
+               <col style={{ width: "4.5%" }} />
+               <col style={{ width: "8%" }} />
+               <col style={{ width: "5%" }} />
+               <col style={{ width: "7%" }} />
+               <col style={{ width: "7%" }} />
+               <col style={{ width: "7%" }} />
+               <col style={{ width: "14.5%" }} />
+             </colgroup>
             <thead>
               {/* Header Row 1 (Cetak Tanpa Kolom PJ) */}
-              <tr className="bg-report-accent print:bg-report-accent text-white print:text-black font-bold text-center border-b border-black">
+              <tr className="bg-primary print:bg-primary text-white print:text-black font-bold text-center border-b border-black">
                 <th
                   rowSpan={2}
                   className="border border-black py-1 px-0.5 text-center align-middle font-bold"
@@ -576,7 +576,7 @@ export function CetakLaporanPage({
               </tr>
 
               {/* Header Row 2 (Sub-Header) */}
-              <tr className="bg-report-accent/90 print:bg-report-accent/90 text-white print:text-black font-bold text-center border-b border-black text-[8px]">
+              <tr className="bg-primary/90 print:bg-primary/90 text-white print:text-black font-bold text-center border-b border-black text-[8px]">
                 {/* Under Realisasi Anggaran */}
                 <th className="border border-black py-1 px-1 text-center align-middle font-bold">
                   Periode Lalu
@@ -618,7 +618,7 @@ export function CetakLaporanPage({
                     <span
                       className={
                         row.statusAnggaran === "Dibuka"
-                          ? "text-report-accentmerald-900 font-bold"
+                          ? "text-emerald-900 font-bold"
                           : "text-rose-900 font-bold"
                       }
                     >
@@ -646,7 +646,7 @@ export function CetakLaporanPage({
 
             {/* Total Summary Footer Row */}
             <tfoot>
-              <tr className="bg-slate-100 font-bold border-t-2 border-black text-[8.5px]">
+              <tr className="bg-emerald-50 font-bold border-t-2 border-primary text-[8.5px]">
                 <td
                   colSpan={4}
                   className="border border-black py-1 px-1 text-center uppercase tracking-wide"
@@ -770,3 +770,4 @@ export function CetakLaporanPage({
     </div>
   );
 }
+

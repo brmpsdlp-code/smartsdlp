@@ -21,6 +21,7 @@ import {
 import { fmtRupiah, Icons } from "@/utils/formatters";
 import {
   PROGRAM_COLORS,
+  resolveCategoryColor,
   resolveProgramCategory,
 } from "@/utils/programCategorization";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -1088,7 +1089,7 @@ export function ManajemenKegiatanPage({
                         className="w-2 h-2 rounded-full"
                         style={{
                           backgroundColor:
-                            programCategories.find((c) => c.id === formCategoryId)?.colorKey || "#64748B",
+                            resolveCategoryColor(programCategories.find((c) => c.id === formCategoryId) ?? { name: "", colorKey: "muted" }),
                         }}
                       />
                       <span className="text-[11px] text-slate-500">

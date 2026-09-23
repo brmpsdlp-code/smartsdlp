@@ -12,10 +12,14 @@ export async function createProgramCategory(input: { name: string }) {
   if (!name || name.toLowerCase() === fallback.toLowerCase()) return { success: false, error: "Nama kategori tidak valid." };
   const exists = await prisma.programCategory.findFirst({ where: { name: { equals: name, mode: "insensitive" } } });
   if (exists) return { success: false, error: "Nama kategori sudah digunakan." };
-  const last = await prisma.programCategory.findFirst({ orderBy: { sortOrder: "desc" }, select: { sortOrder: true } });
-  const colors = ["green", "green-light", "green-dark", "gold", "muted"];
-  const count = await prisma.programCategory.count();
-  const category = await prisma.programCategory.create({ data: { name, sortOrder: (last?.sortOrder ?? 0) + 1, colorKey: colors[count % colors.length] } });
+  const colors = ["green", "green-light", "green-dark", "gold", "muted", "govGreen", "govRed", "govBlue", "border"];
+  const category = await prisma.$transaction(async (tx) => {
+    const last = await tx.programCategory.findFirst({ orderBy: { sortOrder: "desc" }, select: { sortOrder: true } });
+    const active = await tx.programCategory.findMany({ where: { isActive: true }, select: { colorKey: true } });
+    const used = new Set(active.map((row) => row.colorKey));
+    const colorKey = colors.find((color) => !used.has(color)) ?? colors[(active.length) % colors.length];
+    return tx.programCategory.create({ data: { name, sortOrder: (last?.sortOrder ?? 0) + 1, colorKey } });
+  });
   revalidatePath("/admin/master");
   return { success: true, category };
 }
