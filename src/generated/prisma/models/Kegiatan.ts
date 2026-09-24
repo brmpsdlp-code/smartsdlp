@@ -47,7 +47,6 @@ export type KegiatanMinAggregateOutputType = {
   kode: string | null
   nama: string | null
   jenis: $Enums.JenisAnggaran | null
-  jenisKegiatanId: string | null
   programCategory: string | null
   programCategoryId: string | null
   pagu: bigint | null
@@ -69,7 +68,6 @@ export type KegiatanMaxAggregateOutputType = {
   kode: string | null
   nama: string | null
   jenis: $Enums.JenisAnggaran | null
-  jenisKegiatanId: string | null
   programCategory: string | null
   programCategoryId: string | null
   pagu: bigint | null
@@ -91,7 +89,6 @@ export type KegiatanCountAggregateOutputType = {
   kode: number
   nama: number
   jenis: number
-  jenisKegiatanId: number
   programCategory: number
   programCategoryId: number
   pagu: number
@@ -131,7 +128,6 @@ export type KegiatanMinAggregateInputType = {
   kode?: true
   nama?: true
   jenis?: true
-  jenisKegiatanId?: true
   programCategory?: true
   programCategoryId?: true
   pagu?: true
@@ -153,7 +149,6 @@ export type KegiatanMaxAggregateInputType = {
   kode?: true
   nama?: true
   jenis?: true
-  jenisKegiatanId?: true
   programCategory?: true
   programCategoryId?: true
   pagu?: true
@@ -175,7 +170,6 @@ export type KegiatanCountAggregateInputType = {
   kode?: true
   nama?: true
   jenis?: true
-  jenisKegiatanId?: true
   programCategory?: true
   programCategoryId?: true
   pagu?: true
@@ -284,7 +278,6 @@ export type KegiatanGroupByOutputType = {
   kode: string
   nama: string
   jenis: $Enums.JenisAnggaran | null
-  jenisKegiatanId: string | null
   programCategory: string | null
   programCategoryId: string | null
   pagu: bigint
@@ -329,7 +322,6 @@ export type KegiatanWhereInput = {
   kode?: Prisma.StringFilter<"Kegiatan"> | string
   nama?: Prisma.StringFilter<"Kegiatan"> | string
   jenis?: Prisma.EnumJenisAnggaranNullableFilter<"Kegiatan"> | $Enums.JenisAnggaran | null
-  jenisKegiatanId?: Prisma.StringNullableFilter<"Kegiatan"> | string | null
   programCategory?: Prisma.StringNullableFilter<"Kegiatan"> | string | null
   programCategoryId?: Prisma.StringNullableFilter<"Kegiatan"> | string | null
   pagu?: Prisma.BigIntFilter<"Kegiatan"> | bigint | number
@@ -344,7 +336,6 @@ export type KegiatanWhereInput = {
   pjId?: Prisma.StringNullableFilter<"Kegiatan"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Kegiatan"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Kegiatan"> | Date | string
-  jenisKegiatan?: Prisma.XOR<Prisma.JenisKegiatanNullableScalarRelationFilter, Prisma.JenisKegiatanWhereInput> | null
   programCategoryRef?: Prisma.XOR<Prisma.ProgramCategoryNullableScalarRelationFilter, Prisma.ProgramCategoryWhereInput> | null
   pj?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   laporan?: Prisma.LaporanListRelationFilter
@@ -356,7 +347,6 @@ export type KegiatanOrderByWithRelationInput = {
   kode?: Prisma.SortOrder
   nama?: Prisma.SortOrder
   jenis?: Prisma.SortOrderInput | Prisma.SortOrder
-  jenisKegiatanId?: Prisma.SortOrderInput | Prisma.SortOrder
   programCategory?: Prisma.SortOrderInput | Prisma.SortOrder
   programCategoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   pagu?: Prisma.SortOrder
@@ -371,7 +361,6 @@ export type KegiatanOrderByWithRelationInput = {
   pjId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  jenisKegiatan?: Prisma.JenisKegiatanOrderByWithRelationInput
   programCategoryRef?: Prisma.ProgramCategoryOrderByWithRelationInput
   pj?: Prisma.UserOrderByWithRelationInput
   laporan?: Prisma.LaporanOrderByRelationAggregateInput
@@ -386,7 +375,6 @@ export type KegiatanWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.KegiatanWhereInput | Prisma.KegiatanWhereInput[]
   nama?: Prisma.StringFilter<"Kegiatan"> | string
   jenis?: Prisma.EnumJenisAnggaranNullableFilter<"Kegiatan"> | $Enums.JenisAnggaran | null
-  jenisKegiatanId?: Prisma.StringNullableFilter<"Kegiatan"> | string | null
   programCategory?: Prisma.StringNullableFilter<"Kegiatan"> | string | null
   programCategoryId?: Prisma.StringNullableFilter<"Kegiatan"> | string | null
   pagu?: Prisma.BigIntFilter<"Kegiatan"> | bigint | number
@@ -401,7 +389,6 @@ export type KegiatanWhereUniqueInput = Prisma.AtLeast<{
   pjId?: Prisma.StringNullableFilter<"Kegiatan"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Kegiatan"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Kegiatan"> | Date | string
-  jenisKegiatan?: Prisma.XOR<Prisma.JenisKegiatanNullableScalarRelationFilter, Prisma.JenisKegiatanWhereInput> | null
   programCategoryRef?: Prisma.XOR<Prisma.ProgramCategoryNullableScalarRelationFilter, Prisma.ProgramCategoryWhereInput> | null
   pj?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   laporan?: Prisma.LaporanListRelationFilter
@@ -413,7 +400,6 @@ export type KegiatanOrderByWithAggregationInput = {
   kode?: Prisma.SortOrder
   nama?: Prisma.SortOrder
   jenis?: Prisma.SortOrderInput | Prisma.SortOrder
-  jenisKegiatanId?: Prisma.SortOrderInput | Prisma.SortOrder
   programCategory?: Prisma.SortOrderInput | Prisma.SortOrder
   programCategoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   pagu?: Prisma.SortOrder
@@ -443,7 +429,6 @@ export type KegiatanScalarWhereWithAggregatesInput = {
   kode?: Prisma.StringWithAggregatesFilter<"Kegiatan"> | string
   nama?: Prisma.StringWithAggregatesFilter<"Kegiatan"> | string
   jenis?: Prisma.EnumJenisAnggaranNullableWithAggregatesFilter<"Kegiatan"> | $Enums.JenisAnggaran | null
-  jenisKegiatanId?: Prisma.StringNullableWithAggregatesFilter<"Kegiatan"> | string | null
   programCategory?: Prisma.StringNullableWithAggregatesFilter<"Kegiatan"> | string | null
   programCategoryId?: Prisma.StringNullableWithAggregatesFilter<"Kegiatan"> | string | null
   pagu?: Prisma.BigIntWithAggregatesFilter<"Kegiatan"> | bigint | number
@@ -477,7 +462,6 @@ export type KegiatanCreateInput = {
   sudahLapor?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  jenisKegiatan?: Prisma.JenisKegiatanCreateNestedOneWithoutKegiatanInput
   programCategoryRef?: Prisma.ProgramCategoryCreateNestedOneWithoutKegiatanInput
   pj?: Prisma.UserCreateNestedOneWithoutKegiatanSebagaiPJInput
   laporan?: Prisma.LaporanCreateNestedManyWithoutKegiatanInput
@@ -489,7 +473,6 @@ export type KegiatanUncheckedCreateInput = {
   kode: string
   nama: string
   jenis?: $Enums.JenisAnggaran | null
-  jenisKegiatanId?: string | null
   programCategory?: string | null
   programCategoryId?: string | null
   pagu: bigint | number
@@ -525,7 +508,6 @@ export type KegiatanUpdateInput = {
   sudahLapor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  jenisKegiatan?: Prisma.JenisKegiatanUpdateOneWithoutKegiatanNestedInput
   programCategoryRef?: Prisma.ProgramCategoryUpdateOneWithoutKegiatanNestedInput
   pj?: Prisma.UserUpdateOneWithoutKegiatanSebagaiPJNestedInput
   laporan?: Prisma.LaporanUpdateManyWithoutKegiatanNestedInput
@@ -537,7 +519,6 @@ export type KegiatanUncheckedUpdateInput = {
   kode?: Prisma.StringFieldUpdateOperationsInput | string
   nama?: Prisma.StringFieldUpdateOperationsInput | string
   jenis?: Prisma.NullableEnumJenisAnggaranFieldUpdateOperationsInput | $Enums.JenisAnggaran | null
-  jenisKegiatanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   programCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   programCategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pagu?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -561,7 +542,6 @@ export type KegiatanCreateManyInput = {
   kode: string
   nama: string
   jenis?: $Enums.JenisAnggaran | null
-  jenisKegiatanId?: string | null
   programCategory?: string | null
   programCategoryId?: string | null
   pagu: bigint | number
@@ -602,7 +582,6 @@ export type KegiatanUncheckedUpdateManyInput = {
   kode?: Prisma.StringFieldUpdateOperationsInput | string
   nama?: Prisma.StringFieldUpdateOperationsInput | string
   jenis?: Prisma.NullableEnumJenisAnggaranFieldUpdateOperationsInput | $Enums.JenisAnggaran | null
-  jenisKegiatanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   programCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   programCategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pagu?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -634,7 +613,6 @@ export type KegiatanCountOrderByAggregateInput = {
   kode?: Prisma.SortOrder
   nama?: Prisma.SortOrder
   jenis?: Prisma.SortOrder
-  jenisKegiatanId?: Prisma.SortOrder
   programCategory?: Prisma.SortOrder
   programCategoryId?: Prisma.SortOrder
   pagu?: Prisma.SortOrder
@@ -664,7 +642,6 @@ export type KegiatanMaxOrderByAggregateInput = {
   kode?: Prisma.SortOrder
   nama?: Prisma.SortOrder
   jenis?: Prisma.SortOrder
-  jenisKegiatanId?: Prisma.SortOrder
   programCategory?: Prisma.SortOrder
   programCategoryId?: Prisma.SortOrder
   pagu?: Prisma.SortOrder
@@ -686,7 +663,6 @@ export type KegiatanMinOrderByAggregateInput = {
   kode?: Prisma.SortOrder
   nama?: Prisma.SortOrder
   jenis?: Prisma.SortOrder
-  jenisKegiatanId?: Prisma.SortOrder
   programCategory?: Prisma.SortOrder
   programCategoryId?: Prisma.SortOrder
   pagu?: Prisma.SortOrder
@@ -760,48 +736,6 @@ export type KegiatanUncheckedUpdateManyWithoutPjNestedInput = {
   connect?: Prisma.KegiatanWhereUniqueInput | Prisma.KegiatanWhereUniqueInput[]
   update?: Prisma.KegiatanUpdateWithWhereUniqueWithoutPjInput | Prisma.KegiatanUpdateWithWhereUniqueWithoutPjInput[]
   updateMany?: Prisma.KegiatanUpdateManyWithWhereWithoutPjInput | Prisma.KegiatanUpdateManyWithWhereWithoutPjInput[]
-  deleteMany?: Prisma.KegiatanScalarWhereInput | Prisma.KegiatanScalarWhereInput[]
-}
-
-export type KegiatanCreateNestedManyWithoutJenisKegiatanInput = {
-  create?: Prisma.XOR<Prisma.KegiatanCreateWithoutJenisKegiatanInput, Prisma.KegiatanUncheckedCreateWithoutJenisKegiatanInput> | Prisma.KegiatanCreateWithoutJenisKegiatanInput[] | Prisma.KegiatanUncheckedCreateWithoutJenisKegiatanInput[]
-  connectOrCreate?: Prisma.KegiatanCreateOrConnectWithoutJenisKegiatanInput | Prisma.KegiatanCreateOrConnectWithoutJenisKegiatanInput[]
-  createMany?: Prisma.KegiatanCreateManyJenisKegiatanInputEnvelope
-  connect?: Prisma.KegiatanWhereUniqueInput | Prisma.KegiatanWhereUniqueInput[]
-}
-
-export type KegiatanUncheckedCreateNestedManyWithoutJenisKegiatanInput = {
-  create?: Prisma.XOR<Prisma.KegiatanCreateWithoutJenisKegiatanInput, Prisma.KegiatanUncheckedCreateWithoutJenisKegiatanInput> | Prisma.KegiatanCreateWithoutJenisKegiatanInput[] | Prisma.KegiatanUncheckedCreateWithoutJenisKegiatanInput[]
-  connectOrCreate?: Prisma.KegiatanCreateOrConnectWithoutJenisKegiatanInput | Prisma.KegiatanCreateOrConnectWithoutJenisKegiatanInput[]
-  createMany?: Prisma.KegiatanCreateManyJenisKegiatanInputEnvelope
-  connect?: Prisma.KegiatanWhereUniqueInput | Prisma.KegiatanWhereUniqueInput[]
-}
-
-export type KegiatanUpdateManyWithoutJenisKegiatanNestedInput = {
-  create?: Prisma.XOR<Prisma.KegiatanCreateWithoutJenisKegiatanInput, Prisma.KegiatanUncheckedCreateWithoutJenisKegiatanInput> | Prisma.KegiatanCreateWithoutJenisKegiatanInput[] | Prisma.KegiatanUncheckedCreateWithoutJenisKegiatanInput[]
-  connectOrCreate?: Prisma.KegiatanCreateOrConnectWithoutJenisKegiatanInput | Prisma.KegiatanCreateOrConnectWithoutJenisKegiatanInput[]
-  upsert?: Prisma.KegiatanUpsertWithWhereUniqueWithoutJenisKegiatanInput | Prisma.KegiatanUpsertWithWhereUniqueWithoutJenisKegiatanInput[]
-  createMany?: Prisma.KegiatanCreateManyJenisKegiatanInputEnvelope
-  set?: Prisma.KegiatanWhereUniqueInput | Prisma.KegiatanWhereUniqueInput[]
-  disconnect?: Prisma.KegiatanWhereUniqueInput | Prisma.KegiatanWhereUniqueInput[]
-  delete?: Prisma.KegiatanWhereUniqueInput | Prisma.KegiatanWhereUniqueInput[]
-  connect?: Prisma.KegiatanWhereUniqueInput | Prisma.KegiatanWhereUniqueInput[]
-  update?: Prisma.KegiatanUpdateWithWhereUniqueWithoutJenisKegiatanInput | Prisma.KegiatanUpdateWithWhereUniqueWithoutJenisKegiatanInput[]
-  updateMany?: Prisma.KegiatanUpdateManyWithWhereWithoutJenisKegiatanInput | Prisma.KegiatanUpdateManyWithWhereWithoutJenisKegiatanInput[]
-  deleteMany?: Prisma.KegiatanScalarWhereInput | Prisma.KegiatanScalarWhereInput[]
-}
-
-export type KegiatanUncheckedUpdateManyWithoutJenisKegiatanNestedInput = {
-  create?: Prisma.XOR<Prisma.KegiatanCreateWithoutJenisKegiatanInput, Prisma.KegiatanUncheckedCreateWithoutJenisKegiatanInput> | Prisma.KegiatanCreateWithoutJenisKegiatanInput[] | Prisma.KegiatanUncheckedCreateWithoutJenisKegiatanInput[]
-  connectOrCreate?: Prisma.KegiatanCreateOrConnectWithoutJenisKegiatanInput | Prisma.KegiatanCreateOrConnectWithoutJenisKegiatanInput[]
-  upsert?: Prisma.KegiatanUpsertWithWhereUniqueWithoutJenisKegiatanInput | Prisma.KegiatanUpsertWithWhereUniqueWithoutJenisKegiatanInput[]
-  createMany?: Prisma.KegiatanCreateManyJenisKegiatanInputEnvelope
-  set?: Prisma.KegiatanWhereUniqueInput | Prisma.KegiatanWhereUniqueInput[]
-  disconnect?: Prisma.KegiatanWhereUniqueInput | Prisma.KegiatanWhereUniqueInput[]
-  delete?: Prisma.KegiatanWhereUniqueInput | Prisma.KegiatanWhereUniqueInput[]
-  connect?: Prisma.KegiatanWhereUniqueInput | Prisma.KegiatanWhereUniqueInput[]
-  update?: Prisma.KegiatanUpdateWithWhereUniqueWithoutJenisKegiatanInput | Prisma.KegiatanUpdateWithWhereUniqueWithoutJenisKegiatanInput[]
-  updateMany?: Prisma.KegiatanUpdateManyWithWhereWithoutJenisKegiatanInput | Prisma.KegiatanUpdateManyWithWhereWithoutJenisKegiatanInput[]
   deleteMany?: Prisma.KegiatanScalarWhereInput | Prisma.KegiatanScalarWhereInput[]
 }
 
@@ -926,7 +860,6 @@ export type KegiatanCreateWithoutPjInput = {
   sudahLapor?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  jenisKegiatan?: Prisma.JenisKegiatanCreateNestedOneWithoutKegiatanInput
   programCategoryRef?: Prisma.ProgramCategoryCreateNestedOneWithoutKegiatanInput
   laporan?: Prisma.LaporanCreateNestedManyWithoutKegiatanInput
   dokumen?: Prisma.DokumenCreateNestedManyWithoutKegiatanInput
@@ -937,7 +870,6 @@ export type KegiatanUncheckedCreateWithoutPjInput = {
   kode: string
   nama: string
   jenis?: $Enums.JenisAnggaran | null
-  jenisKegiatanId?: string | null
   programCategory?: string | null
   programCategoryId?: string | null
   pagu: bigint | number
@@ -989,7 +921,6 @@ export type KegiatanScalarWhereInput = {
   kode?: Prisma.StringFilter<"Kegiatan"> | string
   nama?: Prisma.StringFilter<"Kegiatan"> | string
   jenis?: Prisma.EnumJenisAnggaranNullableFilter<"Kegiatan"> | $Enums.JenisAnggaran | null
-  jenisKegiatanId?: Prisma.StringNullableFilter<"Kegiatan"> | string | null
   programCategory?: Prisma.StringNullableFilter<"Kegiatan"> | string | null
   programCategoryId?: Prisma.StringNullableFilter<"Kegiatan"> | string | null
   pagu?: Prisma.BigIntFilter<"Kegiatan"> | bigint | number
@@ -1004,78 +935,6 @@ export type KegiatanScalarWhereInput = {
   pjId?: Prisma.StringNullableFilter<"Kegiatan"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Kegiatan"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Kegiatan"> | Date | string
-}
-
-export type KegiatanCreateWithoutJenisKegiatanInput = {
-  id?: string
-  kode: string
-  nama: string
-  jenis?: $Enums.JenisAnggaran | null
-  programCategory?: string | null
-  pagu: bigint | number
-  realisasi?: bigint | number
-  fisik?: number | null
-  uraian?: string | null
-  statusAnggaran?: $Enums.StatusAnggaran
-  realLalu?: bigint | number | null
-  realIni?: bigint | number | null
-  wajib?: boolean
-  sudahLapor?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  programCategoryRef?: Prisma.ProgramCategoryCreateNestedOneWithoutKegiatanInput
-  pj?: Prisma.UserCreateNestedOneWithoutKegiatanSebagaiPJInput
-  laporan?: Prisma.LaporanCreateNestedManyWithoutKegiatanInput
-  dokumen?: Prisma.DokumenCreateNestedManyWithoutKegiatanInput
-}
-
-export type KegiatanUncheckedCreateWithoutJenisKegiatanInput = {
-  id?: string
-  kode: string
-  nama: string
-  jenis?: $Enums.JenisAnggaran | null
-  programCategory?: string | null
-  programCategoryId?: string | null
-  pagu: bigint | number
-  realisasi?: bigint | number
-  fisik?: number | null
-  uraian?: string | null
-  statusAnggaran?: $Enums.StatusAnggaran
-  realLalu?: bigint | number | null
-  realIni?: bigint | number | null
-  wajib?: boolean
-  sudahLapor?: boolean
-  pjId?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  laporan?: Prisma.LaporanUncheckedCreateNestedManyWithoutKegiatanInput
-  dokumen?: Prisma.DokumenUncheckedCreateNestedManyWithoutKegiatanInput
-}
-
-export type KegiatanCreateOrConnectWithoutJenisKegiatanInput = {
-  where: Prisma.KegiatanWhereUniqueInput
-  create: Prisma.XOR<Prisma.KegiatanCreateWithoutJenisKegiatanInput, Prisma.KegiatanUncheckedCreateWithoutJenisKegiatanInput>
-}
-
-export type KegiatanCreateManyJenisKegiatanInputEnvelope = {
-  data: Prisma.KegiatanCreateManyJenisKegiatanInput | Prisma.KegiatanCreateManyJenisKegiatanInput[]
-  skipDuplicates?: boolean
-}
-
-export type KegiatanUpsertWithWhereUniqueWithoutJenisKegiatanInput = {
-  where: Prisma.KegiatanWhereUniqueInput
-  update: Prisma.XOR<Prisma.KegiatanUpdateWithoutJenisKegiatanInput, Prisma.KegiatanUncheckedUpdateWithoutJenisKegiatanInput>
-  create: Prisma.XOR<Prisma.KegiatanCreateWithoutJenisKegiatanInput, Prisma.KegiatanUncheckedCreateWithoutJenisKegiatanInput>
-}
-
-export type KegiatanUpdateWithWhereUniqueWithoutJenisKegiatanInput = {
-  where: Prisma.KegiatanWhereUniqueInput
-  data: Prisma.XOR<Prisma.KegiatanUpdateWithoutJenisKegiatanInput, Prisma.KegiatanUncheckedUpdateWithoutJenisKegiatanInput>
-}
-
-export type KegiatanUpdateManyWithWhereWithoutJenisKegiatanInput = {
-  where: Prisma.KegiatanScalarWhereInput
-  data: Prisma.XOR<Prisma.KegiatanUpdateManyMutationInput, Prisma.KegiatanUncheckedUpdateManyWithoutJenisKegiatanInput>
 }
 
 export type KegiatanCreateWithoutProgramCategoryRefInput = {
@@ -1095,7 +954,6 @@ export type KegiatanCreateWithoutProgramCategoryRefInput = {
   sudahLapor?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  jenisKegiatan?: Prisma.JenisKegiatanCreateNestedOneWithoutKegiatanInput
   pj?: Prisma.UserCreateNestedOneWithoutKegiatanSebagaiPJInput
   laporan?: Prisma.LaporanCreateNestedManyWithoutKegiatanInput
   dokumen?: Prisma.DokumenCreateNestedManyWithoutKegiatanInput
@@ -1106,7 +964,6 @@ export type KegiatanUncheckedCreateWithoutProgramCategoryRefInput = {
   kode: string
   nama: string
   jenis?: $Enums.JenisAnggaran | null
-  jenisKegiatanId?: string | null
   programCategory?: string | null
   pagu: bigint | number
   realisasi?: bigint | number
@@ -1167,7 +1024,6 @@ export type KegiatanCreateWithoutLaporanInput = {
   sudahLapor?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  jenisKegiatan?: Prisma.JenisKegiatanCreateNestedOneWithoutKegiatanInput
   programCategoryRef?: Prisma.ProgramCategoryCreateNestedOneWithoutKegiatanInput
   pj?: Prisma.UserCreateNestedOneWithoutKegiatanSebagaiPJInput
   dokumen?: Prisma.DokumenCreateNestedManyWithoutKegiatanInput
@@ -1178,7 +1034,6 @@ export type KegiatanUncheckedCreateWithoutLaporanInput = {
   kode: string
   nama: string
   jenis?: $Enums.JenisAnggaran | null
-  jenisKegiatanId?: string | null
   programCategory?: string | null
   programCategoryId?: string | null
   pagu: bigint | number
@@ -1229,7 +1084,6 @@ export type KegiatanUpdateWithoutLaporanInput = {
   sudahLapor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  jenisKegiatan?: Prisma.JenisKegiatanUpdateOneWithoutKegiatanNestedInput
   programCategoryRef?: Prisma.ProgramCategoryUpdateOneWithoutKegiatanNestedInput
   pj?: Prisma.UserUpdateOneWithoutKegiatanSebagaiPJNestedInput
   dokumen?: Prisma.DokumenUpdateManyWithoutKegiatanNestedInput
@@ -1240,7 +1094,6 @@ export type KegiatanUncheckedUpdateWithoutLaporanInput = {
   kode?: Prisma.StringFieldUpdateOperationsInput | string
   nama?: Prisma.StringFieldUpdateOperationsInput | string
   jenis?: Prisma.NullableEnumJenisAnggaranFieldUpdateOperationsInput | $Enums.JenisAnggaran | null
-  jenisKegiatanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   programCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   programCategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pagu?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -1275,7 +1128,6 @@ export type KegiatanCreateWithoutDokumenInput = {
   sudahLapor?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  jenisKegiatan?: Prisma.JenisKegiatanCreateNestedOneWithoutKegiatanInput
   programCategoryRef?: Prisma.ProgramCategoryCreateNestedOneWithoutKegiatanInput
   pj?: Prisma.UserCreateNestedOneWithoutKegiatanSebagaiPJInput
   laporan?: Prisma.LaporanCreateNestedManyWithoutKegiatanInput
@@ -1286,7 +1138,6 @@ export type KegiatanUncheckedCreateWithoutDokumenInput = {
   kode: string
   nama: string
   jenis?: $Enums.JenisAnggaran | null
-  jenisKegiatanId?: string | null
   programCategory?: string | null
   programCategoryId?: string | null
   pagu: bigint | number
@@ -1337,7 +1188,6 @@ export type KegiatanUpdateWithoutDokumenInput = {
   sudahLapor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  jenisKegiatan?: Prisma.JenisKegiatanUpdateOneWithoutKegiatanNestedInput
   programCategoryRef?: Prisma.ProgramCategoryUpdateOneWithoutKegiatanNestedInput
   pj?: Prisma.UserUpdateOneWithoutKegiatanSebagaiPJNestedInput
   laporan?: Prisma.LaporanUpdateManyWithoutKegiatanNestedInput
@@ -1348,7 +1198,6 @@ export type KegiatanUncheckedUpdateWithoutDokumenInput = {
   kode?: Prisma.StringFieldUpdateOperationsInput | string
   nama?: Prisma.StringFieldUpdateOperationsInput | string
   jenis?: Prisma.NullableEnumJenisAnggaranFieldUpdateOperationsInput | $Enums.JenisAnggaran | null
-  jenisKegiatanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   programCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   programCategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pagu?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -1371,7 +1220,6 @@ export type KegiatanCreateManyPjInput = {
   kode: string
   nama: string
   jenis?: $Enums.JenisAnggaran | null
-  jenisKegiatanId?: string | null
   programCategory?: string | null
   programCategoryId?: string | null
   pagu: bigint | number
@@ -1404,7 +1252,6 @@ export type KegiatanUpdateWithoutPjInput = {
   sudahLapor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  jenisKegiatan?: Prisma.JenisKegiatanUpdateOneWithoutKegiatanNestedInput
   programCategoryRef?: Prisma.ProgramCategoryUpdateOneWithoutKegiatanNestedInput
   laporan?: Prisma.LaporanUpdateManyWithoutKegiatanNestedInput
   dokumen?: Prisma.DokumenUpdateManyWithoutKegiatanNestedInput
@@ -1415,7 +1262,6 @@ export type KegiatanUncheckedUpdateWithoutPjInput = {
   kode?: Prisma.StringFieldUpdateOperationsInput | string
   nama?: Prisma.StringFieldUpdateOperationsInput | string
   jenis?: Prisma.NullableEnumJenisAnggaranFieldUpdateOperationsInput | $Enums.JenisAnggaran | null
-  jenisKegiatanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   programCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   programCategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pagu?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -1438,7 +1284,6 @@ export type KegiatanUncheckedUpdateManyWithoutPjInput = {
   kode?: Prisma.StringFieldUpdateOperationsInput | string
   nama?: Prisma.StringFieldUpdateOperationsInput | string
   jenis?: Prisma.NullableEnumJenisAnggaranFieldUpdateOperationsInput | $Enums.JenisAnggaran | null
-  jenisKegiatanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   programCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   programCategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pagu?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -1450,94 +1295,6 @@ export type KegiatanUncheckedUpdateManyWithoutPjInput = {
   realIni?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   wajib?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sudahLapor?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type KegiatanCreateManyJenisKegiatanInput = {
-  id?: string
-  kode: string
-  nama: string
-  jenis?: $Enums.JenisAnggaran | null
-  programCategory?: string | null
-  programCategoryId?: string | null
-  pagu: bigint | number
-  realisasi?: bigint | number
-  fisik?: number | null
-  uraian?: string | null
-  statusAnggaran?: $Enums.StatusAnggaran
-  realLalu?: bigint | number | null
-  realIni?: bigint | number | null
-  wajib?: boolean
-  sudahLapor?: boolean
-  pjId?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type KegiatanUpdateWithoutJenisKegiatanInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  kode?: Prisma.StringFieldUpdateOperationsInput | string
-  nama?: Prisma.StringFieldUpdateOperationsInput | string
-  jenis?: Prisma.NullableEnumJenisAnggaranFieldUpdateOperationsInput | $Enums.JenisAnggaran | null
-  programCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  pagu?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  realisasi?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  fisik?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  uraian?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  statusAnggaran?: Prisma.EnumStatusAnggaranFieldUpdateOperationsInput | $Enums.StatusAnggaran
-  realLalu?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  realIni?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  wajib?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  sudahLapor?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  programCategoryRef?: Prisma.ProgramCategoryUpdateOneWithoutKegiatanNestedInput
-  pj?: Prisma.UserUpdateOneWithoutKegiatanSebagaiPJNestedInput
-  laporan?: Prisma.LaporanUpdateManyWithoutKegiatanNestedInput
-  dokumen?: Prisma.DokumenUpdateManyWithoutKegiatanNestedInput
-}
-
-export type KegiatanUncheckedUpdateWithoutJenisKegiatanInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  kode?: Prisma.StringFieldUpdateOperationsInput | string
-  nama?: Prisma.StringFieldUpdateOperationsInput | string
-  jenis?: Prisma.NullableEnumJenisAnggaranFieldUpdateOperationsInput | $Enums.JenisAnggaran | null
-  programCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  programCategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  pagu?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  realisasi?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  fisik?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  uraian?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  statusAnggaran?: Prisma.EnumStatusAnggaranFieldUpdateOperationsInput | $Enums.StatusAnggaran
-  realLalu?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  realIni?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  wajib?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  sudahLapor?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  pjId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  laporan?: Prisma.LaporanUncheckedUpdateManyWithoutKegiatanNestedInput
-  dokumen?: Prisma.DokumenUncheckedUpdateManyWithoutKegiatanNestedInput
-}
-
-export type KegiatanUncheckedUpdateManyWithoutJenisKegiatanInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  kode?: Prisma.StringFieldUpdateOperationsInput | string
-  nama?: Prisma.StringFieldUpdateOperationsInput | string
-  jenis?: Prisma.NullableEnumJenisAnggaranFieldUpdateOperationsInput | $Enums.JenisAnggaran | null
-  programCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  programCategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  pagu?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  realisasi?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  fisik?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  uraian?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  statusAnggaran?: Prisma.EnumStatusAnggaranFieldUpdateOperationsInput | $Enums.StatusAnggaran
-  realLalu?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  realIni?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  wajib?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  sudahLapor?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  pjId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1547,7 +1304,6 @@ export type KegiatanCreateManyProgramCategoryRefInput = {
   kode: string
   nama: string
   jenis?: $Enums.JenisAnggaran | null
-  jenisKegiatanId?: string | null
   programCategory?: string | null
   pagu: bigint | number
   realisasi?: bigint | number
@@ -1580,7 +1336,6 @@ export type KegiatanUpdateWithoutProgramCategoryRefInput = {
   sudahLapor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  jenisKegiatan?: Prisma.JenisKegiatanUpdateOneWithoutKegiatanNestedInput
   pj?: Prisma.UserUpdateOneWithoutKegiatanSebagaiPJNestedInput
   laporan?: Prisma.LaporanUpdateManyWithoutKegiatanNestedInput
   dokumen?: Prisma.DokumenUpdateManyWithoutKegiatanNestedInput
@@ -1591,7 +1346,6 @@ export type KegiatanUncheckedUpdateWithoutProgramCategoryRefInput = {
   kode?: Prisma.StringFieldUpdateOperationsInput | string
   nama?: Prisma.StringFieldUpdateOperationsInput | string
   jenis?: Prisma.NullableEnumJenisAnggaranFieldUpdateOperationsInput | $Enums.JenisAnggaran | null
-  jenisKegiatanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   programCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pagu?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   realisasi?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -1614,7 +1368,6 @@ export type KegiatanUncheckedUpdateManyWithoutProgramCategoryRefInput = {
   kode?: Prisma.StringFieldUpdateOperationsInput | string
   nama?: Prisma.StringFieldUpdateOperationsInput | string
   jenis?: Prisma.NullableEnumJenisAnggaranFieldUpdateOperationsInput | $Enums.JenisAnggaran | null
-  jenisKegiatanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   programCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pagu?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   realisasi?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -1675,7 +1428,6 @@ export type KegiatanSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   kode?: boolean
   nama?: boolean
   jenis?: boolean
-  jenisKegiatanId?: boolean
   programCategory?: boolean
   programCategoryId?: boolean
   pagu?: boolean
@@ -1690,7 +1442,6 @@ export type KegiatanSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   pjId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  jenisKegiatan?: boolean | Prisma.Kegiatan$jenisKegiatanArgs<ExtArgs>
   programCategoryRef?: boolean | Prisma.Kegiatan$programCategoryRefArgs<ExtArgs>
   pj?: boolean | Prisma.Kegiatan$pjArgs<ExtArgs>
   laporan?: boolean | Prisma.Kegiatan$laporanArgs<ExtArgs>
@@ -1703,7 +1454,6 @@ export type KegiatanSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   kode?: boolean
   nama?: boolean
   jenis?: boolean
-  jenisKegiatanId?: boolean
   programCategory?: boolean
   programCategoryId?: boolean
   pagu?: boolean
@@ -1718,7 +1468,6 @@ export type KegiatanSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   pjId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  jenisKegiatan?: boolean | Prisma.Kegiatan$jenisKegiatanArgs<ExtArgs>
   programCategoryRef?: boolean | Prisma.Kegiatan$programCategoryRefArgs<ExtArgs>
   pj?: boolean | Prisma.Kegiatan$pjArgs<ExtArgs>
 }, ExtArgs["result"]["kegiatan"]>
@@ -1728,7 +1477,6 @@ export type KegiatanSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   kode?: boolean
   nama?: boolean
   jenis?: boolean
-  jenisKegiatanId?: boolean
   programCategory?: boolean
   programCategoryId?: boolean
   pagu?: boolean
@@ -1743,7 +1491,6 @@ export type KegiatanSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   pjId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  jenisKegiatan?: boolean | Prisma.Kegiatan$jenisKegiatanArgs<ExtArgs>
   programCategoryRef?: boolean | Prisma.Kegiatan$programCategoryRefArgs<ExtArgs>
   pj?: boolean | Prisma.Kegiatan$pjArgs<ExtArgs>
 }, ExtArgs["result"]["kegiatan"]>
@@ -1753,7 +1500,6 @@ export type KegiatanSelectScalar = {
   kode?: boolean
   nama?: boolean
   jenis?: boolean
-  jenisKegiatanId?: boolean
   programCategory?: boolean
   programCategoryId?: boolean
   pagu?: boolean
@@ -1770,9 +1516,8 @@ export type KegiatanSelectScalar = {
   updatedAt?: boolean
 }
 
-export type KegiatanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "kode" | "nama" | "jenis" | "jenisKegiatanId" | "programCategory" | "programCategoryId" | "pagu" | "realisasi" | "fisik" | "uraian" | "statusAnggaran" | "realLalu" | "realIni" | "wajib" | "sudahLapor" | "pjId" | "createdAt" | "updatedAt", ExtArgs["result"]["kegiatan"]>
+export type KegiatanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "kode" | "nama" | "jenis" | "programCategory" | "programCategoryId" | "pagu" | "realisasi" | "fisik" | "uraian" | "statusAnggaran" | "realLalu" | "realIni" | "wajib" | "sudahLapor" | "pjId" | "createdAt" | "updatedAt", ExtArgs["result"]["kegiatan"]>
 export type KegiatanInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  jenisKegiatan?: boolean | Prisma.Kegiatan$jenisKegiatanArgs<ExtArgs>
   programCategoryRef?: boolean | Prisma.Kegiatan$programCategoryRefArgs<ExtArgs>
   pj?: boolean | Prisma.Kegiatan$pjArgs<ExtArgs>
   laporan?: boolean | Prisma.Kegiatan$laporanArgs<ExtArgs>
@@ -1780,12 +1525,10 @@ export type KegiatanInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   _count?: boolean | Prisma.KegiatanCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type KegiatanIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  jenisKegiatan?: boolean | Prisma.Kegiatan$jenisKegiatanArgs<ExtArgs>
   programCategoryRef?: boolean | Prisma.Kegiatan$programCategoryRefArgs<ExtArgs>
   pj?: boolean | Prisma.Kegiatan$pjArgs<ExtArgs>
 }
 export type KegiatanIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  jenisKegiatan?: boolean | Prisma.Kegiatan$jenisKegiatanArgs<ExtArgs>
   programCategoryRef?: boolean | Prisma.Kegiatan$programCategoryRefArgs<ExtArgs>
   pj?: boolean | Prisma.Kegiatan$pjArgs<ExtArgs>
 }
@@ -1793,7 +1536,6 @@ export type KegiatanIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
 export type $KegiatanPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Kegiatan"
   objects: {
-    jenisKegiatan: Prisma.$JenisKegiatanPayload<ExtArgs> | null
     programCategoryRef: Prisma.$ProgramCategoryPayload<ExtArgs> | null
     pj: Prisma.$UserPayload<ExtArgs> | null
     laporan: Prisma.$LaporanPayload<ExtArgs>[]
@@ -1804,7 +1546,6 @@ export type $KegiatanPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     kode: string
     nama: string
     jenis: $Enums.JenisAnggaran | null
-    jenisKegiatanId: string | null
     programCategory: string | null
     programCategoryId: string | null
     pagu: bigint
@@ -2213,7 +1954,6 @@ readonly fields: KegiatanFieldRefs;
  */
 export interface Prisma__KegiatanClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  jenisKegiatan<T extends Prisma.Kegiatan$jenisKegiatanArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Kegiatan$jenisKegiatanArgs<ExtArgs>>): Prisma.Prisma__JenisKegiatanClient<runtime.Types.Result.GetResult<Prisma.$JenisKegiatanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   programCategoryRef<T extends Prisma.Kegiatan$programCategoryRefArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Kegiatan$programCategoryRefArgs<ExtArgs>>): Prisma.Prisma__ProgramCategoryClient<runtime.Types.Result.GetResult<Prisma.$ProgramCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   pj<T extends Prisma.Kegiatan$pjArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Kegiatan$pjArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   laporan<T extends Prisma.Kegiatan$laporanArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Kegiatan$laporanArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LaporanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2251,7 +1991,6 @@ export interface KegiatanFieldRefs {
   readonly kode: Prisma.FieldRef<"Kegiatan", 'String'>
   readonly nama: Prisma.FieldRef<"Kegiatan", 'String'>
   readonly jenis: Prisma.FieldRef<"Kegiatan", 'JenisAnggaran'>
-  readonly jenisKegiatanId: Prisma.FieldRef<"Kegiatan", 'String'>
   readonly programCategory: Prisma.FieldRef<"Kegiatan", 'String'>
   readonly programCategoryId: Prisma.FieldRef<"Kegiatan", 'String'>
   readonly pagu: Prisma.FieldRef<"Kegiatan", 'BigInt'>
@@ -2664,25 +2403,6 @@ export type KegiatanDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many Kegiatans to delete.
    */
   limit?: number
-}
-
-/**
- * Kegiatan.jenisKegiatan
- */
-export type Kegiatan$jenisKegiatanArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the JenisKegiatan
-   */
-  select?: Prisma.JenisKegiatanSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the JenisKegiatan
-   */
-  omit?: Prisma.JenisKegiatanOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.JenisKegiatanInclude<ExtArgs> | null
-  where?: Prisma.JenisKegiatanWhereInput
 }
 
 /**

@@ -62,11 +62,6 @@ export type Account = Prisma.AccountModel
  */
 export type Verification = Prisma.VerificationModel
 /**
- * Model JenisKegiatan
- * 
- */
-export type JenisKegiatan = Prisma.JenisKegiatanModel
-/**
  * Model ProgramCategory
  * 
  */

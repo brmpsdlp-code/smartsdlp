@@ -109,16 +109,6 @@ enum StatusAnggaran {
   @@map("status_anggaran")
 }
 
-model JenisKegiatan {
-  id        String     @id @default(cuid())
-  nama      String     @unique
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  kegiatan  Kegiatan[]
-
-  @@map("jenis_kegiatan")
-}
-
 model ProgramCategory {
   id        String     @id @default(cuid())
   name      String     @unique
@@ -137,8 +127,6 @@ model Kegiatan {
   kode            String         @unique
   nama            String
   jenis           JenisAnggaran?
-  jenisKegiatanId String?
-  jenisKegiatan   JenisKegiatan? @relation(fields: [jenisKegiatanId], references: [id], onDelete: Restrict)
   programCategory   String?
   programCategoryId String?
   programCategoryRef ProgramCategory? @relation(fields: [programCategoryId], references: [id], onDelete: Restrict)

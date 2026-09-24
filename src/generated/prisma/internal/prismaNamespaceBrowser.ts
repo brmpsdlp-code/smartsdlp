@@ -55,7 +55,6 @@ export const ModelName = {
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
-  JenisKegiatan: 'JenisKegiatan',
   ProgramCategory: 'ProgramCategory',
   Kegiatan: 'Kegiatan',
   Laporan: 'Laporan',
@@ -143,16 +142,6 @@ export const VerificationScalarFieldEnum = {
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
 
 
-export const JenisKegiatanScalarFieldEnum = {
-  id: 'id',
-  nama: 'nama',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type JenisKegiatanScalarFieldEnum = (typeof JenisKegiatanScalarFieldEnum)[keyof typeof JenisKegiatanScalarFieldEnum]
-
-
 export const ProgramCategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -171,7 +160,6 @@ export const KegiatanScalarFieldEnum = {
   kode: 'kode',
   nama: 'nama',
   jenis: 'jenis',
-  jenisKegiatanId: 'jenisKegiatanId',
   programCategory: 'programCategory',
   programCategoryId: 'programCategoryId',
   pagu: 'pagu',

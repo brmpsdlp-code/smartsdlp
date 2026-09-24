@@ -401,7 +401,6 @@ export const ModelName = {
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
-  JenisKegiatan: 'JenisKegiatan',
   ProgramCategory: 'ProgramCategory',
   Kegiatan: 'Kegiatan',
   Laporan: 'Laporan',
@@ -422,7 +421,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "jenisKegiatan" | "programCategory" | "kegiatan" | "laporan" | "auditLog" | "dokumen"
+    modelProps: "user" | "session" | "account" | "verification" | "programCategory" | "kegiatan" | "laporan" | "auditLog" | "dokumen"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -719,80 +718,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.VerificationCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.VerificationCountAggregateOutputType> | number
-        }
-      }
-    }
-    JenisKegiatan: {
-      payload: Prisma.$JenisKegiatanPayload<ExtArgs>
-      fields: Prisma.JenisKegiatanFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.JenisKegiatanFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JenisKegiatanPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.JenisKegiatanFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JenisKegiatanPayload>
-        }
-        findFirst: {
-          args: Prisma.JenisKegiatanFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JenisKegiatanPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.JenisKegiatanFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JenisKegiatanPayload>
-        }
-        findMany: {
-          args: Prisma.JenisKegiatanFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JenisKegiatanPayload>[]
-        }
-        create: {
-          args: Prisma.JenisKegiatanCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JenisKegiatanPayload>
-        }
-        createMany: {
-          args: Prisma.JenisKegiatanCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.JenisKegiatanCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JenisKegiatanPayload>[]
-        }
-        delete: {
-          args: Prisma.JenisKegiatanDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JenisKegiatanPayload>
-        }
-        update: {
-          args: Prisma.JenisKegiatanUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JenisKegiatanPayload>
-        }
-        deleteMany: {
-          args: Prisma.JenisKegiatanDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.JenisKegiatanUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.JenisKegiatanUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JenisKegiatanPayload>[]
-        }
-        upsert: {
-          args: Prisma.JenisKegiatanUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$JenisKegiatanPayload>
-        }
-        aggregate: {
-          args: Prisma.JenisKegiatanAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateJenisKegiatan>
-        }
-        groupBy: {
-          args: Prisma.JenisKegiatanGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.JenisKegiatanGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.JenisKegiatanCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.JenisKegiatanCountAggregateOutputType> | number
         }
       }
     }
@@ -1269,16 +1194,6 @@ export const VerificationScalarFieldEnum = {
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
 
 
-export const JenisKegiatanScalarFieldEnum = {
-  id: 'id',
-  nama: 'nama',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type JenisKegiatanScalarFieldEnum = (typeof JenisKegiatanScalarFieldEnum)[keyof typeof JenisKegiatanScalarFieldEnum]
-
-
 export const ProgramCategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -1297,7 +1212,6 @@ export const KegiatanScalarFieldEnum = {
   kode: 'kode',
   nama: 'nama',
   jenis: 'jenis',
-  jenisKegiatanId: 'jenisKegiatanId',
   programCategory: 'programCategory',
   programCategoryId: 'programCategoryId',
   pagu: 'pagu',
@@ -1689,7 +1603,6 @@ export type GlobalOmitConfig = {
   session?: Prisma.SessionOmit
   account?: Prisma.AccountOmit
   verification?: Prisma.VerificationOmit
-  jenisKegiatan?: Prisma.JenisKegiatanOmit
   programCategory?: Prisma.ProgramCategoryOmit
   kegiatan?: Prisma.KegiatanOmit
   laporan?: Prisma.LaporanOmit

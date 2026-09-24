@@ -5,19 +5,17 @@ async function main() {
   const kegiatan = await prisma.kegiatan.count();
   const laporan = await prisma.laporan.count();
   const dokumen = await prisma.dokumen.count();
-  const jenisKegiatan = await prisma.jenisKegiatan.count();
-  const kegiatanWithJenis = await prisma.kegiatan.count({ where: { jenisKegiatanId: { not: null } } });
-  const legacyKegiatan = await prisma.kegiatan.findMany({
-    select: { kode: true, jenis: true, jenisKegiatanId: true },
+  const programCategories = await prisma.programCategory.count();
+  const kegiatanRows = await prisma.kegiatan.findMany({
+    select: { kode: true, jenis: true, programCategoryRef: { select: { name: true } } },
     orderBy: { kode: "asc" },
   });
-  
+
   console.log(`User: ${users}`);
   console.log(`Kegiatan: ${kegiatan}`);
   console.log(`Laporan: ${laporan}`);
   console.log(`Dokumen: ${dokumen}`);
-  console.log(`JenisKegiatan: ${jenisKegiatan}`);
-  console.log(`Kegiatan dengan jenisKegiatanId terisi: ${kegiatanWithJenis} / ${kegiatan}`);
-  console.log("Kegiatan lama:", legacyKegiatan);
+  console.log(`ProgramCategory: ${programCategories}`);
+  console.log("Kegiatan:", kegiatanRows);
 }
 main().catch(console.error).finally(() => prisma.$disconnect());
