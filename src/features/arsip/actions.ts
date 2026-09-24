@@ -159,7 +159,7 @@ export async function ingatkanPJ(kegiatanId: string, periode: string) {
       subject: `[PENGINGAT] Unggah Laporan - ${kegiatan.kode} (${periode})`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 8px;">
-          <h3 style="color: #065f46; margin-top: 0;">Pemberitahuan Pelaporan SDLAHAN</h3>
+          <h3 style="color: #065f46; margin-top: 0;">Pemberitahuan Pelaporan SDLP</h3>
           <p>Yth. Bapak/Ibu <strong>${pjName}</strong>,</p>
           <p>Melalui email ini, kami menginformasikan bahwa berkas <strong>Laporan</strong> untuk kegiatan Anda belum terunggah:</p>
           <table style="width: 100%; border-collapse: collapse; margin: 16px 0;">
@@ -180,9 +180,9 @@ export async function ingatkanPJ(kegiatanId: string, periode: string) {
               <td style="padding: 8px 0; font-weight: bold; color: #e11d48;">BELUM DIUNGGAH</td>
             </tr>
           </table>
-          <p>Mohon kesediaan Bapak/Ibu untuk segera masuk ke aplikasi <a href="${process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:3000"}/dashboard" style="color: #065f46; font-weight: bold;">SMART BRMP SDLAHAN</a> untuk melakukan pelaporan realisasi.</p>
+          <p>Mohon kesediaan Bapak/Ibu untuk segera masuk ke aplikasi <a href="${process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:3000"}/dashboard" style="color: #065f46; font-weight: bold;">SMART BRMP SDLP</a> untuk melakukan pelaporan realisasi.</p>
           <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #e2e8f0; font-size: 11px; color: #94a3b8;">
-            Email ini dikirim secara otomatis oleh Administrator SMART BRMP SDLAHAN.
+            Email ini dikirim secara otomatis oleh Administrator SMART BRMP SDLP.
           </div>
         </div>
       `,
@@ -207,3 +207,4 @@ export async function ingatkanPJ(kegiatanId: string, periode: string) {
     };
   }
 }
+

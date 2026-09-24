@@ -10,7 +10,7 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "SMART BRMP SDLAHAN — Kementerian Pertanian RI",
+  title: "SMART BRMP SDLP — Kementerian Pertanian RI",
   description:
     "Sistem Monitoring, Analisis, Reporting & Tracking — Balai Besar Perakitan dan Modernisasi Sumber Daya Lahan Pertanian (TA 2026)",
 };
@@ -39,3 +39,4 @@ export default function RootLayout({
     </html>
   );
 }
+

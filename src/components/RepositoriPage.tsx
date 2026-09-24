@@ -257,7 +257,7 @@ export function RepositoriPage({
           </h2>
           <p className="text-xs text-slate-500 mt-1">
             Pusat penyimpanan SK, DIPA, Kontrak, Laporan, dan Surat Dinas
-            BRMP SDLAHAN (Terintegrasi Google Drive)
+            BRMP SDLP (Terintegrasi Google Drive)
           </p>
         </div>
         <button
@@ -837,3 +837,4 @@ export function RepositoriPage({
     </div>
   );
 }
+

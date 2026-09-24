@@ -27,7 +27,7 @@ const ACCOUNTS = [
 ];
 
 async function main() {
-  console.log("🌱 Reseeding database SMART BRMP SDLAHAN...\n");
+  console.log("🌱 Reseeding database SMART BRMP SDLP...\n");
 
   for (const acc of ACCOUNTS) {
     // 1. Hapus akun lama jika ada agar tidak bentrok

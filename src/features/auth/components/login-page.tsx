@@ -72,12 +72,12 @@ export function LoginPage() {
             Sistem Monitoring, Analisis, Reporting &amp; Tracking
           </p>
           <p className="text-[11px] text-emerald-200/60 tracking-wider uppercase mt-2">
-            BRMP SDLAHAN · Kementerian Pertanian RI · TA 2026
+            BRMP SDLP · Kementerian Pertanian RI · TA 2026
           </p>
         </div>
 
         <div className="relative z-10 mt-6 lg:mt-0 lg:absolute lg:bottom-6 text-center text-xs text-emerald-200/70 tracking-wide font-medium">
-          BRMP SDLAHAN · Kementerian Pertanian RI
+          BRMP SDLP · Kementerian Pertanian RI
         </div>
       </div>
 
@@ -221,3 +221,4 @@ export function LoginPage() {
     </div>
   );
 }
+

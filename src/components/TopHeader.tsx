@@ -152,7 +152,7 @@ export function TopHeader({
 
           <div className="min-w-0">
             <p className="text-[10px] font-medium text-emerald-300/80 truncate leading-tight">
-              SMART · BRMP SDLAHAN / {breadcrumbMap[activeMenu] || "Dashboard"}
+              SMART · BRMP SDLP / {breadcrumbMap[activeMenu] || "Dashboard"}
             </p>
             <h1 className="text-xs sm:text-sm font-bold text-white truncate leading-tight mt-0.5">
               {breadcrumbMap[activeMenu] ||
@@ -300,3 +300,4 @@ export function TopHeader({
     </>
   );
 }
+

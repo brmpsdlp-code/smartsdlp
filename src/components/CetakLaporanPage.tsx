@@ -90,7 +90,6 @@ export function CetakLaporanPage({
       jenis: r.jenis,
       pj: r.pj,
       uraian: r.uraian,
-      fisik: r.fisik,
       pagu: r.pagu,
       statusAnggaran: r.statusAnggaran,
       realLalu: r.realLalu,
@@ -448,15 +447,15 @@ export function CetakLaporanPage({
               className="h-16 w-auto object-contain flex-shrink-0"
             />
             <div className="text-center flex-1">
-              <p className="text-[12px] font-bold uppercase tracking-wide">
-                KEMENTERIAN PERTANIAN REPUBLIK INDONESIA
+              <p className="text-[13px] font-bold uppercase tracking-wide text-primary">
+                BALAI BESAR PERAKITAN DAN MODERNISASI SUMBER DAYA LAHAN
+                PERTANIAN
               </p>
               <p className="text-[12px] font-bold uppercase tracking-wide">
                 BADAN PERAKITAN DAN MODERNISASI PERTANIAN
               </p>
-              <p className="text-[13px] font-bold uppercase tracking-wide text-primary">
-                BALAI BESAR PERAKITAN DAN MODERNISASI SUMBER DAYA LAHAN
-                PERTANIAN
+              <p className="text-[12px] font-bold uppercase tracking-wide">
+                KEMENTERIAN PERTANIAN REPUBLIK INDONESIA
               </p>
               <p className="text-[9px] text-slate-700 mt-0.5">
                 Jl. Tentara Pelajar No. 12, Cimanggu, Kota Bogor 16111 | Telp:
@@ -495,7 +494,7 @@ export function CetakLaporanPage({
               </span>
               <span className="font-semibold text-slate-900">
                 : Balai Besar Perakitan dan Modernisasi Sumber Daya Lahan
-                Pertanian (BRMP SDLAHAN)
+                Pertanian (BRMP SDLP)
               </span>
             </div>
           </div>
@@ -508,17 +507,17 @@ export function CetakLaporanPage({
                <col style={{ width: "16%" }} />
                <col style={{ width: "4.5%" }} />
                <col style={{ width: "15%" }} />
-               <col style={{ width: "4.5%" }} />
+               <col style={{ width: "8%" }} />
                <col style={{ width: "8%" }} />
                <col style={{ width: "5%" }} />
                <col style={{ width: "7%" }} />
                <col style={{ width: "7%" }} />
                <col style={{ width: "7%" }} />
-               <col style={{ width: "14.5%" }} />
+               <col style={{ width: "11%" }} />
              </colgroup>
             <thead>
               {/* Header Row 1 (Cetak Tanpa Kolom PJ) */}
-              <tr className="bg-primary print:bg-primary text-white print:text-black font-bold text-center border-b border-black">
+              <tr className="bg-gov-green print:bg-gov-green text-white print:text-white font-extrabold text-center text-[9px] border-b border-black">
                 <th
                   rowSpan={2}
                   className="border border-black py-1 px-0.5 text-center align-middle font-bold"
@@ -576,7 +575,7 @@ export function CetakLaporanPage({
               </tr>
 
               {/* Header Row 2 (Sub-Header) */}
-              <tr className="bg-primary/90 print:bg-primary/90 text-white print:text-black font-bold text-center border-b border-black text-[8px]">
+              <tr className="bg-gov-green print:bg-gov-green text-white print:text-white font-extrabold text-center text-[9px] border-b border-black text-[8px]">
                 {/* Under Realisasi Anggaran */}
                 <th className="border border-black py-1 px-1 text-center align-middle font-bold">
                   Periode Lalu
@@ -646,7 +645,7 @@ export function CetakLaporanPage({
 
             {/* Total Summary Footer Row */}
             <tfoot>
-              <tr className="bg-emerald-50 font-bold border-t-2 border-primary text-[8.5px]">
+              <tr className="bg-gov-green font-extrabold border-t-2 border-gov-green text-white text-[9px] text-[8.5px]">
                 <td
                   colSpan={4}
                   className="border border-black py-1 px-1 text-center uppercase tracking-wide"
@@ -762,7 +761,7 @@ export function CetakLaporanPage({
               Kementerian Pertanian RI
             </span>
             <span className="print-page-number">
-              Dokumen Resmi Laporan SMART — BRMP SDLAHAN Kementan RI
+              Dokumen Resmi Laporan SMART — BRMP SDLP Kementan RI
             </span>
           </div>
         </div>
@@ -770,4 +769,5 @@ export function CetakLaporanPage({
     </div>
   );
 }
+
 

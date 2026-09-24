@@ -411,7 +411,7 @@ export const allArchiveDocs: ArchiveDocument[] = [
   },
   {
     id: 2,
-    nama: "DIPA BRMP SDLAHAN TA 2026",
+    nama: "DIPA BRMP SDLP TA 2026",
     kategori: "DIPA",
     tanggal: "02 Jan 2026",
     ukuran: "1.2 MB",
@@ -483,7 +483,7 @@ export const allArchiveDocs: ArchiveDocument[] = [
   },
   {
     id: 10,
-    nama: "POK Revisi-1 BRMP SDLAHAN TA 2026",
+    nama: "POK Revisi-1 BRMP SDLP TA 2026",
     kategori: "DIPA",
     tanggal: "15 Mar 2026",
     ukuran: "780 KB",
@@ -760,3 +760,4 @@ export const daftarUser = [
   "Dani Firmansyah",
   "Rina Septiana",
 ];
+

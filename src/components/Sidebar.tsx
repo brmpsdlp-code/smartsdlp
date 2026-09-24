@@ -102,7 +102,7 @@ export function Sidebar({ role }: SidebarProps) {
                   SMART
                 </span>
                 <span className="text-[11px] font-bold text-emerald-300">
-                  BRMP SDLAHAN
+                  BRMP SDLP
                 </span>
               </div>
               <div className="text-[9.5px] text-emerald-200/80 leading-tight truncate">
@@ -236,7 +236,7 @@ export function Sidebar({ role }: SidebarProps) {
           </svg>
         </button>
         <span className="ml-2.5 text-xs font-black tracking-tight text-white">
-          SMART BRMP SDLAHAN
+          SMART BRMP SDLP
         </span>
       </div>
 
@@ -270,3 +270,4 @@ export function Sidebar({ role }: SidebarProps) {
     </>
   );
 }
+
