@@ -52,7 +52,7 @@ export default async function Page({
         { pj: { name: { contains: q, mode: "insensitive" } } },
       ],
     }),
-    ...(kategori && { programCategory: kategori }),
+    ...(kategori && { programCategoryRef: { id: kategori } }),
   };
 
   const [

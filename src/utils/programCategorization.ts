@@ -1,5 +1,6 @@
 import { Activity } from "@/types";
 import { DonutChartSegment } from "@/components/ui/donut-chart";
+import { getCategoryColor } from "@/lib/category-colors";
 
 export const MAIN_PROGRAM_CATEGORIES = [
   {
@@ -34,29 +35,8 @@ export type ProgramCategoryDefinition = {
   color?: string;
 };
 
-const COLOR_TOKENS: Record<string, string> = {
-  blue: "var(--chart-1)",
-  green: "var(--chart-2)",
-  "green-light": "var(--chart-3)",
-  "green-dark": "var(--chart-4)",
-  gold: "var(--chart-5)",
-  muted: "var(--chart-6)",
-  govGreen: "var(--primary)",
-  govRed: "var(--destructive)",
-  govBlue: "var(--report-accent)",
-  border: "var(--chart-9)",
-  orange: "var(--chart-3)",
-  purple: "var(--chart-4)",
-  slate: "var(--chart-5)",
-  chart1: "var(--chart-1)",
-  chart2: "var(--chart-2)",
-  chart3: "var(--chart-3)",
-  chart4: "var(--chart-4)",
-  chart5: "var(--chart-5)",
-};
-
 export function resolveCategoryColor(category: ProgramCategoryDefinition): string {
-  return category.color || (category.colorKey ? COLOR_TOKENS[category.colorKey.toLowerCase()] : undefined) || PROGRAM_COLORS[category.name] || "var(--chart-5)";
+  return category.color || getCategoryColor(category.colorKey) || "#64748B";
 }
 
 export type ProgramCategoryType =
@@ -102,7 +82,7 @@ export function aggregateProgramPagu(
   activities.forEach((act) => {
     const category = resolveProgramCategory(act.kode, act.nama, act.programCategory);
     const configuredCategory = categories.find((cat) => cat.name === category);
-    const color = configuredCategory ? resolveCategoryColor(configuredCategory) : PROGRAM_COLORS[category] || "var(--chart-5)";
+    const color = configuredCategory ? resolveCategoryColor(configuredCategory) : getCategoryColor();
 
     if (!totals[category]) {
       totals[category] = {
@@ -135,9 +115,10 @@ export function aggregateProgramPagu(
       label: c.name,
       value: 0,
       percentage: 0,
-      color: c.color || PROGRAM_COLORS[c.name] || "#64748B",
+      color: resolveCategoryColor(c),
     }));
   }
 
   return segments;
 }
+
