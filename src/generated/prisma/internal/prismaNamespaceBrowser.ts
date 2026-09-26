@@ -55,6 +55,7 @@ export const ModelName = {
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
+  AppSettings: 'AppSettings',
   ProgramCategory: 'ProgramCategory',
   Kegiatan: 'Kegiatan',
   Laporan: 'Laporan',
@@ -90,7 +91,8 @@ export const UserScalarFieldEnum = {
   nip: 'nip',
   jabatan: 'jabatan',
   unitKerja: 'unitKerja',
-  isActive: 'isActive'
+  isActive: 'isActive',
+  mustChangePassword: 'mustChangePassword'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -140,6 +142,17 @@ export const VerificationScalarFieldEnum = {
 } as const
 
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
+
+
+export const AppSettingsScalarFieldEnum = {
+  id: 'id',
+  reportDeadlineDay: 'reportDeadlineDay',
+  reportDeadlineTime: 'reportDeadlineTime',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AppSettingsScalarFieldEnum = (typeof AppSettingsScalarFieldEnum)[keyof typeof AppSettingsScalarFieldEnum]
 
 
 export const ProgramCategoryScalarFieldEnum = {

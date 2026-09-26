@@ -28,6 +28,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { ManageCategoriesDialog } from "@/components/admin/ManageCategoriesDialog";
+import { updateReportDeadline } from "@/features/app-settings/actions";
 
 type KegiatanFromDb = {
   id: string;
@@ -191,6 +192,9 @@ export function ManajemenKegiatanPage({
   const [formKode, setFormKode] = useState("");
   const [formNama, setFormNama] = useState("");
   const [formPjId, setFormPjId] = useState<string>(pjOptions[0]?.id ?? "");
+  const [deadlineOpen, setDeadlineOpen] = useState(false);
+  const [deadlineDay, setDeadlineDay] = useState("25");
+  const [deadlineTime, setDeadlineTime] = useState("23:59");
   const [formJenis, setFormJenis] = useState<"APBN" | "NON_APBN">("APBN");
   const [formPagu, setFormPagu] = useState("500000000");
   const [formCategoryId, setFormCategoryId] = useState<string>("");
@@ -409,6 +413,8 @@ export function ManajemenKegiatanPage({
               Tambah Kegiatan Baru
             </button>
             <ManageCategoriesDialog initialCategories={categoryList} onChange={(next) => { setCategoryList(next); router.refresh(); }} />
+            <button onClick={() => setDeadlineOpen(true)} className="inline-flex items-center gap-2 px-3.5 py-2 border border-emerald-700 text-emerald-800 rounded-md text-xs font-semibold hover:bg-emerald-50">Pengaturan Deadline</button>
+            {deadlineOpen && <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4"><div className="w-full max-w-sm rounded-xl bg-white p-5 shadow-xl"><h3 className="font-bold text-sm text-slate-800">Pengaturan Deadline</h3><div className="mt-4 space-y-3"><label className="block text-xs font-semibold">Hari<input type="number" min="1" max="31" value={deadlineDay} onChange={(e) => setDeadlineDay(e.target.value)} className="mt-1 w-full rounded-md border px-3 py-2" /></label><label className="block text-xs font-semibold">Jam<input type="time" value={deadlineTime} onChange={(e) => setDeadlineTime(e.target.value)} className="mt-1 w-full rounded-md border px-3 py-2" /></label></div><div className="mt-5 flex justify-end gap-2"><button onClick={() => setDeadlineOpen(false)} className="rounded-md border px-3 py-2 text-xs">Batal</button><button onClick={() => { void updateReportDeadline(Number(deadlineDay), deadlineTime).then((r) => { if (!r.success) { toast.error(r.error); return; } toast.success("Deadline diperbarui."); setDeadlineOpen(false); }); }} className="rounded-md bg-emerald-800 px-3 py-2 text-xs font-semibold text-white">Simpan</button></div></div></div>}
           </div>
         </div>
 

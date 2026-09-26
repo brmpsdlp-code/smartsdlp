@@ -1,5 +1,8 @@
 import React, { useState, useRef } from "react";
 import { UserProfile } from "@/types";
+import { changePassword } from "@/lib/auth-client";
+import { markPasswordChanged } from "@/features/users/actions";
+import { toast } from "sonner";
 import { User, Upload, Trash2, X, Mail, Briefcase, Lock, Shield, CheckCircle } from "lucide-react";
 
 interface EditProfileModalProps {
@@ -16,6 +19,7 @@ export function EditProfileModal({
   onSave,
 }: EditProfileModalProps) {
   const [formData, setFormData] = useState<UserProfile>({ ...userProfile });
+  const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -68,19 +72,21 @@ export function EditProfileModal({
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setPasswordError("");
 
-    if (newPassword || confirmPassword) {
-      if (newPassword.length < 6) {
-        setPasswordError("Kata sandi baru minimal 6 karakter.");
-        return;
-      }
-      if (newPassword !== confirmPassword) {
-        setPasswordError("Konfirmasi kata sandi tidak cocok.");
-        return;
-      }
+    if (newPassword || confirmPassword || currentPassword) {
+      if (!currentPassword) { setPasswordError("Kata sandi lama wajib diisi."); return; }
+      if (newPassword.length < 6) { setPasswordError("Kata sandi baru minimal 6 karakter."); return; }
+      if (newPassword !== confirmPassword) { setPasswordError("Konfirmasi kata sandi tidak cocok."); return; }
+      const result = await changePassword({ currentPassword, newPassword, revokeOtherSessions: false });
+      if (result.error) { setPasswordError(result.error.message || "Gagal mengubah kata sandi."); return; }
+      await markPasswordChanged();
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      toast.success("Kata sandi berhasil diubah.");
     }
 
     onSave(formData);
@@ -270,6 +276,10 @@ export function EditProfileModal({
             )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="sm:col-span-2">
+                <label className="block text-[11px] font-medium text-slate-600 mb-1">Kata Sandi Lama</label>
+                <input type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} required={Boolean(newPassword || confirmPassword)} className="w-full h-8 px-3 bg-white border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-emerald-600 text-xs" />
+              </div>
               <div>
                 <label className="block text-[11px] font-medium text-slate-600 mb-1">
                   Kata Sandi Baru

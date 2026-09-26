@@ -175,6 +175,9 @@ export function Sidebar({ role }: SidebarProps) {
 
       {/* Bottom section: Help & System Info */}
       <div className="p-3 border-t border-emerald-900/60 bg-gov-green-dark/50 space-y-2">
+        <Link href="/account/change-password" className="w-full flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded bg-emerald-950/40 hover:bg-emerald-800 text-emerald-100 text-[11px] font-semibold transition">
+          Profil Saya / Ganti Password
+        </Link>
         <div className="bg-gov-green/80 p-2.5 rounded border border-emerald-800/40 text-[10.5px]">
           <div className="flex items-center gap-1.5 font-semibold text-emerald-200">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />

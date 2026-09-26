@@ -10,8 +10,8 @@ export default async function UserLayout({
   const session = await getActiveSession();
 
   if (!session) redirect("/login?error=inactive");
-  if (session.user.role?.toLowerCase() === "admin")
-    redirect("/admin/dashboard");
+  if (session.user.role?.toLowerCase() === "admin") redirect("/admin/dashboard");
+  if (session.user.mustChangePassword) redirect("/account/change-password");
 
   return (
     <div className="flex h-screen w-screen overflow-hidden print:h-auto print:overflow-visible print:w-auto bg-slate-50 print:bg-white">

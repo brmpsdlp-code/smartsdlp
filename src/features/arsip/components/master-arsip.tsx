@@ -4,7 +4,7 @@ import React, { useState, useEffect, useTransition } from "react";
 import Link from "next/link";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import * as XLSX from "xlsx";
+import { generateSmartReportExcel } from "@/utils/excelExport";
 import { Icons } from "@/utils/formatters";
 import { deleteLaporan, ingatkanPJ } from "@/features/arsip/actions";
 
@@ -154,32 +154,22 @@ export function MasterArsipSMARTPage({
     });
   };
 
-  const handleDownloadExcel = (item: ArsipItem) => {
-    const data = [
-      {
-        "Kode Kegiatan": item.kode,
-        "Nama Kegiatan": item.nama,
-        Periode: item.periode,
-        Jenis: item.jenis,
-        "Penanggung Jawab": item.pjNama,
-        Email: item.pjEmail,
-        "Waktu Upload": item.waktuUpload,
-        "Pagu Anggaran": item.pagu,
-        "Realisasi Bulan Ini": item.realIni,
-        "Total Akumulasi": item.realisasi,
-        "Fisik (%)": item.fisik,
-        Status: item.statusAnggaran,
-        "Uraian / Keterangan": item.uraian || "-",
-      },
-    ];
-
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Laporan");
-    XLSX.writeFile(
-      workbook,
-      `Laporan_${item.kode.replace(/[^a-zA-Z0-9]/g, "_")}_${item.periode.replace(/\s+/g, "_")}.xlsx`,
-    );
+  const handleDownloadExcel = async (item: ArsipItem) => {
+    await generateSmartReportExcel([{
+      no: 1,
+      kode: item.kode,
+      nama: item.nama,
+      jenis: item.jenis === "APBN" ? "Dibuka" : "Dibuka",
+      pj: item.pjNama,
+      uraian: item.uraian || "-",
+      pagu: item.pagu,
+      statusAnggaran: item.statusAnggaran === "DIBLOKIR" ? "Diblokir" : "Dibuka",
+      realLalu: item.realisasi - item.realIni,
+      realIni: item.realIni,
+      realSd: item.realisasi,
+      pct: item.pagu > 0 ? (item.realisasi / item.pagu) * 100 : 0,
+      sisa: item.pagu - item.realisasi,
+    }], item.periode, `Laporan_${item.kode.replace(/[^a-zA-Z0-9]/g, "_")}_${item.periode.replace(/\s+/g, "_")}.xlsx`);
     toast.success(`Mengunduh berkas laporan ${item.kode}`);
   };
 

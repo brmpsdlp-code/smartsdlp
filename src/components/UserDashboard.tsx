@@ -44,12 +44,14 @@ interface UserDashboardProps {
   activities: Activity[];
   metrics: Record<string, { realLalu: number; realIni: number; sdPeriode: number; sisa: number; persentaseRealisasi: number }>;
   laporanHistory: LaporanHistoryItem[];
+  deadline: { day: number; time: string };
 }
 
 export function UserDashboard({
   activities,
   metrics,
   laporanHistory,
+  deadline,
 }: UserDashboardProps) {
   const [filterStatus, setFilterStatus] = useState<
     "ALL" | "BELUM_LAPOR" | "WAJIB"
@@ -322,7 +324,7 @@ export function UserDashboard({
                 <div>
                   <p className="font-bold">Batas Akhir Pelaporan</p>
                   <p className="text-[11px] text-amber-800 mt-0.5">
-                    Tanggal 25 setiap bulan pukul 23:59 WIB. Mohon segera input
+                    Tanggal {deadline.day} setiap bulan pukul {deadline.time} WIB. Mohon segera input
                     realisasi.
                   </p>
                 </div>

@@ -48,6 +48,36 @@ export async function deleteLaporan(laporanId: string, alasan: string) {
       "Desember",
     ];
     const namaPeriode = `${NAMA_BULAN[target.periodeBulan - 1]} ${target.periodeTahun}`;
+    let notifStatus = "GAGAL: Email PJ tidak tersedia";
+
+    if (target.kegiatan.pj?.email) {
+      try {
+        const { sendMail } = await import("@/lib/mailer");
+        const mailResult = await sendMail({
+          to: target.kegiatan.pj.email,
+          subject: `Laporan Realisasi ${target.kegiatan.kode} Dihapus/Ditolak — SMART BRMP SDLP`,
+          html: `
+            <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 32px; background: #f8f9fa; border-radius: 12px;">
+              <div style="background: #143D32; padding: 24px; border-radius: 8px; text-align: center; margin-bottom: 24px;">
+                <h1 style="color: #fff; margin: 0; font-size: 18px; letter-spacing: 0.2em;">SMART</h1>
+                <p style="color: #6ee7b7; margin: 4px 0 0; font-size: 10px;">BRMP SDLP · Kementerian Pertanian RI</p>
+              </div>
+              <h2 style="color: #1a202c;">Laporan Dihapus/Ditolak</h2>
+              <p style="color: #4a5568;">Yth. ${target.kegiatan.pj.name},</p>
+              <p style="color: #4a5568;">Laporan realisasi kegiatan <strong>${target.kegiatan.kode} — ${target.kegiatan.nama}</strong> periode <strong>${namaPeriode}</strong> telah dihapus/ditolak oleh admin pada ${new Date().toLocaleDateString("id-ID")}.</p>
+              <p style="color: #4a5568;"><strong>Alasan:</strong> ${alasan.trim()}</p>
+              <p style="color: #4a5568;">Silakan hubungi admin atau masuk ke aplikasi SMART BRMP SDLP untuk informasi lebih lanjut.</p>
+            </div>
+          `,
+          text: `Yth. ${target.kegiatan.pj.name}, laporan realisasi ${target.kegiatan.kode} — ${target.kegiatan.nama} periode ${namaPeriode} telah dihapus/ditolak oleh admin. Alasan: ${alasan.trim()}. Silakan hubungi admin atau masuk ke aplikasi SMART BRMP SDLP untuk informasi lebih lanjut.`,
+        });
+        notifStatus = mailResult.success ? "TERKIRIM" : "GAGAL: Pengiriman email gagal";
+        if (!mailResult.success) console.error("Notifikasi penghapusan laporan gagal dikirim:", mailResult.error);
+      } catch (error) {
+        notifStatus = "GAGAL: Pengiriman email gagal";
+        console.error("Notifikasi penghapusan laporan gagal dikirim:", error);
+      }
+    }
 
     await prisma.$transaction(async (tx) => {
       // 1. Simpan rekam jejak penghapusan ke tabel AuditLog
@@ -66,7 +96,7 @@ export async function deleteLaporan(laporanId: string, alasan: string) {
           adminNama: session.user.name,
           adminEmail: session.user.email,
           alasan: alasan.trim(),
-          notifStatus: "Terkirim ke Email",
+          notifStatus,
         },
       });
 

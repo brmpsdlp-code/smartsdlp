@@ -13,6 +13,11 @@ export const metadata: Metadata = {
   title: "SMART BRMP SDLP — Kementerian Pertanian RI",
   description:
     "Sistem Monitoring, Analisis, Reporting & Tracking — Balai Besar Perakitan dan Modernisasi Sumber Daya Lahan Pertanian (TA 2026)",
+  icons: {
+    icon: "/logo-kementan.png",
+    shortcut: "/logo-kementan.png",
+    apple: "/logo-kementan.png",
+  },
 };
 
 export default function RootLayout({

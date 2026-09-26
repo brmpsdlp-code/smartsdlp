@@ -2,7 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { requireAdminSession } from "@/lib/active-session";
+import { requireAdminSession, requireActiveSession } from "@/lib/active-session";
 import { createLocalAccountIssuer } from "@better-auth/core/db";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
@@ -10,9 +10,10 @@ import { z } from "zod";
 const createSchema = z.object({
   name: z.string().trim().min(1, "Nama wajib diisi"),
   email: z.string().trim().toLowerCase().email("Format email tidak valid"),
+  nip: z.string().trim().min(1, "NIP wajib diisi"),
 });
 
-export async function createAdminUser(input: { name: string; email: string }) {
+export async function createAdminUser(input: { name: string; email: string; nip: string }) {
   const admin = await requireAdminSession();
   const parsed = createSchema.safeParse(input);
   if (!parsed.success) return { success: false as const, error: parsed.error.issues[0].message };
@@ -20,13 +21,15 @@ export async function createAdminUser(input: { name: string; email: string }) {
   if (existing) return { success: false as const, error: "Email sudah digunakan, termasuk oleh akun nonaktif." };
 
   const context = await auth.$context;
-  const password = crypto.randomUUID();
+  const password = "internubsi2026";
   const user = await context.internalAdapter.createUser({
     name: parsed.data.name,
     email: parsed.data.email,
+    nip: parsed.data.nip,
     emailVerified: false,
     role: "USER",
     isActive: true,
+    mustChangePassword: true,
   }, { method: "admin" });
   const passwordHash = await context.password.hash(password);
   try {
@@ -43,6 +46,12 @@ export async function createAdminUser(input: { name: string; email: string }) {
   }
   revalidatePath("/admin/users");
   return { success: true as const, user: { id: user.id, name: user.name, email: user.email }, temporaryPassword: password, adminSessionId: admin.session.id };
+}
+
+export async function markPasswordChanged() {
+  const session = await requireActiveSession();
+  await prisma.user.update({ where: { id: session.user.id }, data: { mustChangePassword: false } });
+  return { success: true as const };
 }
 
 export async function setUserActive(userId: string, isActive: boolean) {

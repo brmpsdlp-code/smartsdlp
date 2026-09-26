@@ -36,6 +36,7 @@ model User {
   jabatan   String?
   unitKerja String?
   isActive  Boolean  @default(true)
+  mustChangePassword Boolean @default(false)
 
   sessions          Session[]
   accounts          Account[]
@@ -107,6 +108,16 @@ enum StatusAnggaran {
   DIBLOKIR
 
   @@map("status_anggaran")
+}
+
+model AppSettings {
+  id                String   @id @default(cuid())
+  reportDeadlineDay Int      @default(25)
+  reportDeadlineTime String  @default("23:59")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@map("app_settings")
 }
 
 model ProgramCategory {

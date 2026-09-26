@@ -30,11 +30,9 @@ export async function generateSmartReportExcel(items: SmartReportItem[], periode
   sheet.views = [{ showGridLines: true }];
 
   sheet.addRows([
-    ["BALAI BESAR PERAKITAN DAN MODERNISASI SUMBER DAYA LAHAN PERTANIAN"],
-    ["BADAN PERAKITAN DAN MODERNISASI PERTANIAN"],
-    ["KEMENTERIAN PERTANIAN REPUBLIK INDONESIA"],
-    ["Jl. Tentara Pelajar No. 12, Cimanggu, Kota Bogor 16111 | Telp: (0251) 8321762 | Email: brmp.sdlahan@pertanian.go.id"],
-    ["LAPORAN REALISASI ANGGARAN"],
+    ["", "LAPORAN CAPAIAN KEGIATAN"],
+    ["", "BALAI BESAR PERAKITAN DAN MODERNISASI SUMBER DAYA LAHAN PERTANIAN"],
+    ["", "Jl. Tentara Pelajar No. 12, Cimanggu, Kota Bogor 16111 | Telp: (0251) 8321762 | Email: brmp.sdlahan@pertanian.go.id"],
     ["Periode Pelaporan", `: ${periode}`],
     ["Satuan Kerja", ": Balai Besar Perakitan dan Modernisasi Sumber Daya Lahan Pertanian (BRMP SDLP)"],
     [],
@@ -42,11 +40,11 @@ export async function generateSmartReportExcel(items: SmartReportItem[], periode
     ["", "", "", "", "", "", "", "Periode Lalu", "Periode Ini", "s.d. Periode", "%", ""],
   ]);
 
-  for (let row = 1; row <= 5; row++) sheet.mergeCells(row, 1, row, 12);
-  sheet.mergeCells(6, 2, 6, 12);
-  sheet.mergeCells(7, 2, 7, 12);
-  [1, 2, 3, 4, 5, 6, 7, 12].forEach((column) => sheet.mergeCells(9, column, 10, column));
-  sheet.mergeCells(9, 8, 9, 11);
+  [1, 2, 3].forEach((row) => sheet.mergeCells(row, 2, row, 12));
+  sheet.mergeCells(4, 2, 4, 12);
+  sheet.mergeCells(5, 2, 5, 12);
+  [1, 2, 3, 4, 5, 6, 7, 12].forEach((column) => sheet.mergeCells(7, column, 8, column));
+  sheet.mergeCells(7, 8, 7, 11);
 
   let totalPagu = 0, totalRealLalu = 0, totalRealIni = 0, totalRealSd = 0, totalSisa = 0;
   items.forEach((item, index) => {
@@ -70,18 +68,17 @@ export async function generateSmartReportExcel(items: SmartReportItem[], periode
       cell.border = { top: { style: "thin", color: { argb: BORDER } }, left: { style: "thin", color: { argb: BORDER } }, bottom: { style: "thin", color: { argb: BORDER } }, right: { style: "thin", color: { argb: BORDER } } };
       cell.alignment = { vertical: "middle", wrapText: true };
     });
-    if (rowNumber <= 5) {
-      row.eachCell((cell) => { cell.font = { bold: true, color: { argb: rowNumber === 1 ? GREEN : "000000" } }; cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true }; });
+    if (rowNumber <= 3) {
+      row.eachCell((cell) => { cell.font = { bold: rowNumber < 3, color: { argb: rowNumber === 2 ? GREEN : "000000" } }; cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true }; });
     }
-    if (rowNumber === 5) row.eachCell((cell) => { cell.font = { bold: true, color: { argb: "000000" }, underline: "single" }; });
-    if (rowNumber >= 9 && rowNumber <= 10) {
+    if (rowNumber >= 7 && rowNumber <= 8) {
       row.eachCell((cell) => { cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: GREEN } }; cell.font = { bold: true, color: { argb: WHITE } }; cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true }; });
     }
   });
-  [6, 7].forEach((rowNumber) => { sheet.getCell(rowNumber, 1).font = { bold: true, color: { argb: MUTED } }; sheet.getCell(rowNumber, 2).font = { bold: true, color: { argb: "000000" } }; });
+  [4, 5].forEach((rowNumber) => { sheet.getCell(rowNumber, 1).font = { bold: true, color: { argb: MUTED } }; sheet.getCell(rowNumber, 2).font = { bold: true, color: { argb: "000000" } }; });
   totalRow.eachCell((cell) => { cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: LIGHT_GREEN } }; cell.font = { bold: true }; });
   [sheet.getCell(footerRow, 2), sheet.getCell(footerRow, 8)].forEach((cell) => { cell.border = { top: { style: "thin", color: { argb: "9CA3AF" } } }; cell.font = { size: 9, color: { argb: "4B5563" } }; });
-  for (let row = 11; row <= totalRow.number; row++) {
+  for (let row = 9; row <= totalRow.number; row++) {
     [6, 8, 9, 10, 12].forEach((column) => { sheet.getCell(row, column).numFmt = rupiahFormat; });
     sheet.getCell(row, 11).numFmt = "0.0%";
   }

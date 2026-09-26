@@ -7,6 +7,7 @@ export default async function Home() {
 
   if (!session) redirect("/login?error=inactive");
 
+  if (session.user.mustChangePassword) redirect("/account/change-password");
   const isAdmin = session.user.role?.toLowerCase() === "admin";
   redirect(isAdmin ? "/admin/dashboard" : "/dashboard");
 }

@@ -92,7 +92,7 @@ export default async function Page({
     prisma.kegiatan.count({ where: { wajib: true, sudahLapor: true } }),
 
     prisma.user.findMany({
-      where: { isActive: true },
+      where: { isActive: true, role: "USER" },
       select: { id: true, name: true, email: true },
       orderBy: { name: "asc" },
     }),

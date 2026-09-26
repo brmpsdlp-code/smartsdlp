@@ -37,6 +37,7 @@ export type UserMinAggregateOutputType = {
   jabatan: string | null
   unitKerja: string | null
   isActive: boolean | null
+  mustChangePassword: boolean | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -52,6 +53,7 @@ export type UserMaxAggregateOutputType = {
   jabatan: string | null
   unitKerja: string | null
   isActive: boolean | null
+  mustChangePassword: boolean | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -67,6 +69,7 @@ export type UserCountAggregateOutputType = {
   jabatan: number
   unitKerja: number
   isActive: number
+  mustChangePassword: number
   _all: number
 }
 
@@ -84,6 +87,7 @@ export type UserMinAggregateInputType = {
   jabatan?: true
   unitKerja?: true
   isActive?: true
+  mustChangePassword?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -99,6 +103,7 @@ export type UserMaxAggregateInputType = {
   jabatan?: true
   unitKerja?: true
   isActive?: true
+  mustChangePassword?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -114,6 +119,7 @@ export type UserCountAggregateInputType = {
   jabatan?: true
   unitKerja?: true
   isActive?: true
+  mustChangePassword?: true
   _all?: true
 }
 
@@ -202,6 +208,7 @@ export type UserGroupByOutputType = {
   jabatan: string | null
   unitKerja: string | null
   isActive: boolean
+  mustChangePassword: boolean
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
@@ -238,6 +245,7 @@ export type UserWhereInput = {
   jabatan?: Prisma.StringNullableFilter<"User"> | string | null
   unitKerja?: Prisma.StringNullableFilter<"User"> | string | null
   isActive?: Prisma.BoolFilter<"User"> | boolean
+  mustChangePassword?: Prisma.BoolFilter<"User"> | boolean
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
   kegiatanSebagaiPJ?: Prisma.KegiatanListRelationFilter
@@ -259,6 +267,7 @@ export type UserOrderByWithRelationInput = {
   jabatan?: Prisma.SortOrderInput | Prisma.SortOrder
   unitKerja?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   accounts?: Prisma.AccountOrderByRelationAggregateInput
   kegiatanSebagaiPJ?: Prisma.KegiatanOrderByRelationAggregateInput
@@ -283,6 +292,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   jabatan?: Prisma.StringNullableFilter<"User"> | string | null
   unitKerja?: Prisma.StringNullableFilter<"User"> | string | null
   isActive?: Prisma.BoolFilter<"User"> | boolean
+  mustChangePassword?: Prisma.BoolFilter<"User"> | boolean
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
   kegiatanSebagaiPJ?: Prisma.KegiatanListRelationFilter
@@ -304,6 +314,7 @@ export type UserOrderByWithAggregationInput = {
   jabatan?: Prisma.SortOrderInput | Prisma.SortOrder
   unitKerja?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
@@ -325,6 +336,7 @@ export type UserScalarWhereWithAggregatesInput = {
   jabatan?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   unitKerja?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  mustChangePassword?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
 }
 
 export type UserCreateInput = {
@@ -340,6 +352,7 @@ export type UserCreateInput = {
   jabatan?: string | null
   unitKerja?: string | null
   isActive?: boolean
+  mustChangePassword?: boolean
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   kegiatanSebagaiPJ?: Prisma.KegiatanCreateNestedManyWithoutPjInput
@@ -361,6 +374,7 @@ export type UserUncheckedCreateInput = {
   jabatan?: string | null
   unitKerja?: string | null
   isActive?: boolean
+  mustChangePassword?: boolean
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   kegiatanSebagaiPJ?: Prisma.KegiatanUncheckedCreateNestedManyWithoutPjInput
@@ -382,6 +396,7 @@ export type UserUpdateInput = {
   jabatan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitKerja?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   kegiatanSebagaiPJ?: Prisma.KegiatanUpdateManyWithoutPjNestedInput
@@ -403,6 +418,7 @@ export type UserUncheckedUpdateInput = {
   jabatan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitKerja?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   kegiatanSebagaiPJ?: Prisma.KegiatanUncheckedUpdateManyWithoutPjNestedInput
@@ -424,6 +440,7 @@ export type UserCreateManyInput = {
   jabatan?: string | null
   unitKerja?: string | null
   isActive?: boolean
+  mustChangePassword?: boolean
 }
 
 export type UserUpdateManyMutationInput = {
@@ -439,6 +456,7 @@ export type UserUpdateManyMutationInput = {
   jabatan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitKerja?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -454,6 +472,7 @@ export type UserUncheckedUpdateManyInput = {
   jabatan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitKerja?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -469,6 +488,7 @@ export type UserCountOrderByAggregateInput = {
   jabatan?: Prisma.SortOrder
   unitKerja?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -484,6 +504,7 @@ export type UserMaxOrderByAggregateInput = {
   jabatan?: Prisma.SortOrder
   unitKerja?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -499,6 +520,7 @@ export type UserMinOrderByAggregateInput = {
   jabatan?: Prisma.SortOrder
   unitKerja?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -636,6 +658,7 @@ export type UserCreateWithoutSessionsInput = {
   jabatan?: string | null
   unitKerja?: string | null
   isActive?: boolean
+  mustChangePassword?: boolean
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   kegiatanSebagaiPJ?: Prisma.KegiatanCreateNestedManyWithoutPjInput
   laporanSubmitted?: Prisma.LaporanCreateNestedManyWithoutSubmittedByInput
@@ -656,6 +679,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   jabatan?: string | null
   unitKerja?: string | null
   isActive?: boolean
+  mustChangePassword?: boolean
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   kegiatanSebagaiPJ?: Prisma.KegiatanUncheckedCreateNestedManyWithoutPjInput
   laporanSubmitted?: Prisma.LaporanUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -692,6 +716,7 @@ export type UserUpdateWithoutSessionsInput = {
   jabatan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitKerja?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   kegiatanSebagaiPJ?: Prisma.KegiatanUpdateManyWithoutPjNestedInput
   laporanSubmitted?: Prisma.LaporanUpdateManyWithoutSubmittedByNestedInput
@@ -712,6 +737,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   jabatan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitKerja?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   kegiatanSebagaiPJ?: Prisma.KegiatanUncheckedUpdateManyWithoutPjNestedInput
   laporanSubmitted?: Prisma.LaporanUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -732,6 +758,7 @@ export type UserCreateWithoutAccountsInput = {
   jabatan?: string | null
   unitKerja?: string | null
   isActive?: boolean
+  mustChangePassword?: boolean
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   kegiatanSebagaiPJ?: Prisma.KegiatanCreateNestedManyWithoutPjInput
   laporanSubmitted?: Prisma.LaporanCreateNestedManyWithoutSubmittedByInput
@@ -752,6 +779,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   jabatan?: string | null
   unitKerja?: string | null
   isActive?: boolean
+  mustChangePassword?: boolean
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   kegiatanSebagaiPJ?: Prisma.KegiatanUncheckedCreateNestedManyWithoutPjInput
   laporanSubmitted?: Prisma.LaporanUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -788,6 +816,7 @@ export type UserUpdateWithoutAccountsInput = {
   jabatan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitKerja?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   kegiatanSebagaiPJ?: Prisma.KegiatanUpdateManyWithoutPjNestedInput
   laporanSubmitted?: Prisma.LaporanUpdateManyWithoutSubmittedByNestedInput
@@ -808,6 +837,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   jabatan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitKerja?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   kegiatanSebagaiPJ?: Prisma.KegiatanUncheckedUpdateManyWithoutPjNestedInput
   laporanSubmitted?: Prisma.LaporanUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -828,6 +858,7 @@ export type UserCreateWithoutKegiatanSebagaiPJInput = {
   jabatan?: string | null
   unitKerja?: string | null
   isActive?: boolean
+  mustChangePassword?: boolean
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   laporanSubmitted?: Prisma.LaporanCreateNestedManyWithoutSubmittedByInput
@@ -848,6 +879,7 @@ export type UserUncheckedCreateWithoutKegiatanSebagaiPJInput = {
   jabatan?: string | null
   unitKerja?: string | null
   isActive?: boolean
+  mustChangePassword?: boolean
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   laporanSubmitted?: Prisma.LaporanUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -884,6 +916,7 @@ export type UserUpdateWithoutKegiatanSebagaiPJInput = {
   jabatan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitKerja?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   laporanSubmitted?: Prisma.LaporanUpdateManyWithoutSubmittedByNestedInput
@@ -904,6 +937,7 @@ export type UserUncheckedUpdateWithoutKegiatanSebagaiPJInput = {
   jabatan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitKerja?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   laporanSubmitted?: Prisma.LaporanUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -924,6 +958,7 @@ export type UserCreateWithoutLaporanSubmittedInput = {
   jabatan?: string | null
   unitKerja?: string | null
   isActive?: boolean
+  mustChangePassword?: boolean
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   kegiatanSebagaiPJ?: Prisma.KegiatanCreateNestedManyWithoutPjInput
@@ -944,6 +979,7 @@ export type UserUncheckedCreateWithoutLaporanSubmittedInput = {
   jabatan?: string | null
   unitKerja?: string | null
   isActive?: boolean
+  mustChangePassword?: boolean
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   kegiatanSebagaiPJ?: Prisma.KegiatanUncheckedCreateNestedManyWithoutPjInput
@@ -969,6 +1005,7 @@ export type UserCreateWithoutLaporansInput = {
   jabatan?: string | null
   unitKerja?: string | null
   isActive?: boolean
+  mustChangePassword?: boolean
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   kegiatanSebagaiPJ?: Prisma.KegiatanCreateNestedManyWithoutPjInput
@@ -989,6 +1026,7 @@ export type UserUncheckedCreateWithoutLaporansInput = {
   jabatan?: string | null
   unitKerja?: string | null
   isActive?: boolean
+  mustChangePassword?: boolean
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   kegiatanSebagaiPJ?: Prisma.KegiatanUncheckedCreateNestedManyWithoutPjInput
@@ -1025,6 +1063,7 @@ export type UserUpdateWithoutLaporanSubmittedInput = {
   jabatan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitKerja?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   kegiatanSebagaiPJ?: Prisma.KegiatanUpdateManyWithoutPjNestedInput
@@ -1045,6 +1084,7 @@ export type UserUncheckedUpdateWithoutLaporanSubmittedInput = {
   jabatan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitKerja?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   kegiatanSebagaiPJ?: Prisma.KegiatanUncheckedUpdateManyWithoutPjNestedInput
@@ -1076,6 +1116,7 @@ export type UserUpdateWithoutLaporansInput = {
   jabatan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitKerja?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   kegiatanSebagaiPJ?: Prisma.KegiatanUpdateManyWithoutPjNestedInput
@@ -1096,6 +1137,7 @@ export type UserUncheckedUpdateWithoutLaporansInput = {
   jabatan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitKerja?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   kegiatanSebagaiPJ?: Prisma.KegiatanUncheckedUpdateManyWithoutPjNestedInput
@@ -1116,6 +1158,7 @@ export type UserCreateWithoutDokumenUploadedInput = {
   jabatan?: string | null
   unitKerja?: string | null
   isActive?: boolean
+  mustChangePassword?: boolean
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   kegiatanSebagaiPJ?: Prisma.KegiatanCreateNestedManyWithoutPjInput
@@ -1136,6 +1179,7 @@ export type UserUncheckedCreateWithoutDokumenUploadedInput = {
   jabatan?: string | null
   unitKerja?: string | null
   isActive?: boolean
+  mustChangePassword?: boolean
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   kegiatanSebagaiPJ?: Prisma.KegiatanUncheckedCreateNestedManyWithoutPjInput
@@ -1172,6 +1216,7 @@ export type UserUpdateWithoutDokumenUploadedInput = {
   jabatan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitKerja?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   kegiatanSebagaiPJ?: Prisma.KegiatanUpdateManyWithoutPjNestedInput
@@ -1192,6 +1237,7 @@ export type UserUncheckedUpdateWithoutDokumenUploadedInput = {
   jabatan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitKerja?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   kegiatanSebagaiPJ?: Prisma.KegiatanUncheckedUpdateManyWithoutPjNestedInput
@@ -1288,6 +1334,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   jabatan?: boolean
   unitKerja?: boolean
   isActive?: boolean
+  mustChangePassword?: boolean
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   kegiatanSebagaiPJ?: boolean | Prisma.User$kegiatanSebagaiPJArgs<ExtArgs>
@@ -1310,6 +1357,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   jabatan?: boolean
   unitKerja?: boolean
   isActive?: boolean
+  mustChangePassword?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1325,6 +1373,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   jabatan?: boolean
   unitKerja?: boolean
   isActive?: boolean
+  mustChangePassword?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -1340,9 +1389,10 @@ export type UserSelectScalar = {
   jabatan?: boolean
   unitKerja?: boolean
   isActive?: boolean
+  mustChangePassword?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "createdAt" | "updatedAt" | "role" | "nip" | "jabatan" | "unitKerja" | "isActive", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "createdAt" | "updatedAt" | "role" | "nip" | "jabatan" | "unitKerja" | "isActive" | "mustChangePassword", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
@@ -1378,6 +1428,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     jabatan: string | null
     unitKerja: string | null
     isActive: boolean
+    mustChangePassword: boolean
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -1819,6 +1870,7 @@ export interface UserFieldRefs {
   readonly jabatan: Prisma.FieldRef<"User", 'String'>
   readonly unitKerja: Prisma.FieldRef<"User", 'String'>
   readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
+  readonly mustChangePassword: Prisma.FieldRef<"User", 'Boolean'>
 }
     
 
