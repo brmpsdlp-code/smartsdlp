@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 export async function getActiveSession() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) return null;
-  const user = await prisma.user.findUnique({ where: { id: session.user.id }, select: { isActive: true, mustChangePassword: true } });
+  const user = await prisma.user.findUnique({ where: { id: session.user.id }, select: { isActive: true, mustChangePassword: true, nip: true, jabatan: true, unitKerja: true } });
   return user?.isActive ? { ...session, user: { ...session.user, mustChangePassword: user.mustChangePassword } } : null;
 }
 

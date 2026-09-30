@@ -6,6 +6,7 @@ import { requireAdminSession, requireActiveSession } from "@/lib/active-session"
 import { createLocalAccountIssuer } from "@better-auth/core/db";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { Prisma } from "@/generated/prisma/client";
 
 const createSchema = z.object({
   name: z.string().trim().min(1, "Nama wajib diisi"),
@@ -22,15 +23,23 @@ export async function createAdminUser(input: { name: string; email: string; nip:
 
   const context = await auth.$context;
   const password = "internubsi2026";
-  const user = await context.internalAdapter.createUser({
-    name: parsed.data.name,
-    email: parsed.data.email,
-    nip: parsed.data.nip,
-    emailVerified: false,
-    role: "USER",
-    isActive: true,
-    mustChangePassword: true,
-  }, { method: "admin" });
+  let user;
+  try {
+    user = await context.internalAdapter.createUser({
+      name: parsed.data.name,
+      email: parsed.data.email,
+      nip: parsed.data.nip,
+      emailVerified: false,
+      role: "USER",
+      isActive: true,
+      mustChangePassword: true,
+    }, { method: "admin" });
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+      return { success: false as const, error: "NIP sudah terdaftar, gunakan NIP lain." };
+    }
+    throw error;
+  }
   const passwordHash = await context.password.hash(password);
   try {
     await context.internalAdapter.createAccount({
