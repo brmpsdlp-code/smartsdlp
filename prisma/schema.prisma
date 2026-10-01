@@ -48,6 +48,16 @@ model User {
   @@map("user")
 }
 
+model AuthAttempt {
+  id          String   @id @default(cuid())
+  identifier  String
+  kind        String
+  attemptedAt DateTime @default(now())
+
+  @@index([identifier, kind, attemptedAt])
+  @@map("auth_attempt")
+}
+
 model Session {
   id        String   @id @default(cuid())
   expiresAt DateTime

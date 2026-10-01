@@ -7,6 +7,7 @@ import { createLocalAccountIssuer } from "@better-auth/core/db";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { Prisma } from "@/generated/prisma/client";
+import { recordAdminAudit } from "@/lib/audit";
 
 const createSchema = z.object({
   name: z.string().trim().min(1, "Nama wajib diisi"),
@@ -53,6 +54,7 @@ export async function createAdminUser(input: { name: string; email: string; nip:
     await context.internalAdapter.deleteUser(user.id);
     throw error;
   }
+  await recordAdminAudit({ action: "CREATE_USER", adminName: admin.user.name, adminEmail: admin.user.email, alasan: `User: ${user.email}` });
   revalidatePath("/admin/users");
   return { success: true as const, user: { id: user.id, name: user.name, email: user.email }, temporaryPassword: password, adminSessionId: admin.session.id };
 }
@@ -77,6 +79,9 @@ export async function setUserActive(userId: string, isActive: boolean) {
     if (!isActive) await tx.session.deleteMany({ where: { userId } });
     return { success: true as const };
   });
+  if (result.success) {
+    await recordAdminAudit({ action: isActive ? "ACTIVATE_USER" : "DEACTIVATE_USER", adminName: admin.user.name, adminEmail: admin.user.email, alasan: `User ID: ${userId}` });
+  }
   revalidatePath("/admin/users");
   return result;
 }

@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { getActiveSession } from "@/lib/active-session";
 import { z } from "zod";
+import { recordAdminAudit } from "@/lib/audit";
 
 const createKegiatanSchema = z.object({
   kode: z.string().min(1, "Kode kegiatan wajib diisi"),
@@ -57,6 +58,7 @@ export async function createKegiatan(
   }
   const data = parsed.data;
 
+  try {
   const category = await prisma.programCategory.findUnique({ where: { id: data.programCategoryId } });
   if (!category || !category.isActive) return { success: false, error: "Kategori program tidak aktif atau tidak ditemukan." };
 
@@ -70,7 +72,8 @@ export async function createKegiatan(
     };
   }
 
-  const kegiatan = await prisma.kegiatan.create({
+  const kegiatan = await prisma.$transaction(async (tx) => {
+  const kegiatan = await tx.kegiatan.create({
     data: {
       kode: data.kode,
       nama: data.nama,
@@ -88,6 +91,9 @@ export async function createKegiatan(
     },
   });
 
+  await recordAdminAudit({ action: "CREATE_KEGIATAN", adminName: session.user.name, adminEmail: session.user.email, kodeKegiatan: kegiatan.kode, namaKegiatan: kegiatan.nama }, tx);
+  return kegiatan;
+  });
   revalidatePath("/admin/master");
 
   return {
@@ -103,6 +109,10 @@ export async function createKegiatan(
       pj: kegiatan.pj,
     },
   };
+  } catch (error) {
+    console.error("Gagal membuat kegiatan:", error);
+    return { success: false, error: 'Gagal membuat kegiatan. Periksa data dan coba lagi.' };
+  }
 }
 
 const updateKegiatanSchema = z.object({
@@ -158,6 +168,7 @@ export async function updateKegiatan(
   }
   const data = parsed.data;
 
+  try {
   const category = await prisma.programCategory.findUnique({ where: { id: data.programCategoryId } });
   if (!category || !category.isActive) {
     const current = await prisma.kegiatan.findUnique({ where: { id: data.id }, select: { programCategoryId: true } });
@@ -177,12 +188,13 @@ export async function updateKegiatan(
   const target = await prisma.kegiatan.findUnique({ where: { id: data.id } });
   if (!target) {
     return {
-      success: false,
+      success: false as const,
       error: "Kegiatan tidak ditemukan (mungkin sudah dihapus).",
     };
   }
 
-  const kegiatan = await prisma.kegiatan.update({
+  const kegiatan = await prisma.$transaction(async (tx) => {
+  const kegiatan = await tx.kegiatan.update({
     where: { id: data.id },
     data: {
       kode: data.kode,
@@ -199,6 +211,9 @@ export async function updateKegiatan(
     },
   });
 
+  await recordAdminAudit({ action: "UPDATE_KEGIATAN", adminName: session.user.name, adminEmail: session.user.email, kodeKegiatan: kegiatan.kode, namaKegiatan: kegiatan.nama }, tx);
+  return kegiatan;
+  });
   revalidatePath("/admin/master");
 
   return {
@@ -214,6 +229,10 @@ export async function updateKegiatan(
       pj: kegiatan.pj,
     },
   };
+  } catch (error) {
+    console.error('Gagal mengubah kegiatan:', error);
+    return { success: false, error: 'Gagal mengubah kegiatan. Periksa data dan coba lagi.' };
+  }
 }
 
 type DeleteKegiatanResult =
@@ -234,19 +253,29 @@ export async function deleteKegiatan(
     };
   }
 
-  const target = await prisma.kegiatan.findUnique({ where: { id } });
+  try {
+  const result = await prisma.$transaction(async (tx) => {
+  const target = await tx.kegiatan.findUnique({ where: { id } });
   if (!target) {
     return {
-      success: false,
+      success: false as const,
       error: "Kegiatan tidak ditemukan (mungkin sudah dihapus).",
     };
   }
 
-  await prisma.kegiatan.delete({ where: { id } });
+  await tx.kegiatan.delete({ where: { id } });
 
   revalidatePath("/admin/master");
 
-  return { success: true, deletedId: id };
+  await recordAdminAudit({ action: "DELETE_KEGIATAN", adminName: session.user.name, adminEmail: session.user.email, alasan: `Kegiatan ID: ${id}` }, tx);
+  return { success: true as const, deletedId: id };
+  });
+  revalidatePath("/admin/master");
+  return result;
+  } catch (error) {
+    console.error("Gagal mengubah kegiatan:", error);
+    return { success: false, error: "Gagal mengubah data kegiatan." };
+  }
 }
 
 type ToggleWajibResult =
@@ -269,22 +298,32 @@ export async function toggleWajibLapor(
     };
   }
 
-  const target = await prisma.kegiatan.findUnique({ where: { id } });
+  try {
+  const result = await prisma.$transaction(async (tx) => {
+  const target = await tx.kegiatan.findUnique({ where: { id } });
   if (!target) {
     return {
-      success: false,
+      success: false as const,
       error: "Kegiatan tidak ditemukan (mungkin sudah dihapus).",
     };
   }
 
-  await prisma.kegiatan.update({
+  await tx.kegiatan.update({
     where: { id },
     data: { wajib },
   });
 
   revalidatePath("/admin/master");
 
-  return { success: true, id, wajib };
+  await recordAdminAudit({ action: "TOGGLE_WAJIB_LAPOR", adminName: session.user.name, adminEmail: session.user.email, alasan: `Kegiatan ID: ${id}` }, tx);
+  return { success: true as const, id, wajib };
+  });
+  revalidatePath("/admin/master");
+  return result;
+  } catch (error) {
+    console.error("Gagal mengubah kegiatan:", error);
+    return { success: false, error: "Gagal mengubah data kegiatan." };
+  }
 }
 
 type ToggleStatusResult =
@@ -307,15 +346,17 @@ export async function toggleStatusAnggaran(
     };
   }
 
-  const target = await prisma.kegiatan.findUnique({ where: { id } });
+  try {
+  const result = await prisma.$transaction(async (tx) => {
+  const target = await tx.kegiatan.findUnique({ where: { id } });
   if (!target) {
     return {
-      success: false,
+      success: false as const,
       error: "Kegiatan tidak ditemukan (mungkin sudah dihapus).",
     };
   }
 
-  await prisma.kegiatan.update({
+  await tx.kegiatan.update({
     where: { id },
     data: { statusAnggaran },
   });
@@ -324,5 +365,23 @@ export async function toggleStatusAnggaran(
   revalidatePath("/input");
   revalidatePath("/dashboard");
 
-  return { success: true, id, statusAnggaran };
+  await recordAdminAudit({ action: "TOGGLE_STATUS_ANGGARAN", adminName: session.user.name, adminEmail: session.user.email, alasan: `Kegiatan ID: ${id}` }, tx);
+  return { success: true as const, id, statusAnggaran };
+  });
+  revalidatePath("/admin/master");
+  revalidatePath("/input");
+  revalidatePath("/dashboard");
+  return result;
+  } catch (error) {
+    console.error("Gagal mengubah kegiatan:", error);
+    return { success: false, error: "Gagal mengubah data kegiatan." };
+  }
 }
+
+
+
+
+
+
+
+

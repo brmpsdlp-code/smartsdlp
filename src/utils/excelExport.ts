@@ -23,6 +23,8 @@ const BORDER = "000000";
 const MUTED = "374151";
 const rupiahFormat = '"Rp "#,##0';
 const stripMonthPrefix = (value: string) => value.replace(/^[^:]+:\s*/, "");
+const safeText = (value: string) => /^[=+\-@]/.test(value) ? `'${value}` : value;
+const textCell = (value: string) => safeText(value);
 
 export async function generateSmartReportExcel(items: SmartReportItem[], periode = "Agustus 2026", fileName = "laporan_realisasi_smart.xlsx") {
   const workbook = new ExcelJS.Workbook();
@@ -52,7 +54,7 @@ export async function generateSmartReportExcel(items: SmartReportItem[], periode
     const pct = item.pct ?? (item.pagu > 0 ? (realSd / item.pagu) * 100 : 0);
     const sisa = item.sisa ?? item.pagu - realSd;
     totalPagu += item.pagu; totalRealLalu += item.realLalu; totalRealIni += item.realIni; totalRealSd += realSd; totalSisa += sisa;
-    sheet.addRow([index + 1, item.kode, item.nama, item.jenis, stripMonthPrefix(item.uraian), item.pagu, item.statusAnggaran, item.realLalu, item.realIni, realSd, pct / 100, sisa]);
+    sheet.addRow([index + 1, textCell(item.kode), textCell(item.nama), textCell(item.jenis), textCell(stripMonthPrefix(item.uraian)), item.pagu, textCell(item.statusAnggaran), item.realLalu, item.realIni, realSd, pct / 100, sisa]);
   });
   const totalRow = sheet.addRow(["", "", "TOTAL KESELURUHAN", `${items.length} Kegiatan Terdaftar`, "", totalPagu, "", totalRealLalu, totalRealIni, totalRealSd, totalPagu > 0 ? totalRealSd / totalPagu : 0, totalSisa]);
 

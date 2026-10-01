@@ -80,10 +80,11 @@ export async function createDokumenWithFormData(formData: FormData) {
         tahun,
       });
       finalFileUrl = uploadResult.webViewLink;
-    } catch (err: any) {
+    } catch (error) {
+      console.error("Gagal upload dokumen ke Google Drive:", error);
       return {
         success: false,
-        error: `Gagal upload ke Google Drive: ${err.message}`,
+        error: "Gagal upload dokumen ke Google Drive. Periksa konfigurasi dan coba lagi.",
       };
     }
 
@@ -101,7 +102,7 @@ export async function createDokumenWithFormData(formData: FormData) {
     const doc = await prisma.dokumen.create({
       data: {
         nama: nama.trim(),
-        kategori: kategori as any,
+        kategori: kategori as "SK" | "DIPA" | "KONTRAK" | "LAPORAN" | "ESURAT" | "LAINNYA",
         tanggal: parsedDate,
         kegiatanId: kegiatanId && kegiatanId !== "NONE" ? kegiatanId : null,
         fileUrl: finalFileUrl,
@@ -113,10 +114,11 @@ export async function createDokumenWithFormData(formData: FormData) {
 
     revalidatePath("/admin/repositori");
     return { success: true, id: doc.id };
-  } catch (error: any) {
+  } catch (error) {
+    console.error("Gagal menyimpan dokumen:", error);
     return {
       success: false,
-      error: error?.message || "Gagal menyimpan dokumen.",
+      error: "Gagal menyimpan dokumen. Periksa data dan coba lagi.",
     };
   }
 }
@@ -134,10 +136,11 @@ export async function deleteDokumen(id: string) {
     await prisma.dokumen.delete({ where: { id } });
     revalidatePath("/admin/repositori");
     return { success: true };
-  } catch (error: any) {
+  } catch (error) {
+    console.error("Gagal menghapus dokumen:", error);
     return {
       success: false,
-      error: error?.message || "Gagal menghapus dokumen.",
+      error: "Gagal menghapus dokumen. Dokumen mungkin sudah dihapus atau tidak ditemukan.",
     };
   }
 }

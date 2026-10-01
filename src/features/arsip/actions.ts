@@ -52,24 +52,17 @@ export async function deleteLaporan(laporanId: string, alasan: string) {
 
     if (target.kegiatan.pj?.email) {
       try {
-        const { sendMail } = await import("@/lib/mailer");
+        const { buildEmailTemplate, sendMail, escapeHtml } = await import("@/lib/mailer");
+        const safePjName = escapeHtml(target.kegiatan.pj.name);
+        const safeKode = escapeHtml(target.kegiatan.kode);
+        const safeNama = escapeHtml(target.kegiatan.nama);
+        const safePeriode = escapeHtml(namaPeriode);
+        const safeAlasan = escapeHtml(alasan.trim());
         const mailResult = await sendMail({
           to: target.kegiatan.pj.email,
-          subject: `Laporan Realisasi ${target.kegiatan.kode} Dihapus/Ditolak — SMART BRMP SDLP`,
-          html: `
-            <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 32px; background: #f8f9fa; border-radius: 12px;">
-              <div style="background: #143D32; padding: 24px; border-radius: 8px; text-align: center; margin-bottom: 24px;">
-                <h1 style="color: #fff; margin: 0; font-size: 18px; letter-spacing: 0.2em;">SMART</h1>
-                <p style="color: #6ee7b7; margin: 4px 0 0; font-size: 10px;">BRMP SDLP · Kementerian Pertanian RI</p>
-              </div>
-              <h2 style="color: #1a202c;">Laporan Dihapus/Ditolak</h2>
-              <p style="color: #4a5568;">Yth. ${target.kegiatan.pj.name},</p>
-              <p style="color: #4a5568;">Laporan realisasi kegiatan <strong>${target.kegiatan.kode} — ${target.kegiatan.nama}</strong> periode <strong>${namaPeriode}</strong> telah dihapus/ditolak oleh admin pada ${new Date().toLocaleDateString("id-ID")}.</p>
-              <p style="color: #4a5568;"><strong>Alasan:</strong> ${alasan.trim()}</p>
-              <p style="color: #4a5568;">Silakan hubungi admin atau masuk ke aplikasi SMART BRMP SDLP untuk informasi lebih lanjut.</p>
-            </div>
-          `,
-          text: `Yth. ${target.kegiatan.pj.name}, laporan realisasi ${target.kegiatan.kode} — ${target.kegiatan.nama} periode ${namaPeriode} telah dihapus/ditolak oleh admin. Alasan: ${alasan.trim()}. Silakan hubungi admin atau masuk ke aplikasi SMART BRMP SDLP untuk informasi lebih lanjut.`,
+          subject: `Laporan Realisasi ${safeKode} Dihapus/Ditolak — SMART BRMP SDLP`,
+          html: buildEmailTemplate("Laporan Dihapus/Ditolak", `<p>Yth. ${safePjName},</p><p>Laporan realisasi kegiatan <strong>${safeKode} ? ${safeNama}</strong> periode <strong>${safePeriode}</strong> telah dihapus/ditolak oleh admin.</p><p><strong>Alasan:</strong> ${safeAlasan}</p><p>Silakan hubungi admin atau masuk ke aplikasi SMART BRMP SDLP untuk informasi lebih lanjut.</p>`),
+          text: `Yth. ${safePjName}, laporan realisasi ${safeKode} — ${safeNama} periode ${safePeriode} telah dihapus/ditolak oleh admin. Alasan: ${safeAlasan}. Silakan hubungi admin atau masuk ke aplikasi SMART BRMP SDLP untuk informasi lebih lanjut.`,
         });
         notifStatus = mailResult.success ? "TERKIRIM" : "GAGAL: Pengiriman email gagal";
         if (!mailResult.success) console.error("Notifikasi penghapusan laporan gagal dikirim:", mailResult.error);
@@ -145,10 +138,11 @@ export async function deleteLaporan(laporanId: string, alasan: string) {
     revalidatePath("/dashboard");
 
     return { success: true };
-  } catch (error: any) {
+  } catch (error) {
+    console.error("Gagal menghapus laporan:", error);
     return {
       success: false,
-      error: error?.message || "Gagal menghapus laporan.",
+      error: "Gagal menghapus laporan. Periksa data dan coba lagi.",
     };
   }
 }
@@ -182,40 +176,17 @@ export async function ingatkanPJ(kegiatanId: string, periode: string) {
       };
     }
 
-    const { sendMail } = await import("@/lib/mailer");
+    const { buildEmailTemplate, escapeHtml, sendMail } = await import("@/lib/mailer");
 
+    const safePjName = escapeHtml(pjName);
+    const safeKode = escapeHtml(kegiatan.kode);
+    const safeNama = escapeHtml(kegiatan.nama);
+    const safePeriode = escapeHtml(periode);
+    const dashboardUrl = `${process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:3000"}/dashboard`;
     const mailResult = await sendMail({
       to: pjEmail,
-      subject: `[PENGINGAT] Unggah Laporan - ${kegiatan.kode} (${periode})`,
-      html: `
-        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 8px;">
-          <h3 style="color: #065f46; margin-top: 0;">Pemberitahuan Pelaporan SDLP</h3>
-          <p>Yth. Bapak/Ibu <strong>${pjName}</strong>,</p>
-          <p>Melalui email ini, kami menginformasikan bahwa berkas <strong>Laporan</strong> untuk kegiatan Anda belum terunggah:</p>
-          <table style="width: 100%; border-collapse: collapse; margin: 16px 0;">
-            <tr style="border-bottom: 1px solid #e2e8f0;">
-              <td style="padding: 8px 0; color: #64748b; width: 140px;">Kode Kegiatan</td>
-              <td style="padding: 8px 0; font-weight: bold; color: #065f46;">${kegiatan.kode}</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #e2e8f0;">
-              <td style="padding: 8px 0; color: #64748b;">Nama Kegiatan</td>
-              <td style="padding: 8px 0; font-weight: 600;">${kegiatan.nama}</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #e2e8f0;">
-              <td style="padding: 8px 0; color: #64748b;">Periode</td>
-              <td style="padding: 8px 0; font-weight: 600;">${periode}</td>
-            </tr>
-            <tr>
-              <td style="padding: 8px 0; color: #64748b;">Status</td>
-              <td style="padding: 8px 0; font-weight: bold; color: #e11d48;">BELUM DIUNGGAH</td>
-            </tr>
-          </table>
-          <p>Mohon kesediaan Bapak/Ibu untuk segera masuk ke aplikasi <a href="${process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:3000"}/dashboard" style="color: #065f46; font-weight: bold;">SMART BRMP SDLP</a> untuk melakukan pelaporan realisasi.</p>
-          <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #e2e8f0; font-size: 11px; color: #94a3b8;">
-            Email ini dikirim secara otomatis oleh Administrator SMART BRMP SDLP.
-          </div>
-        </div>
-      `,
+      subject: `[PENGINGAT] Unggah Laporan - ${safeKode} (${safePeriode})`,
+      html: buildEmailTemplate("Pelaporan Capaian Kegiatan", `<p>Yth. Bapak/Ibu <strong>${safePjName}</strong>,</p><p>Berkas <strong>Laporan</strong> untuk kegiatan Anda belum terunggah.</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:16px 0;"><tr><td style="padding:8px 0;color:#64748b;width:140px;">Kode Kegiatan</td><td style="padding:8px 0;font-weight:bold;color:#143D32;">${safeKode}</td></tr><tr><td style="padding:8px 0;color:#64748b;">Nama Kegiatan</td><td style="padding:8px 0;font-weight:600;">${safeNama}</td></tr><tr><td style="padding:8px 0;color:#64748b;">Periode</td><td style="padding:8px 0;font-weight:600;">${safePeriode}</td></tr><tr><td style="padding:8px 0;color:#64748b;">Status</td><td style="padding:8px 0;font-weight:bold;color:#e11d48;">BELUM DIUNGGAH</td></tr></table>`, { label: "Buka SMART BRMP SDLP", url: dashboardUrl }),
       text: `Yth. ${pjName}, mohon segera mengunggah Laporan untuk kegiatan ${kegiatan.kode} (${kegiatan.nama}) periode ${periode}.`,
     });
 
@@ -230,10 +201,11 @@ export async function ingatkanPJ(kegiatanId: string, periode: string) {
       success: true,
       message: `Email pengingat berhasil dikirim ke ${pjEmail}`,
     };
-  } catch (error: any) {
+  } catch (error) {
+    console.error("Gagal mengirim email pengingat:", error);
     return {
       success: false,
-      error: error?.message || "Gagal mengirim email pengingat.",
+      error: "Gagal mengirim email pengingat. Periksa konfigurasi SMTP dan coba lagi.",
     };
   }
 }

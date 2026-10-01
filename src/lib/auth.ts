@@ -1,12 +1,21 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "@/lib/prisma";
-import { sendMail } from "@/lib/mailer";
+import { buildEmailTemplate, escapeHtml, sendMail } from "@/lib/mailer";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  session: {
+    expiresIn: 60 * 60 * 12,
+    updateAge: 60 * 60,
+  },
+  rateLimit: {
+    enabled: true,
+    window: 60,
+    max: 100,
+  },
   databaseHooks: {
     session: {
       create: {
@@ -22,28 +31,12 @@ export const auth = betterAuth({
   },
   emailAndPassword: {
     enabled: true,
+    resetPasswordTokenExpiresIn: 60 * 60,
     async sendResetPassword({ user, url }) {
       await sendMail({
         to: user.email,
-        subject: "Reset Password — SMART BRMP SDLP",
-        html: `
-          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 32px; background: #f8f9fa; border-radius: 12px;">
-            <div style="background: #143D32; padding: 24px; border-radius: 8px; text-align: center; margin-bottom: 24px;">
-              <h1 style="color: #fff; margin: 0; font-size: 18px; letter-spacing: 0.2em;">SMART</h1>
-              <p style="color: #86efac; margin: 4px 0 0; font-size: 11px;">Sistem Monitoring, Analisis, Reporting & Tracking</p>
-              <p style="color: #6ee7b7; margin: 2px 0 0; font-size: 10px;">BRMP SDLP · Kementerian Pertanian RI</p>
-            </div>
-            <h2 style="color: #1a202c; margin-bottom: 8px;">Permintaan Reset Password</h2>
-            <p style="color: #4a5568;">Halo <strong>${user.name || ""}</strong>,</p>
-            <p style="color: #4a5568;">Kami menerima permintaan untuk mereset password akun SMART Anda. Klik tombol di bawah untuk melanjutkan:</p>
-            <p style="margin: 28px 0;">
-              <a href="${url}" style="background-color: #143D32; color: #fff; padding: 12px 28px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: 600; font-size: 14px;">Reset Password</a>
-            </p>
-            <p style="color: #718096; font-size: 13px;">Jika Anda tidak meminta reset password, abaikan email ini. Link ini berlaku selama <strong>1 jam</strong>.</p>
-            <hr style="border: 1px solid #e2e8f0; margin: 24px 0;">
-            <p style="color: #a0aec0; font-size: 11px; text-align: center;">BRMP SDLP · Kementerian Pertanian RI · TA 2026</p>
-          </div>
-        `,
+        subject: "Reset Password ? SMART BRMP SDLP",
+        html: buildEmailTemplate("Permintaan Reset Password", `<p>Halo <strong>${escapeHtml(user.name || "")}</strong>,</p><p>Kami menerima permintaan untuk mereset password akun SMART Anda. Link berlaku selama <strong>1 jam</strong>.</p>`, { label: "Reset Password", url }),
         text: `Halo ${user.name || ""}, gunakan link berikut untuk mereset password: ${url}`,
       });
     },
@@ -53,24 +46,8 @@ export const auth = betterAuth({
     async sendVerificationEmail({ user, url }) {
       await sendMail({
         to: user.email,
-        subject: "Verifikasi Email — SMART BRMP SDLP",
-        html: `
-          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 32px; background: #f8f9fa; border-radius: 12px;">
-            <div style="background: #143D32; padding: 24px; border-radius: 8px; text-align: center; margin-bottom: 24px;">
-              <h1 style="color: #fff; margin: 0; font-size: 18px; letter-spacing: 0.2em;">SMART</h1>
-              <p style="color: #86efac; margin: 4px 0 0; font-size: 11px;">Sistem Monitoring, Analisis, Reporting & Tracking</p>
-            </div>
-            <h2 style="color: #1a202c;">Verifikasi Email Anda</h2>
-            <p style="color: #4a5568;">Halo <strong>${user.name || ""}</strong>,</p>
-            <p style="color: #4a5568;">Terima kasih telah bergabung dengan sistem SMART. Verifikasi email Anda untuk mengaktifkan akun:</p>
-            <p style="margin: 28px 0;">
-              <a href="${url}" style="background-color: #143D32; color: #fff; padding: 12px 28px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: 600; font-size: 14px;">Verifikasi Email</a>
-            </p>
-            <p style="color: #718096; font-size: 13px;">Link ini berlaku selama <strong>24 jam</strong>.</p>
-            <hr style="border: 1px solid #e2e8f0; margin: 24px 0;">
-            <p style="color: #a0aec0; font-size: 11px; text-align: center;">BRMP SDLP · Kementerian Pertanian RI · TA 2026</p>
-          </div>
-        `,
+        subject: "Verifikasi Email ? SMART BRMP SDLP",
+        html: buildEmailTemplate("Verifikasi Email Anda", `<p>Halo <strong>${escapeHtml(user.name || "")}</strong>,</p><p>Terima kasih telah bergabung. Verifikasi email Anda untuk mengaktifkan akun.</p>`, { label: "Verifikasi Email", url }),
         text: `Halo ${user.name || ""}, verifikasi email Anda: ${url}`,
       });
     },

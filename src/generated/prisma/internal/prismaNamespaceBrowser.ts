@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  AuthAttempt: 'AuthAttempt',
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
@@ -96,6 +97,16 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const AuthAttemptScalarFieldEnum = {
+  id: 'id',
+  identifier: 'identifier',
+  kind: 'kind',
+  attemptedAt: 'attemptedAt'
+} as const
+
+export type AuthAttemptScalarFieldEnum = (typeof AuthAttemptScalarFieldEnum)[keyof typeof AuthAttemptScalarFieldEnum]
 
 
 export const SessionScalarFieldEnum = {

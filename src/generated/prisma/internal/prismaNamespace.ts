@@ -398,6 +398,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
+  AuthAttempt: 'AuthAttempt',
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
@@ -422,7 +423,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "appSettings" | "programCategory" | "kegiatan" | "laporan" | "auditLog" | "dokumen"
+    modelProps: "user" | "authAttempt" | "session" | "account" | "verification" | "appSettings" | "programCategory" | "kegiatan" | "laporan" | "auditLog" | "dokumen"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -497,6 +498,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UserCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UserCountAggregateOutputType> | number
+        }
+      }
+    }
+    AuthAttempt: {
+      payload: Prisma.$AuthAttemptPayload<ExtArgs>
+      fields: Prisma.AuthAttemptFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AuthAttemptFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthAttemptPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AuthAttemptFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthAttemptPayload>
+        }
+        findFirst: {
+          args: Prisma.AuthAttemptFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthAttemptPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AuthAttemptFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthAttemptPayload>
+        }
+        findMany: {
+          args: Prisma.AuthAttemptFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthAttemptPayload>[]
+        }
+        create: {
+          args: Prisma.AuthAttemptCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthAttemptPayload>
+        }
+        createMany: {
+          args: Prisma.AuthAttemptCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AuthAttemptCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthAttemptPayload>[]
+        }
+        delete: {
+          args: Prisma.AuthAttemptDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthAttemptPayload>
+        }
+        update: {
+          args: Prisma.AuthAttemptUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthAttemptPayload>
+        }
+        deleteMany: {
+          args: Prisma.AuthAttemptDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AuthAttemptUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AuthAttemptUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthAttemptPayload>[]
+        }
+        upsert: {
+          args: Prisma.AuthAttemptUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthAttemptPayload>
+        }
+        aggregate: {
+          args: Prisma.AuthAttemptAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAuthAttempt>
+        }
+        groupBy: {
+          args: Prisma.AuthAttemptGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AuthAttemptGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AuthAttemptCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AuthAttemptCountAggregateOutputType> | number
         }
       }
     }
@@ -1224,6 +1299,16 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const AuthAttemptScalarFieldEnum = {
+  id: 'id',
+  identifier: 'identifier',
+  kind: 'kind',
+  attemptedAt: 'attemptedAt'
+} as const
+
+export type AuthAttemptScalarFieldEnum = (typeof AuthAttemptScalarFieldEnum)[keyof typeof AuthAttemptScalarFieldEnum]
+
+
 export const SessionScalarFieldEnum = {
   id: 'id',
   expiresAt: 'expiresAt',
@@ -1687,6 +1772,7 @@ export interface PrismaClientOptionsWithAdapter extends PrismaClientBaseOptions 
 export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaClientOptionsWithAdapter
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
+  authAttempt?: Prisma.AuthAttemptOmit
   session?: Prisma.SessionOmit
   account?: Prisma.AccountOmit
   verification?: Prisma.VerificationOmit

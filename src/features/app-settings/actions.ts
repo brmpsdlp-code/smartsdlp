@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { requireAdminSession } from "@/lib/active-session";
+import { recordAdminAudit } from "@/lib/audit";
 
 export async function getReportDeadline() {
   const settings = await prisma.appSettings.findFirst();
@@ -9,10 +10,11 @@ export async function getReportDeadline() {
 }
 
 export async function updateReportDeadline(day: number, time: string) {
-  await requireAdminSession();
+  const session = await requireAdminSession();
   if (!Number.isInteger(day) || day < 1 || day > 31 || !/^([01]\d|2[0-3]):[0-5]\d$/.test(time)) {
     return { success: false as const, error: "Hari harus 1-31 dan jam harus HH:mm." };
   }
   await prisma.appSettings.upsert({ where: { id: "global" }, update: { reportDeadlineDay: day, reportDeadlineTime: time }, create: { id: "global", reportDeadlineDay: day, reportDeadlineTime: time } });
+  await recordAdminAudit({ action: "UPDATE_REPORT_DEADLINE", adminName: session.user.name, adminEmail: session.user.email, alasan: `Hari ${day}, jam ${time}` });
   return { success: true as const };
 }

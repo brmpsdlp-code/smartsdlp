@@ -1,9 +1,9 @@
 "use client";
 
 import kemEntanLogo from "@/imports/Kementerian_Pertanian_Kementan_Logo.svg";
-import { signIn } from "@/lib/auth-client";
+import { requestPasswordReset, signIn } from "@/lib/auth-client";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export function LoginPage() {
   const router = useRouter();
@@ -14,6 +14,11 @@ export function LoginPage() {
   const [showPass, setShowPass] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [forgotOpen, setForgotOpen] = useState(false);
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotMessage, setForgotMessage] = useState("");
+  const [retryAfterSeconds, setRetryAfterSeconds] = useState(0);
+  const [forgotRetryAfterSeconds, setForgotRetryAfterSeconds] = useState(0);
   const [error, setError] = useState(
     searchParams.get("error") === "inactive"
       ? "Akun tidak aktif. Hubungi administrator."
@@ -21,6 +26,31 @@ export function LoginPage() {
   );
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const logoSrc = (kemEntanLogo as any)?.src || kemEntanLogo;
+
+  useEffect(() => {
+    if (retryAfterSeconds <= 0 && forgotRetryAfterSeconds <= 0) return;
+    const timer = window.setInterval(() => {
+      setRetryAfterSeconds((value) => Math.max(0, value - 1));
+      setForgotRetryAfterSeconds((value) => Math.max(0, value - 1));
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, [retryAfterSeconds, forgotRetryAfterSeconds]);
+
+  const formatCountdown = (seconds: number) => `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+
+  const handleForgotPassword = async () => {
+    if (!email.trim()) { setForgotMessage("Masukkan email terlebih dahulu."); return; }
+    setForgotLoading(true); setForgotMessage("");
+    try {
+      const result = await requestPasswordReset({ email: email.trim(), redirectTo: `${window.location.origin}/reset-password` });
+      if (result.error) setForgotMessage(result.error.message || "Permintaan reset gagal.");
+      else setForgotMessage("Jika email terdaftar, link reset sudah dikirim.");
+    } catch (error) {
+      const response = error as { retryAfterSeconds?: number };
+      if (response.retryAfterSeconds) setForgotRetryAfterSeconds(response.retryAfterSeconds);
+      setForgotMessage("Permintaan reset gagal. Coba lagi nanti.");
+    } finally { setForgotLoading(false); }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,6 +68,8 @@ export function LoginPage() {
       });
 
       if (result.error) {
+        const details = result.error as typeof result.error & { retryAfterSeconds?: number };
+        if (details.retryAfterSeconds) setRetryAfterSeconds(details.retryAfterSeconds);
         setError(result.error.message || "Email atau kata sandi tidak valid.");
         return;
       }
@@ -99,6 +131,8 @@ export function LoginPage() {
             </div>
           )}
 
+          {retryAfterSeconds > 0 && <p className="text-xs text-rose-700">Coba lagi dalam {formatCountdown(retryAfterSeconds)}</p>}
+          {forgotOpen && <div className="rounded-md border border-slate-200 bg-slate-50 p-3 space-y-2"><p className="text-xs text-slate-600">Masukkan email untuk menerima link reset.</p><button type="button" onClick={handleForgotPassword} disabled={forgotLoading || forgotRetryAfterSeconds > 0} className="w-full rounded bg-slate-700 p-2 text-xs text-white disabled:opacity-50">{forgotRetryAfterSeconds > 0 ? `Coba lagi dalam ${formatCountdown(forgotRetryAfterSeconds)}` : forgotLoading ? "Mengirim..." : "Kirim Link Reset"}</button>{forgotMessage && <p className="text-xs text-slate-600">{forgotMessage}</p>}</div>}
           <form onSubmit={handleSubmit} className="space-y-3" noValidate>
             <div>
               <label className="block text-xs font-medium text-slate-700 mb-1">
@@ -173,7 +207,8 @@ export function LoginPage() {
               </label>
               <button
                 type="button"
-                className="text-[#143D32] text-[11px] font-semibold hover:underline bg-transparent border-none cursor-pointer p-0"
+                 onClick={() => { setForgotOpen((value) => !value); setForgotMessage(""); }}
+                 className="text-[#143D32] text-[11px] font-semibold hover:underline bg-transparent border-none cursor-pointer p-0"
               >
                 Lupa Kata Sandi?
               </button>
@@ -181,7 +216,7 @@ export function LoginPage() {
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || retryAfterSeconds > 0}
               className="w-full h-9 sm:h-10 bg-[#143D32] hover:bg-[#0F3128] text-white font-semibold rounded-md text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer shadow-xs disabled:opacity-70 mt-1"
             >
               {loading ? (
@@ -221,4 +256,6 @@ export function LoginPage() {
     </div>
   );
 }
+
+
 

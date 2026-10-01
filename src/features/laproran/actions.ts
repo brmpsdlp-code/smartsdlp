@@ -37,6 +37,7 @@ export async function submitLaporan(
     return { success: false, error: "Sesi tidak valid, silakan login ulang." };
   }
 
+  try {
   const parsed = submitLaporanSchema.safeParse(input);
   if (!parsed.success) {
     return {
@@ -207,4 +208,8 @@ export async function submitLaporan(
       realisasi: Number(laporan.realisasi),
     },
   };
+  } catch (error) {
+    console.error("Gagal menyimpan laporan:", error);
+    return { success: false, error: "Gagal menyimpan laporan. Periksa data dan coba lagi." };
+  }
 }
