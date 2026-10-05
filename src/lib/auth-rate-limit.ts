@@ -9,13 +9,22 @@ export async function checkAuthRateLimit(identifier: string, kind: keyof typeof 
   const normalized = identifier.trim().toLowerCase();
   const rule = RULES[kind];
   const cutoff = new Date(Date.now() - rule.windowMs);
-  await prisma.authAttempt.deleteMany({ where: { identifier: normalized, kind, attemptedAt: { lt: new Date(Date.now() - 60 * 60 * 1000) } } });
-  const latest = await prisma.authAttempt.findFirst({ where: { identifier: normalized, kind, attemptedAt: { gte: cutoff } }, orderBy: { attemptedAt: "asc" }, select: { attemptedAt: true } });
-  const count = await prisma.authAttempt.count({ where: { identifier: normalized, kind, attemptedAt: { gte: cutoff } } });
-  const retryAfterSeconds = latest ? Math.max(1, Math.ceil((latest.attemptedAt.getTime() + rule.windowMs - Date.now()) / 1000)) : 0;
-  return { allowed: count < rule.max, remaining: Math.max(0, rule.max - count), retryAfterSeconds };
+  try {
+    await prisma.authAttempt.deleteMany({ where: { identifier: normalized, kind, attemptedAt: { lt: new Date(Date.now() - 60 * 60 * 1000) } } });
+    const latest = await prisma.authAttempt.findFirst({ where: { identifier: normalized, kind, attemptedAt: { gte: cutoff } }, orderBy: { attemptedAt: "asc" }, select: { attemptedAt: true } });
+    const count = await prisma.authAttempt.count({ where: { identifier: normalized, kind, attemptedAt: { gte: cutoff } } });
+    const retryAfterSeconds = latest ? Math.max(1, Math.ceil((latest.attemptedAt.getTime() + rule.windowMs - Date.now()) / 1000)) : 0;
+    return { allowed: count < rule.max, remaining: Math.max(0, rule.max - count), retryAfterSeconds };
+  } catch (error) {
+    console.error("Auth rate-limit storage unavailable; allowing auth handler to continue:", error);
+    return { allowed: true, remaining: rule.max, retryAfterSeconds: 0 };
+  }
 }
 
 export async function recordAuthAttempt(identifier: string, kind: keyof typeof RULES) {
-  await prisma.authAttempt.create({ data: { identifier: identifier.trim().toLowerCase(), kind } });
+  try {
+    await prisma.authAttempt.create({ data: { identifier: identifier.trim().toLowerCase(), kind } });
+  } catch (error) {
+    console.error("Auth attempt could not be recorded:", error);
+  }
 }
