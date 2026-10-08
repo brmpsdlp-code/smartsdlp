@@ -59,10 +59,8 @@ export async function generateSmartReportExcel(items: SmartReportItem[], periode
   const totalRow = sheet.addRow(["", "", "TOTAL KESELURUHAN", `${items.length} Kegiatan Terdaftar`, "", totalPagu, "", totalRealLalu, totalRealIni, totalRealSd, totalPagu > 0 ? totalRealSd / totalPagu : 0, totalSisa]);
 
   const footerRow = totalRow.number + 2;
-  sheet.mergeCells(footerRow, 2, footerRow, 7);
-  sheet.mergeCells(footerRow, 8, footerRow, 12);
-  sheet.getCell(footerRow, 2).value = "Sistem Informasi SMART — BRMP Sumber Daya Lahan Pertanian — Kementerian Pertanian RI";
-  sheet.getCell(footerRow, 8).value = "Dokumen Resmi Laporan SMART — BRMP SDLP Kementan RI";
+  sheet.mergeCells(footerRow, 2, footerRow, 12);
+  sheet.getCell(footerRow, 2).value = "SMART - BRMP Sumber Daya Lahan Pertanian";
 
   [6, 22, 36, 14, 48, 22, 15, 18, 18, 18, 10, 22].forEach((width, index) => { sheet.getColumn(index + 1).width = width; });
   sheet.eachRow((row, rowNumber) => {
@@ -79,7 +77,7 @@ export async function generateSmartReportExcel(items: SmartReportItem[], periode
   });
   [4, 5].forEach((rowNumber) => { sheet.getCell(rowNumber, 1).font = { bold: true, color: { argb: MUTED } }; sheet.getCell(rowNumber, 2).font = { bold: true, color: { argb: "000000" } }; });
   totalRow.eachCell((cell) => { cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: LIGHT_GREEN } }; cell.font = { bold: true }; });
-  [sheet.getCell(footerRow, 2), sheet.getCell(footerRow, 8)].forEach((cell) => { cell.border = { top: { style: "thin", color: { argb: "9CA3AF" } } }; cell.font = { size: 9, color: { argb: "4B5563" } }; });
+  sheet.getCell(footerRow, 2).border = { top: { style: "thin", color: { argb: "9CA3AF" } } }; sheet.getCell(footerRow, 2).font = { size: 9, color: { argb: "4B5563" } };
   for (let row = 9; row <= totalRow.number; row++) {
     [6, 8, 9, 10, 12].forEach((column) => { sheet.getCell(row, column).numFmt = rupiahFormat; });
     sheet.getCell(row, 11).numFmt = "0.0%";

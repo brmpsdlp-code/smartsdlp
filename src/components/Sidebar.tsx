@@ -180,6 +180,12 @@ export function Sidebar({ role, userProfile }: SidebarProps & { userProfile: Use
 
       {/* Bottom section: Help & System Info */}
       <div className="p-3 border-t border-emerald-900/60 bg-gov-green-dark/50 space-y-2">
+        <Link
+          href="/tentang"
+          className="block text-center text-[12px] text-emerald-300/60 hover:text-emerald-200 transition"
+        >
+          Tentang Aplikasi
+        </Link>
         <DropdownMenu>
           <DropdownMenuTrigger className="w-full flex items-center gap-2 rounded-xl bg-emerald-950/40 p-2 text-left hover:bg-emerald-800/70">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-xs font-bold text-white">{initials}</span>
@@ -253,7 +259,7 @@ export function Sidebar({ role, userProfile }: SidebarProps & { userProfile: Use
           </svg>
         </button>
         <span className="ml-2.5 text-xs font-black tracking-tight text-white">
-          SMART BRMP SDLP
+          SMART - BRMP SDLP
         </span>
       </div>
 

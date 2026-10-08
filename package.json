@@ -9,7 +9,7 @@
     "lint": "eslint",
     "db:generate": "bunx prisma generate",
     "db:push": "bunx prisma db push",
-    "db:seed": "bun run prisma/seed.ts",
+    "db:migrate": "bunx prisma migrate deploy",
     "db:studio": "bunx prisma studio"
   },
   "dependencies": {

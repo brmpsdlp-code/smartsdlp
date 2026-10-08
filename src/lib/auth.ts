@@ -3,7 +3,24 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "@/lib/prisma";
 import { buildEmailTemplate, escapeHtml, sendMail } from "@/lib/mailer";
 
+const normalizeOrigin = (value: string) => value.replace(/\/$/, "");
+const configuredOrigin = normalizeOrigin(process.env.BETTER_AUTH_URL || "http://localhost:3000");
+
 export const auth = betterAuth({
+  baseURL: configuredOrigin,
+  trustedOrigins: async (request) => {
+    const requestOrigin = request?.headers.get("origin");
+    const forwardedHost = request?.headers.get("x-forwarded-host");
+    const forwardedProto = request?.headers.get("x-forwarded-proto") || "https";
+    const forwardedOrigin = forwardedHost ? `${forwardedProto}://${forwardedHost}` : "";
+    return [
+      configuredOrigin,
+      "http://localhost:3000",
+      "http://127.0.0.1:3000",
+      requestOrigin || "",
+      forwardedOrigin,
+    ].filter(Boolean).map(normalizeOrigin);
+  },
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),

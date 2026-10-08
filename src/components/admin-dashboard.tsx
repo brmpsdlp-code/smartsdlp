@@ -146,14 +146,14 @@ export function AdminDashboard({
           icon={Icons.dashboard}
         />
         <KpiCard
-          label="Total Realisasi Keuangan"
+          label="Realisasi Anggaran"
           value={fmtRupiah(totalReal)}
           sub={`Realisasi %: ${persenSerapan.toFixed(1)}%`}
           accent="#236437"
           icon={Icons.excel}
         />
         <KpiCard
-          label="Sisa Anggaran Belum Terserap"
+          label="Sisa Anggaran"
           value={fmtRupiah(sisaAnggaran)}
           sub={posisiLabel}
           accent="#E2A917"
@@ -212,7 +212,7 @@ export function AdminDashboard({
                     </span>
                   </div>
                   <p className="text-xs text-slate-500">
-                    Total realisasi keuangan per bulan (bukan kumulatif)
+                    Total realisasi anggaran per bulan (bukan kumulatif)
                   </p>
                 </div>
 

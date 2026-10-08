@@ -139,7 +139,7 @@ export function UserDashboard({
           icon={Icons.dashboard}
         />
         <KpiCard
-          label="Realisasi Keuangan"
+          label="Realisasi Anggaran"
           value={fmtRupiah(totalReal)}
           sub={`Persentase Realisasi: ${persenSerapan.toFixed(1)}%`}
           accent="#236437"

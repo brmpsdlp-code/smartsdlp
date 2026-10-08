@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
-  allowedDevOrigins: ["192.168.100.201", "localhost:3000"],
+  allowedDevOrigins: ["192.168.100.201", "localhost:3000", "ggpdsjwp-3000.asse.devtunnels.ms"],
   async headers() {
     return [
       {

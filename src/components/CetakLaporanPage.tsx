@@ -471,7 +471,7 @@ export function CetakLaporanPage({
           {/* ── Judul Laporan ── */}
           <div className="text-center mb-3">
             <h1 className="text-[12px] font-bold uppercase tracking-wider underline">
-              LAPORAN REALISASI ANGGARAN
+              LAPORAN CAPAIAN KEGIATAN
             </h1>
             <h2 className="text-[11px] font-bold uppercase tracking-wider mt-0.5">
               TAHUN ANGGARAN {currentTahun}
@@ -755,13 +755,9 @@ export function CetakLaporanPage({
           )}
 
           {/* ── Footer Dokumen Resmi ── */}
-          <div className="border-t border-slate-400 pt-1.5 mt-4 flex items-center justify-between text-[8.5px] text-slate-600">
-            <span>
-              Sistem Informasi SMART — BRMP Sumber Daya Lahan Pertanian —
-              Kementerian Pertanian RI
-            </span>
+          <div className="border-t border-slate-400 pt-1.5 mt-4 flex items-center justify-end text-[8.5px] text-slate-600">
             <span className="print-page-number">
-              Dokumen Resmi Laporan SMART — BRMP SDLP Kementan RI
+              SMART - BRMP Sumber Daya Lahan Pertanian
             </span>
           </div>
         </div>
