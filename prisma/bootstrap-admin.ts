@@ -3,8 +3,12 @@ import { createLocalAccountIssuer } from "@better-auth/core/db";
 import { auth } from "../src/lib/auth";
 import { prisma } from "../src/lib/prisma";
 
-const email = "noreply.smartsdlp@gmail.com";
-const password = "ubsi2026";
+const email = process.env.BOOTSTRAP_ADMIN_EMAIL?.trim();
+const password = process.env.BOOTSTRAP_ADMIN_PASSWORD;
+
+if (!email || !password) {
+  throw new Error("BOOTSTRAP_ADMIN_EMAIL and BOOTSTRAP_ADMIN_PASSWORD must be set before running bootstrap-admin.ts");
+}
 
 const existing = await prisma.user.findUnique({ where: { email } });
 if (existing) {
