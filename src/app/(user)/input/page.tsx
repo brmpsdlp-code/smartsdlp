@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getActiveSession } from "@/lib/active-session";
 import { prisma } from "@/lib/prisma";
 import { InputLaporanPage } from "@/components/InputLaporanPage";
+import { getReportDeadline } from "@/features/app-settings/actions";
 
 export default async function Page({
   searchParams,
@@ -13,7 +14,7 @@ export default async function Page({
 
   const params = await searchParams;
 
-  const [kegiatanRows, laporanHistory] = await Promise.all([
+  const [kegiatanRows, laporanHistory, deadline] = await Promise.all([
     prisma.kegiatan.findMany({
       where: { pjId: session.user.id },
       include: {
@@ -40,6 +41,7 @@ export default async function Page({
         uraian: true,
       },
     }),
+    getReportDeadline(),
   ]);
 
   if (kegiatanRows.length === 0) {
@@ -106,6 +108,8 @@ export default async function Page({
         jabatan: session.user.jabatan ?? "Penanggung Jawab (PJ) Kegiatan",
       }}
       laporanHistory={laporanHistorySerialized}
+      deadline={deadline}
+      serverNow={new Date().getTime()}
     />
   );
 }

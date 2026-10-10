@@ -87,6 +87,11 @@ export type Kegiatan = Prisma.KegiatanModel
  */
 export type Laporan = Prisma.LaporanModel
 /**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
  * Model AuditLog
  * 
  */

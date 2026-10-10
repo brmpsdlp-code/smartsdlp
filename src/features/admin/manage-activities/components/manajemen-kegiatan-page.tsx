@@ -26,7 +26,7 @@ import {
 } from "@/utils/programCategorization";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState, useTransition } from "react";
-import { toast } from "sonner";
+import { showToast } from "@/components/ui/app-toast";
 import { ManageCategoriesDialog } from "@/components/admin/ManageCategoriesDialog";
 import { updateReportDeadline } from "@/features/app-settings/actions";
 
@@ -69,6 +69,7 @@ interface ManajemenKegiatanPageProps {
   totalWajibCount: number;
   sudahLaporCount: number;
   belumLaporCount: number;
+  deadline: { day: number; time: string };
 }
 
 // ── Helper: header kolom tabel yang bisa diklik untuk sort ──────────────────
@@ -145,6 +146,7 @@ export function ManajemenKegiatanPage({
   wajibPage,
   wajibPageSize,
   wajibTotal,
+  deadline,
 }: ManajemenKegiatanPageProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -173,7 +175,7 @@ export function ManajemenKegiatanPage({
       .then((result) => {
         if (!result.success) {
           setWajibOverride((prev) => ({ ...prev, [k.id]: !newValue }));
-          toast.error(`Gagal mengubah status "${k.nama}": ${result.error}`);
+          showToast("error", "Status gagal diubah", `Gagal mengubah status "${k.nama}": ${result.error}`);
           return;
         }
         router.refresh();
@@ -193,8 +195,8 @@ export function ManajemenKegiatanPage({
   const [formNama, setFormNama] = useState("");
   const [formPjId, setFormPjId] = useState<string>(pjOptions[0]?.id ?? "");
   const [deadlineOpen, setDeadlineOpen] = useState(false);
-  const [deadlineDay, setDeadlineDay] = useState("25");
-  const [deadlineTime, setDeadlineTime] = useState("23:59");
+  const [deadlineDay, setDeadlineDay] = useState(String(deadline.day));
+  const [deadlineTime, setDeadlineTime] = useState(deadline.time);
   const [formJenis, setFormJenis] = useState<"APBN" | "NON_APBN">("APBN");
   const [formPagu, setFormPagu] = useState("500000000");
   const [formCategoryId, setFormCategoryId] = useState<string>("");
@@ -228,7 +230,7 @@ export function ManajemenKegiatanPage({
       .then((result) => {
         if (!result.success) {
           setStatusOverride((prev) => ({ ...prev, [k.id]: getStatusValue(k) }));
-          toast.error(`Gagal mengubah status "${k.nama}": ${result.error}`);
+          showToast("error", "Status gagal diubah", `Gagal mengubah status "${k.nama}": ${result.error}`);
           return;
         }
         router.refresh();
@@ -330,10 +332,11 @@ export function ManajemenKegiatanPage({
         return;
       }
 
-      toast.success(
+      showToast(
+        "success",
         editId
-          ? `Kegiatan "${result.kegiatan.kode}" berhasil diperbarui (Kategori: ${formCategoryId})`
-          : `Kegiatan "${result.kegiatan.kode}" berhasil disimpan (Kategori: ${formCategoryId})`,
+          ? `Kegiatan "${result.kegiatan.kode}" berhasil diperbarui (Kategori: ${result.kegiatan.programCategory ?? "-"})`
+          : `Kegiatan "${result.kegiatan.kode}" berhasil disimpan (Kategori: ${result.kegiatan.programCategory ?? "-"})`,
       );
       setModalOpen(false);
       router.refresh();
@@ -348,12 +351,12 @@ export function ManajemenKegiatanPage({
       const result = await deleteKegiatan(target.id);
 
       if (!result.success) {
-        toast.error(`Gagal menghapus: ${result.error}`);
+        showToast("error", "Kegiatan gagal dihapus", result.error);
         setDeleteTarget(null);
         return;
       }
 
-      toast.success(`Kegiatan "${target.nama}" berhasil dihapus.`);
+      showToast("success", "Kegiatan dihapus", `Kegiatan "${target.nama}" berhasil dihapus.`);
       setDeleteTarget(null);
       router.refresh();
     });
@@ -414,7 +417,7 @@ export function ManajemenKegiatanPage({
             </button>
             <ManageCategoriesDialog initialCategories={categoryList} onChange={(next) => { setCategoryList(next); router.refresh(); }} />
             <button onClick={() => setDeadlineOpen(true)} className="inline-flex items-center gap-2 px-3.5 py-2 border border-emerald-700 text-emerald-800 rounded-md text-xs font-semibold hover:bg-emerald-50">Pengaturan Deadline</button>
-            {deadlineOpen && <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4"><div className="w-full max-w-sm rounded-xl bg-white p-5 shadow-xl"><h3 className="font-bold text-sm text-slate-800">Pengaturan Deadline</h3><div className="mt-4 space-y-3"><label className="block text-xs font-semibold">Hari<input type="number" min="1" max="31" value={deadlineDay} onChange={(e) => setDeadlineDay(e.target.value)} className="mt-1 w-full rounded-md border px-3 py-2" /></label><label className="block text-xs font-semibold">Jam<input type="time" value={deadlineTime} onChange={(e) => setDeadlineTime(e.target.value)} className="mt-1 w-full rounded-md border px-3 py-2" /></label></div><div className="mt-5 flex justify-end gap-2"><button onClick={() => setDeadlineOpen(false)} className="rounded-md border px-3 py-2 text-xs">Batal</button><button onClick={() => { void updateReportDeadline(Number(deadlineDay), deadlineTime).then((r) => { if (!r.success) { toast.error(r.error); return; } toast.success("Deadline diperbarui."); setDeadlineOpen(false); }); }} className="rounded-md bg-emerald-800 px-3 py-2 text-xs font-semibold text-white">Simpan</button></div></div></div>}
+            {deadlineOpen && <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4"><div className="w-full max-w-sm rounded-xl bg-white p-5 shadow-xl"><h3 className="font-bold text-sm text-slate-800">Pengaturan Deadline</h3><div className="mt-4 space-y-4"><fieldset><legend className="text-xs font-semibold text-slate-700">Hari batas laporan</legend><div className="mt-2 grid grid-cols-7 gap-1.5">{Array.from({ length: 31 }, (_, index) => String(index + 1)).map((day) => <button key={day} type="button" onClick={() => setDeadlineDay(day)} className={`h-8 rounded-md border text-xs font-semibold transition ${deadlineDay === day ? "border-emerald-800 bg-emerald-800 text-white" : "border-slate-200 bg-white text-slate-600 hover:border-emerald-400"}`}>{day}</button>)}</div></fieldset><label className="block text-xs font-semibold text-slate-700">Jam batas laporan<input type="time" value={deadlineTime} onChange={(e) => setDeadlineTime(e.target.value)} className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2" /></label></div><div className="mt-5 flex justify-end gap-2"><button onClick={() => setDeadlineOpen(false)} className="rounded-md border px-3 py-2 text-xs">Batal</button><button onClick={() => { void updateReportDeadline(Number(deadlineDay), deadlineTime).then((r) => { if (!r.success) { showToast("error", "Deadline gagal diperbarui", r.error); return; } showToast("success", "Deadline diperbarui", "Pengaturan deadline tersimpan."); setDeadlineOpen(false); }); }} className="rounded-md bg-emerald-800 px-3 py-2 text-xs font-semibold text-white">Simpan</button></div></div></div>}
           </div>
         </div>
 
@@ -1053,6 +1056,7 @@ export function ManajemenKegiatanPage({
     </>
   );
 }
+
 
 
 

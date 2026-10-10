@@ -3,6 +3,7 @@ import type { Prisma } from "@/generated/prisma/client";
 import { ManajemenKegiatanPage } from "@/features/admin/manage-activities/components/manajemen-kegiatan-page";
 import { redirect } from "next/navigation";
 import { aggregateActivityReports } from "@/utils/reportAggregation";
+import { getReportDeadline } from "@/features/app-settings/actions";
 
 const PAGE_SIZE = 5;
 const WAJIB_PAGE_SIZE = 5;
@@ -64,6 +65,7 @@ export default async function Page({
     sudahLaporCount,
     pjOptions,
     programCategories,
+    deadline,
   ] = await Promise.all([
     prisma.kegiatan.findMany({
       where,
@@ -97,6 +99,7 @@ export default async function Page({
       orderBy: { name: "asc" },
     }),
     prisma.programCategory.findMany({ orderBy: { sortOrder: "asc" } }),
+     getReportDeadline(),
   ]);
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
@@ -154,6 +157,9 @@ export default async function Page({
       totalWajibCount={totalWajibCount}
       sudahLaporCount={sudahLaporCount}
       belumLaporCount={belumLaporCount}
+       deadline={deadline}
     />
   );
 }
+
+

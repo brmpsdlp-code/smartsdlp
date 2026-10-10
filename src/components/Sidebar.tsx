@@ -11,6 +11,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import NotificationsWithActions, { type NotificationItem } from "@/components/ui/notifications-with-actions";
 
 const userMenu: MenuItem[] = [
   {
@@ -69,9 +70,10 @@ const adminMenu: MenuItem[] = [
 
 interface SidebarProps {
   role: Role;
+  notifications?: NotificationItem[];
 }
 
-export function Sidebar({ role, userProfile }: SidebarProps & { userProfile: UserProfile }) {
+export function Sidebar({ role, userProfile, notifications = [] }: SidebarProps & { userProfile: UserProfile }) {
   const isAdmin = role === "admin";
   const menu = isAdmin ? adminMenu : userMenu;
   const logoSrc = kemEntanLogo?.src || kemEntanLogo;
@@ -180,6 +182,7 @@ export function Sidebar({ role, userProfile }: SidebarProps & { userProfile: Use
 
       {/* Bottom section: Help & System Info */}
       <div className="p-3 border-t border-emerald-900/60 bg-gov-green-dark/50 space-y-2">
+        <NotificationsWithActions items={notifications} />
         <Link
           href="/tentang"
           className="block text-center text-[12px] text-emerald-300/60 hover:text-emerald-200 transition"

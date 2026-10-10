@@ -60,6 +60,7 @@ export const ModelName = {
   ProgramCategory: 'ProgramCategory',
   Kegiatan: 'Kegiatan',
   Laporan: 'Laporan',
+  Notification: 'Notification',
   AuditLog: 'AuditLog',
   Dokumen: 'Dokumen'
 } as const
@@ -221,6 +222,20 @@ export const LaporanScalarFieldEnum = {
 } as const
 
 export type LaporanScalarFieldEnum = (typeof LaporanScalarFieldEnum)[keyof typeof LaporanScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  title: 'title',
+  message: 'message',
+  href: 'href',
+  readAt: 'readAt',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
 export const AuditLogScalarFieldEnum = {

@@ -44,6 +44,7 @@ model User {
   laporanSubmitted  Laporan[]  @relation("LaporanSubmitter")
   dokumenUploaded   Dokumen[]  @relation("DokumenUploader")
   laporans          Laporan[]
+   notifications     Notification[]
 
   @@map("user")
 }
@@ -203,6 +204,21 @@ model Laporan {
   @@map("laporan")
 }
 
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  title     String
+  message   String
+  href      String?
+  readAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([userId, readAt, createdAt])
+  @@map("notification")
+}
+
 model AuditLog {
   id           String   @id @default(cuid())
   action       String   @default("DELETE_LAPORAN")
@@ -253,3 +269,8 @@ model Dokumen {
   @@index([uploaderId])
   @@map("dokumen")
 }
+
+
+
+
+

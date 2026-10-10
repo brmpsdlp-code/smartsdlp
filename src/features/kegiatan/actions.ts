@@ -103,7 +103,7 @@ export async function createKegiatan(
       kode: kegiatan.kode,
       nama: kegiatan.nama,
       jenis: kegiatan.jenis || "APBN",
-      programCategory: kegiatan.programCategory,
+      programCategory: category?.name ?? null,
       pagu: Number(kegiatan.pagu),
       realisasi: Number(kegiatan.realisasi),
       pj: kegiatan.pj,
@@ -223,7 +223,7 @@ export async function updateKegiatan(
       kode: kegiatan.kode,
       nama: kegiatan.nama,
       jenis: kegiatan.jenis || "APBN",
-      programCategory: kegiatan.programCategory,
+      programCategory: category?.name ?? null,
       pagu: Number(kegiatan.pagu),
       realisasi: Number(kegiatan.realisasi),
       pj: kegiatan.pj,
@@ -377,6 +377,7 @@ export async function toggleStatusAnggaran(
     return { success: false, error: "Gagal mengubah data kegiatan." };
   }
 }
+
 
 
 

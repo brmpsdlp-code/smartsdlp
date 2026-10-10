@@ -41,7 +41,7 @@ export default function RootLayout({
           richColors
           closeButton
           toastOptions={{
-            className: "text-sm",
+            className: "text-sm rounded-xl border shadow-xl",
           }}
         />
       </body>
