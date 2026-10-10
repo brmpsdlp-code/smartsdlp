@@ -19,7 +19,6 @@ type KegiatanForInput = {
   pagu: number;
   statusAnggaran: "Dibuka" | "Diblokir";
   uraian: string;
-  fisik: number;
   realLalu: number;
   realIni: number;
   programCategory?: {
@@ -44,7 +43,6 @@ type LaporanHistoryItem = {
   periodeBulan: number;
   periodeTahun: number;
   realIni: number;
-  fisik: number;
   uraian: string;
 };
 
@@ -86,7 +84,6 @@ export function InputLaporanPage({
   const [clientNow, setClientNow] = useState(serverNow);
   const [selectedKode, setSelectedKode] = useState(initialSelectedKode);
   const [uraian, setUraian] = useState("");
-  const [fisik, setFisik] = useState("0");
   const [realIni, setRealIni] = useState("0");
 
   const periodeOptions = useMemo(
@@ -114,9 +111,6 @@ export function InputLaporanPage({
     const priorReports = reports.filter((laporan) =>
       isBefore(laporan.periodeBulan, laporan.periodeTahun),
     );
-    const latestPrior = [...priorReports].sort((a, b) =>
-      b.periodeTahun - a.periodeTahun || b.periodeBulan - a.periodeBulan,
-    )[0];
     const existingLaporan = reports.find((laporan) =>
       isSame(laporan.periodeBulan, laporan.periodeTahun),
     );
@@ -125,7 +119,6 @@ export function InputLaporanPage({
     );
     return {
       realLalu: priorReports.reduce((sum, laporan) => sum + laporan.realIni, 0),
-      prevFisik: latestPrior?.fisik ?? 0,
       totalUsedByOtherPeriods: otherReports.reduce(
         (sum, laporan) => sum + laporan.realIni,
         0,
@@ -152,23 +145,18 @@ export function InputLaporanPage({
     paguNum - calc.totalUsedByOtherPeriods,
   );
   const iniNum = Number(realIni) || 0;
-  const fisikNum = Number(fisik) || 0;
   const exceedsRemaining = iniNum > maxAllowedIni;
 
   /* eslint-disable react-hooks/set-state-in-effect */
   useLayoutEffect(() => {
     if (calc.existingLaporan) {
       setUraian(calc.existingLaporan.uraian);
-      setFisik(
-        isBlocked ? String(calc.prevFisik) : String(calc.existingLaporan.fisik),
-      );
       setRealIni(
-        isBlocked || isFullyAbsorbed ? "0" : String(calc.existingLaporan.realIni),
+        isFullyAbsorbed ? "0" : String(calc.existingLaporan.realIni),
       );
       return;
     }
     setUraian("");
-    setFisik(String(calc.prevFisik));
     setRealIni("0");
   }, [calc, isBlocked, isFullyAbsorbed]);
   /* eslint-enable react-hooks/set-state-in-effect */
@@ -192,7 +180,6 @@ export function InputLaporanPage({
         periodeBulan: periode.bulan,
         periodeTahun: periode.tahun,
         uraian,
-        fisik: fisikNum,
         realIni: iniNum,
       });
       if (!result.success) {
@@ -250,7 +237,7 @@ export function InputLaporanPage({
             )}
             {isBlocked && (
               <div className="rounded-lg border border-rose-200 bg-rose-50 p-3 text-xs text-rose-800">
-                <strong>Kegiatan ini sedang diblokir oleh admin.</strong> Realisasi keuangan dan progres fisik periode ini terkunci ke nilai terakhir.
+                <strong>Kegiatan ini sedang diblokir oleh admin.</strong> Realisasi keuangan periode ini terkunci ke nilai terakhir.
               </div>
             )}
 
@@ -315,22 +302,9 @@ export function InputLaporanPage({
                 value={uraian}
                 onChange={(event) => setUraian(event.target.value)}
                 disabled={isReadOnly}
-                placeholder="Deskripsikan realisasi fisik, output lapangan, dan kendala/tindak lanjut..."
+                placeholder="Deskripsikan realisasi keuangan, output kegiatan, dan kendala/tindak lanjut..."
                 className="w-full rounded-md border border-slate-300 bg-white p-2.5 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#E28B59] disabled:bg-slate-100"
               />
-              <label className="block max-w-xs space-y-1">
-                <span className="block text-xs font-semibold text-slate-700">Progres Fisik (%) *</span>
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  step="0.01"
-                  value={fisik}
-                  onChange={(event) => setFisik(event.target.value)}
-                  disabled={isReadOnly || isBlocked}
-                  className="h-9 w-full rounded-md border border-slate-300 bg-white px-3 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#E28B59] disabled:bg-slate-100"
-                />
-              </label>
             </label>
           </section>
 

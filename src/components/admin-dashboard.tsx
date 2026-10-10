@@ -19,6 +19,7 @@ import {
   CartesianGrid,
 } from "recharts";
 import Link from "next/link";
+import NotificationsWithActions, { type NotificationItem } from "@/components/ui/notifications-with-actions";
 
 interface BarDataPoint {
   name: string;
@@ -38,6 +39,7 @@ interface AdminDashboardProps {
   metrics: Record<string, { realLalu: number; realIni: number; sdPeriode: number; sisa: number; persentaseRealisasi: number }>;
   barData: BarDataPoint[];
   lineDataFull: LineDataPoint[];
+  notifications: NotificationItem[];
 }
 
 export function AdminDashboard({
@@ -46,6 +48,7 @@ export function AdminDashboard({
   metrics,
   barData,
   lineDataFull,
+  notifications,
 }: AdminDashboardProps) {
   const [activeTab, setActiveTab] = useState<"serapan" | "trend" | "kegiatan">(
     "serapan",
@@ -102,6 +105,7 @@ export function AdminDashboard({
           </p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
+          <NotificationsWithActions items={notifications} />
           <Link
             href="/admin/master"
             className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md text-xs font-semibold transition cursor-pointer"
@@ -523,3 +527,4 @@ export function AdminDashboard({
     </div>
   );
 }
+

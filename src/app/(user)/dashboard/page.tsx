@@ -5,6 +5,7 @@ import { UserDashboard } from "@/components/UserDashboard";
 import type { Activity } from "@/types";
 import { aggregateActivityReports } from "@/utils/reportAggregation";
 import { getReportDeadline } from "@/features/app-settings/actions";
+import { getMyNotifications } from "@/features/notifications/actions";
 
 export default async function DashboardPage() {
   const session = await getActiveSession();
@@ -14,7 +15,7 @@ export default async function DashboardPage() {
   const currentMonth = now.getMonth() + 1;
   const currentYear = now.getFullYear();
 
-  const [rows, laporanRows, laporanBulanIni, deadline] = await Promise.all([
+  const [rows, laporanRows, laporanBulanIni, deadline, notifications] = await Promise.all([
     prisma.kegiatan.findMany({
       where: { pjId: session.user.id },
       include: {
@@ -45,6 +46,7 @@ export default async function DashboardPage() {
       select: { kegiatanId: true },
     }),
     getReportDeadline(),
+    getMyNotifications(),
   ]);
 
   const aggregates = aggregateActivityReports(rows.map((k) => ({ id: k.id, pagu: Number(k.pagu) })), laporanRows.map((l) => ({ ...l, realIni: Number(l.realIni) })), { month: currentMonth, year: currentYear });
@@ -93,6 +95,9 @@ export default async function DashboardPage() {
 
   const metrics = Object.fromEntries(aggregates.entries());
   return (
-    <UserDashboard activities={activities} metrics={metrics} laporanHistory={laporanHistory} deadline={deadline} />
+    <UserDashboard activities={activities} metrics={metrics} laporanHistory={laporanHistory} deadline={deadline} notifications={notifications.items} />
   );
 }
+
+
+

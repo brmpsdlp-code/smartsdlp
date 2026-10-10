@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { AdminDashboard } from "@/components/admin-dashboard";
 import type { Activity } from "@/types";
 import { aggregateActivityReports } from "@/utils/reportAggregation";
+import { getMyNotifications } from "@/features/notifications/actions";
 
 const NAMA_BULAN_SINGKAT = [
   "Jan",
@@ -19,7 +20,7 @@ const NAMA_BULAN_SINGKAT = [
 ];
 
 export default async function Page() {
-  const [kegiatanRows, laporanRows, categories] = await Promise.all([
+  const [kegiatanRows, laporanRows, categories, notifications] = await Promise.all([
     prisma.kegiatan.findMany({
       include: {
         pj: { select: { id: true, name: true, email: true } },
@@ -58,9 +59,10 @@ programCategoryRef: {
       orderBy: { sortOrder: "asc" },
       select: { name: true, sortOrder: true, colorKey: true, isActive: true },
     }),
-  ]);
+     getMyNotifications(),
+   ]);
 
-  const now = new Date();
+   const now = new Date();
   const currentYear = now.getFullYear();
   const currentMonth = now.getMonth() + 1;
   const period = { month: currentMonth, year: currentYear };
@@ -137,6 +139,13 @@ programCategoryRef: {
       categories={categories.filter((category) => category.isActive).map(({ name, colorKey }) => ({ name, colorKey }))}
       barData={barData}
       lineDataFull={lineDataFull}
-    />
+       notifications={notifications.items}
+     />
   );
 }
+
+
+
+
+
+

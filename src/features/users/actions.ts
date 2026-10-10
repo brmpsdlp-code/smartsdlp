@@ -65,6 +65,43 @@ export async function markPasswordChanged() {
   return { success: true as const };
 }
 
+const updateProfileSchema = z.object({
+  userId: z.string().min(1),
+  name: z.string().trim().min(1, "Nama wajib diisi"),
+  nip: z.string().trim().min(1, "NIP wajib diisi"),
+});
+
+export async function updateUserProfile(input: { userId: string; name: string; nip: string }) {
+  const admin = await requireAdminSession();
+  const parsed = updateProfileSchema.safeParse(input);
+  if (!parsed.success) return { success: false as const, error: parsed.error.issues[0]?.message ?? "Data tidak valid." };
+
+  try {
+    const target = await prisma.user.findUnique({ where: { id: parsed.data.userId }, select: { id: true, name: true, nip: true, email: true } });
+    if (!target) return { success: false as const, error: "User tidak ditemukan." };
+
+    const updated = await prisma.user.update({
+      where: { id: parsed.data.userId },
+      data: { name: parsed.data.name, nip: parsed.data.nip },
+      select: { id: true, name: true, nip: true },
+    });
+    await recordAdminAudit({
+      action: "UPDATE_USER_PROFILE",
+      adminName: admin.user.name,
+      adminEmail: admin.user.email,
+      alasan: `User ${target.email}: nama/NIP diperbarui`,
+    });
+    revalidatePath("/admin/users");
+    return { success: true as const, user: updated };
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+      return { success: false as const, error: "NIP sudah terdaftar, gunakan NIP lain." };
+    }
+    console.error("Gagal memperbarui profil user:", error);
+    return { success: false as const, error: "Profil user gagal diperbarui." };
+  }
+}
+
 export async function setUserActive(userId: string, isActive: boolean) {
   const admin = await requireAdminSession();
   if (userId === admin.user.id) return { success: false as const, error: "Admin tidak boleh menonaktifkan dirinya sendiri." };

@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { getActiveSession } from "@/lib/active-session";
+import { createUserNotification } from "@/lib/notifications";
 
 export async function deleteLaporan(laporanId: string, alasan: string) {
   const session = await getActiveSession();
@@ -195,6 +196,20 @@ export async function ingatkanPJ(kegiatanId: string, periode: string) {
         success: false,
         error: "Gagal mengirim email — periksa konfigurasi SMTP server.",
       };
+    }
+
+    if (kegiatan.pj?.id) {
+      try {
+        await createUserNotification({
+          userId: kegiatan.pj.id,
+          type: "REPORT_REMINDER",
+          title: "Pengingat laporan",
+          message: `Mohon isi laporan kegiatan ${kegiatan.kode} untuk periode ${periode}.`,
+          href: "/input",
+        });
+      } catch (notificationError) {
+        console.error("Gagal membuat notifikasi pengingat:", notificationError);
+      }
     }
 
     return {

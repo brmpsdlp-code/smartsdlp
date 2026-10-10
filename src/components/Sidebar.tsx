@@ -11,7 +11,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import NotificationsWithActions, { type NotificationItem } from "@/components/ui/notifications-with-actions";
 
 const userMenu: MenuItem[] = [
   {
@@ -70,10 +69,9 @@ const adminMenu: MenuItem[] = [
 
 interface SidebarProps {
   role: Role;
-  notifications?: NotificationItem[];
 }
 
-export function Sidebar({ role, userProfile, notifications = [] }: SidebarProps & { userProfile: UserProfile }) {
+export function Sidebar({ role, userProfile }: SidebarProps & { userProfile: UserProfile }) {
   const isAdmin = role === "admin";
   const menu = isAdmin ? adminMenu : userMenu;
   const logoSrc = kemEntanLogo?.src || kemEntanLogo;
@@ -182,11 +180,11 @@ export function Sidebar({ role, userProfile, notifications = [] }: SidebarProps 
 
       {/* Bottom section: Help & System Info */}
       <div className="p-3 border-t border-emerald-900/60 bg-gov-green-dark/50 space-y-2">
-        <NotificationsWithActions items={notifications} />
         <Link
           href="/tentang"
-          className="block text-center text-[12px] text-emerald-300/60 hover:text-emerald-200 transition"
+          className="flex items-center justify-center gap-1.5 rounded-md border border-emerald-700/60 bg-emerald-950/30 px-3 py-2 text-[11px] font-semibold text-emerald-100 transition hover:border-emerald-400 hover:bg-emerald-800/70 hover:text-white"
         >
+          <span aria-hidden="true">ⓘ</span>
           Tentang Aplikasi
         </Link>
         <DropdownMenu>
@@ -201,16 +199,6 @@ export function Sidebar({ role, userProfile, notifications = [] }: SidebarProps 
           </DropdownMenuContent>
         </DropdownMenu>
         <EditProfileModal isOpen={profileOpen} onClose={() => setProfileOpen(false)} userProfile={userProfile} onSave={() => router.refresh()} />
-        <div className="bg-gov-green/80 p-2.5 rounded border border-emerald-800/40 text-[10.5px]">
-          <div className="flex items-center gap-1.5 font-semibold text-emerald-200">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            <span>Pusdatin Kementan</span>
-          </div>
-          <p className="text-[9.5px] text-emerald-300/70 mt-0.5">
-            Sistem Sinkronisasi SMART Aktif
-          </p>
-        </div>
-
         <button
           onClick={() => {
             signOut({

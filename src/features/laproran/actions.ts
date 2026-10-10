@@ -15,7 +15,6 @@ const submitLaporanSchema = z.object({
   periodeBulan: z.number().int().min(1).max(12),
   periodeTahun: z.number().int().min(2020).max(2100),
   uraian: z.string().min(1, "Uraian kegiatan wajib diisi"),
-  fisik: z.coerce.number().min(0).max(100),
   realIni: z.coerce.number().int().min(0),
 });
 
@@ -121,13 +120,6 @@ export async function submitLaporan(
                 "Anggaran kegiatan ini sedang diblokir, realisasi periode ini harus 0.",
             };
           }
-          const maxFisik = priorLaporan[0]?.fisik ?? 0;
-          if (data.fisik > maxFisik) {
-            return {
-              success: false,
-              error: `Anggaran sedang diblokir, realisasi fisik tidak boleh melebihi ${maxFisik}% (nilai periode sebelumnya).`,
-            };
-          }
         }
 
         const currentRealisasi = BigInt(data.realIni);
@@ -159,7 +151,7 @@ export async function submitLaporan(
             periodeBulan: data.periodeBulan,
             periodeTahun: data.periodeTahun,
             uraian: data.uraian,
-            fisik: data.fisik,
+            fisik: 0,
             statusAnggaran: kegiatan.statusAnggaran,
             realLalu: realLaluServer,
             realIni: currentRealisasi,
@@ -168,7 +160,7 @@ export async function submitLaporan(
           },
           update: {
             uraian: data.uraian,
-            fisik: data.fisik,
+            fisik: 0,
             statusAnggaran: kegiatan.statusAnggaran,
             realLalu: realLaluServer,
             realIni: currentRealisasi,
@@ -252,3 +244,4 @@ export async function submitLaporan(
     };
   }
 }
+

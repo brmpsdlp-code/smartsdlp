@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Activity } from "@/types";
 import { fmtRupiah, Icons } from "@/utils/formatters";
+import NotificationsWithActions, { type NotificationItem } from "@/components/ui/notifications-with-actions";
 import { KpiCard, Badge, ProgressBar } from "./KpiCard";
 import {
   Dialog,
@@ -45,6 +46,7 @@ interface UserDashboardProps {
   metrics: Record<string, { realLalu: number; realIni: number; sdPeriode: number; sisa: number; persentaseRealisasi: number }>;
   laporanHistory: LaporanHistoryItem[];
   deadline: { day: number; time: string };
+  notifications: NotificationItem[];
 }
 
 export function UserDashboard({
@@ -52,6 +54,7 @@ export function UserDashboard({
   metrics,
   laporanHistory,
   deadline,
+  notifications,
 }: UserDashboardProps) {
   const [filterStatus, setFilterStatus] = useState<
     "ALL" | "BELUM_LAPOR" | "WAJIB"
@@ -111,6 +114,7 @@ export function UserDashboard({
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <NotificationsWithActions items={notifications} />
           <Link
             href="/input"
             className="inline-flex items-center gap-2 px-3 py-2 bg-emerald-800 hover:bg-emerald-900 text-white rounded-md text-xs font-semibold shadow-xs transition cursor-pointer"
@@ -335,10 +339,9 @@ export function UserDashboard({
                   Panduan Pengisian
                 </p>
                 <p className="text-[11px] text-slate-500 mt-1">
-                  1. Download template Excel atau isi via Form Web Direct.
+                  1. isi via Form Web Direct.
                   <br />
-                  2. Masukkan nominal realisasi periode berjalan &amp; capaian
-                  fisik.
+                  2. Masukkan nominal realisasi periode berjalan.
                   <br />
                   3. Identitas Penanggung Jawab otomatis tervalidasi dari sesi
                   login.
@@ -411,3 +414,5 @@ export function UserDashboard({
     </div>
   );
 }
+
+

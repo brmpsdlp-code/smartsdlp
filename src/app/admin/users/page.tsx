@@ -8,7 +8,7 @@ export default async function Page() {
   if (!session) redirect("/login?error=inactive");
   if (session.user.role?.toLowerCase() !== "admin") redirect("/dashboard");
   const users = await prisma.user.findMany({
-    select: { id: true, name: true, email: true, role: true, isActive: true },
+    select: { id: true, name: true, email: true, nip: true, role: true, isActive: true },
     orderBy: { name: "asc" },
   });
   return <ManajemenUserPage users={users} currentUserId={session.user.id} />;
