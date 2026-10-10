@@ -63,7 +63,20 @@ const DonutChart = React.forwardRef<HTMLDivElement, DonutChartProps>(
 
     const radius = size / 2 - strokeWidth / 2;
     const circumference = 2 * Math.PI * radius;
-    let cumulativePercentage = 0;
+    const visibleSegments = data.filter((segment) => segment.value > 0);
+    const minimumAngle = visibleSegments.length
+      ? Math.min(2, 360 / visibleSegments.length)
+      : 0;
+    const rawAngles = data.map((segment) =>
+      internalTotalValue > 0 ? (segment.value / internalTotalValue) * 360 : 0,
+    );
+    const excessAngle = rawAngles.reduce(
+      (sum, angle) => sum + Math.max(angle - minimumAngle, 0),
+      0,
+    );
+    const remainingAngle = 360 - visibleSegments.length * minimumAngle;
+    const excessScale = excessAngle > 0 ? remainingAngle / excessAngle : 0;
+    let cumulativeAngle = 0;
 
     React.useEffect(() => {
       onSegmentHover?.(internalHovered);
@@ -106,19 +119,18 @@ const DonutChart = React.forwardRef<HTMLDivElement, DonutChartProps>(
           <AnimatePresence>
             {data.map((segment, index) => {
               if (segment.value === 0) return null;
-
-              const percentage =
-                internalTotalValue === 0
-                  ? 0
-                  : (segment.value / internalTotalValue) * 100;
-
-              const strokeDasharray = `${(percentage / 100) * circumference} ${circumference}`;
-              const strokeDashoffset = (cumulativePercentage / 100) * circumference;
+               const rawAngle = rawAngles[index];
+               const visualAngle =
+                 rawAngle >= minimumAngle
+                   ? minimumAngle + (rawAngle - minimumAngle) * excessScale
+                   : minimumAngle;
+               const strokeDasharray = `${(visualAngle / 360) * circumference} ${circumference}`;
+               const strokeDashoffset = (cumulativeAngle / 360) * circumference;
 
               const isActive = activeHovered?.label === segment.label;
               const isDimmed = hasActiveSelection && !isActive;
 
-              cumulativePercentage += percentage;
+              cumulativeAngle += visualAngle;
 
               return (
                 <motion.circle
@@ -191,3 +203,5 @@ const DonutChart = React.forwardRef<HTMLDivElement, DonutChartProps>(
 DonutChart.displayName = "DonutChart";
 
 export { DonutChart };
+
+

@@ -89,7 +89,13 @@ programCategoryRef: {
     status: aggregates.get(k.id)?.sudahLaporPeriode ? "done" : "pending",
   }));
 
-  // Bar chart: total realisasi PER BULAN (bukan kumulatif), Januari s.d. bulan berjalan.
+  // Bar chart: persentase realisasi terhadap pagu jenis anggaran per bulan.
+  const totalPaguApbn = activities
+    .filter((activity) => activity.jenis === "APBN")
+    .reduce((sum, activity) => sum + activity.pagu, 0);
+  const totalPaguNonApbn = activities
+    .filter((activity) => activity.jenis !== "APBN")
+    .reduce((sum, activity) => sum + activity.pagu, 0);
   const barData = Array.from({ length: currentMonth }, (_, i) => {
     const bulan = i + 1;
     const laporanBulanIni = laporanRows.filter(
@@ -101,7 +107,13 @@ programCategoryRef: {
     const non_real = laporanBulanIni
       .filter((l) => (l.kegiatan.jenis || "APBN") !== "APBN")
       .reduce((sum, l) => sum + Number(l.realIni), 0);
-    return { name: NAMA_BULAN_SINGKAT[i], apbn_real, non_real };
+    return {
+       name: NAMA_BULAN_SINGKAT[i],
+       apbn_real,
+       non_real,
+       apbn_pct: totalPaguApbn > 0 ? (apbn_real / totalPaguApbn) * 100 : 0,
+       non_pct: totalPaguNonApbn > 0 ? (non_real / totalPaguNonApbn) * 100 : 0,
+     };
   });
 
   // Kurva-S: realisasi kumulatif (%) vs target LINEAR (asumsi — belum ada
@@ -144,6 +156,7 @@ programCategoryRef: {
      />
   );
 }
+
 
 
 

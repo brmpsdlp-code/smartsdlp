@@ -2,7 +2,7 @@
 
 import React, { useState, useTransition } from "react";
 import { Activity } from "@/types";
-import { fmtRupiah, formatRupiahSingkat, Icons } from "@/utils/formatters";
+import { fmtRupiah, Icons } from "@/utils/formatters";
 import { KpiCard, Badge, ProgressBar } from "./KpiCard";
 import { Top5LowSerapanWidget } from "./Top5LowSerapanWidget";
 import { DistribusiPaguWidget } from "./DistribusiPaguWidget";
@@ -27,6 +27,8 @@ interface BarDataPoint {
   name: string;
   apbn_real: number;
   non_real: number;
+  apbn_pct: number;
+  non_pct: number;
 }
 
 interface LineDataPoint {
@@ -257,28 +259,32 @@ export function AdminDashboard({
                         tickLine={false}
                       />
                       <YAxis
-                        domain={[
-                          0,
-                          (dataMax: number) => {
-                            if (dataMax === 0) return 100; // fallback kalau semua data kosong
-                            // Bulatkan ke atas ke "angka bulat" yang proporsional dengan skala
-                            // data sebenarnya — bukan dipaksa kelipatan 500 juta yang cuma cocok
-                            // untuk data skala miliaran.
-                            const target = dataMax * 1.25;
-                            const magnitude = Math.pow(
-                              10,
-                              Math.floor(Math.log10(target)),
-                            );
-                            return Math.ceil(target / magnitude) * magnitude;
-                          },
-                        ]}
+                        domain={[0, "auto"]}
                         tick={{ fontSize: 11, fill: "#475569" }}
                         axisLine={false}
                         tickLine={false}
-                        tickFormatter={(v) => formatRupiahSingkat(v)}
+                        tickFormatter={(value) => `${Number(value).toFixed(1)}%`}
+                        label={{ value: "% Realisasi terhadap Pagu", angle: -90, position: "insideLeft", style: { textAnchor: "middle", fill: "#475569", fontSize: 11 } }}
                       />
                       <Tooltip
-                        formatter={(val) => [fmtRupiah(Number(val)), ""]}
+                        content={({ active, payload, label }) => {
+                          if (!active || !payload?.length) return null;
+                          return (
+                            <div className="rounded border border-slate-200 bg-white px-3 py-2 text-xs shadow-md">
+                              <p className="mb-1 font-semibold text-slate-700">{label}</p>
+                              {payload.map((entry) => {
+                                const original = entry.dataKey === "apbn_pct"
+                                  ? Number(entry.payload?.apbn_real ?? 0)
+                                  : Number(entry.payload?.non_real ?? 0);
+                                return (
+                                  <p key={String(entry.dataKey)} style={{ color: entry.color }}>
+                                    {entry.name}: {Number(entry.value ?? 0).toFixed(2)}% ({fmtRupiah(original)})
+                                  </p>
+                                );
+                              })}
+                            </div>
+                          );
+                        }}
                         contentStyle={{
                           fontSize: 12,
                           borderRadius: 8,
@@ -287,14 +293,14 @@ export function AdminDashboard({
                         }}
                       />
                       <Bar
-                        dataKey="apbn_real"
+                        dataKey="apbn_pct"
                         name="Realisasi APBN"
                         fill="#236437"
                         radius={[4, 4, 0, 0]}
                         maxBarSize={32}
                       />
                       <Bar
-                        dataKey="non_real"
+                        dataKey="non_pct"
                         name="Realisasi Non-APBN"
                         fill="#134B88"
                         radius={[4, 4, 0, 0]}
@@ -471,8 +477,7 @@ export function AdminDashboard({
                     <th className="py-2.5 px-3 text-center">
                       Status Pelaporan
                     </th>
-                                       <th className="py-2.5 px-3 text-center">Aksi</th>
-                   </tr>
+                                       <th className="py-2.5 px-3 text-center">Aksi</th></tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 text-xs text-slate-700">
                   {filtered.length === 0 ? (
@@ -525,15 +530,14 @@ export function AdminDashboard({
                           </td>
                           <td className="py-2.5 px-3 min-w-[130px]">
                             <ProgressBar value={pct} color="#236437" />
-                          </td>
-                          <td className="py-2.5 px-3 text-center">
+                          </td><td className="py-2.5 px-3 text-center">
                             <Badge
                               text={
                                 item.sudahLapor ? "Sudah Lapor" : "Belum Lapor"
                               }
                               color={item.sudahLapor ? "green" : "red"}
                             />
-                          </td>                           <td className="py-2.5 px-3 text-center">
+                          </td><td className="py-2.5 px-3 text-center">
                              {!item.sudahLapor && item.pj ? (
                                <button
                                  type="button"
@@ -565,6 +569,8 @@ export function AdminDashboard({
     </div>
   );
 }
+
+
 
 
 

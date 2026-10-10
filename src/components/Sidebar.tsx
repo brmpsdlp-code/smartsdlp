@@ -4,7 +4,7 @@ import kemEntanLogo from "@/imports/Kementerian_Pertanian_Kementan_Logo.svg";
 import { signOut } from "@/lib/auth-client";
 import { MenuItem, Role, UserProfile } from "@/types";
 import { EditProfileModal } from "./EditProfileModal";
-import { User, LogOut, ChevronDown } from "lucide-react";
+import { User, LogOut, ChevronDown, Info } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Icons } from "@/utils/formatters";
 import Image from "next/image";
@@ -182,9 +182,9 @@ export function Sidebar({ role, userProfile }: SidebarProps & { userProfile: Use
       <div className="p-3 border-t border-emerald-900/60 bg-gov-green-dark/50 space-y-2">
         <Link
           href="/tentang"
-          className="flex w-full items-center justify-center gap-2.5 rounded-md px-2.5 py-2 text-left text-xs text-emerald-100/80 transition-all hover:bg-emerald-800/50 hover:text-white"
+          className="w-full flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded bg-emerald-950/40 hover:bg-rose-900/40 text-emerald-200 hover:text-rose-200 text-[11px] font-semibold transition cursor-pointer"
         >
-          <span aria-hidden="true">ⓘ</span>
+          <Info className="w-[13px] h-[13px]" aria-hidden="true" />
           Tentang Aplikasi
         </Link>
         <DropdownMenu>
