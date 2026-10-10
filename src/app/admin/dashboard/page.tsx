@@ -140,6 +140,7 @@ programCategoryRef: {
       barData={barData}
       lineDataFull={lineDataFull}
        notifications={notifications.items}
+       reportPeriod={{ month: currentMonth, year: currentYear }}
      />
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import { Activity } from "@/types";
 import { fmtRupiah, formatRupiahSingkat, Icons } from "@/utils/formatters";
 import { KpiCard, Badge, ProgressBar } from "./KpiCard";
@@ -20,6 +20,8 @@ import {
 } from "recharts";
 import Link from "next/link";
 import NotificationsWithActions, { type NotificationItem } from "@/components/ui/notifications-with-actions";
+import { ingatkanPJ } from "@/features/arsip/actions";
+import { showToast } from "@/components/ui/app-toast";
 
 interface BarDataPoint {
   name: string;
@@ -40,6 +42,7 @@ interface AdminDashboardProps {
   barData: BarDataPoint[];
   lineDataFull: LineDataPoint[];
   notifications: NotificationItem[];
+  reportPeriod: { month: number; year: number };
 }
 
 export function AdminDashboard({
@@ -49,6 +52,7 @@ export function AdminDashboard({
   barData,
   lineDataFull,
   notifications,
+  reportPeriod,
 }: AdminDashboardProps) {
   const [activeTab, setActiveTab] = useState<"serapan" | "trend" | "kegiatan">(
     "serapan",
@@ -57,6 +61,8 @@ export function AdminDashboard({
   const [filterJenis, setFilterJenis] = useState<"ALL" | "APBN" | "NON-APBN">(
     "ALL",
   );
+  const [remindingId, setRemindingId] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
 
   const totalPagu = activities.reduce((a, b) => a + b.pagu, 0);
   const totalReal = activities.reduce((sum, activity) => sum + (metrics[activity.id]?.sdPeriode ?? 0), 0);
@@ -66,6 +72,19 @@ export function AdminDashboard({
   const persenSerapan = totalPagu > 0 ? (totalReal / totalPagu) * 100 : 0;
   const sisaAnggaran = totalPagu - totalReal;
 
+  const handleSendReminder = (item: Activity) => {
+    if (!item.pj || item.sudahLapor) return;
+    setRemindingId(item.id);
+    startTransition(async () => {
+      const result = await ingatkanPJ(item.id, `${reportPeriod.month}/${reportPeriod.year}`);
+      if (result.success) {
+        showToast("success", `Pengingat terkirim ke ${item.pj}`);
+      } else {
+        showToast("error", result.error || "Gagal mengirim pengingat.");
+      }
+      setRemindingId(null);
+    });
+  };
   const filtered = activities.filter((a) => {
     const matchSearch =
       a.nama.toLowerCase().includes(search.toLowerCase()) ||
@@ -452,13 +471,14 @@ export function AdminDashboard({
                     <th className="py-2.5 px-3 text-center">
                       Status Pelaporan
                     </th>
-                  </tr>
+                                       <th className="py-2.5 px-3 text-center">Aksi</th>
+                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 text-xs text-slate-700">
                   {filtered.length === 0 ? (
                     <tr>
                       <td
-                        colSpan={8}
+                        colSpan={9}
                         className="py-8 text-center text-slate-400"
                       >
                         Tidak ada kegiatan yang cocok dengan kriteria pencarian.
@@ -513,8 +533,26 @@ export function AdminDashboard({
                               }
                               color={item.sudahLapor ? "green" : "red"}
                             />
-                          </td>
-                        </tr>
+                          </td>                           <td className="py-2.5 px-3 text-center">
+                             {!item.sudahLapor && item.pj ? (
+                               <button
+                                 type="button"
+                                 onClick={() => handleSendReminder(item)}
+                                 disabled={isPending && remindingId === item.id}
+                                 className="inline-flex items-center gap-1 rounded-md border border-amber-300 bg-amber-50 px-2.5 py-1 text-[11px] font-bold text-amber-800 shadow-2xs transition hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-50"
+                               >
+                                 {isPending && remindingId === item.id ? (
+                                   <>
+                                     <span className="h-2.5 w-2.5 animate-spin rounded-full border-2 border-amber-800/40 border-t-amber-800" />
+                                     Mengirim...
+                                   </>
+                                 ) : (
+                                   "Ingatkan PJ"
+                                 )}
+                               </button>
+                             ) : null}
+                           </td>
+                         </tr>
                       );
                     })
                   )}
@@ -527,4 +565,7 @@ export function AdminDashboard({
     </div>
   );
 }
+
+
+
 

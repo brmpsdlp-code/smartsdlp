@@ -52,11 +52,11 @@ export default function NotificationsWithActions({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
-        className="relative inline-flex items-center justify-center rounded-lg p-2 text-emerald-200 transition hover:bg-emerald-800/60 hover:text-white"
+        className="relative inline-flex items-center justify-center rounded-lg bg-emerald-800 p-2 text-white shadow-sm transition hover:bg-emerald-900 hover:text-white"
         title="Notifikasi Sistem"
       >
         <Bell className="h-4 w-4 sm:h-[18px] sm:w-[18px]" />
-        {unread > 0 && <span className="absolute -right-0.5 -top-0.5 flex min-w-[17px] items-center justify-center rounded-full bg-rose-600 px-1 text-[10px] font-bold text-white ring-2 ring-[#143D32]">{unread}</span>}
+        {unread > 0 && <span className="absolute -right-0.5 -top-0.5 flex min-w-[17px] items-center justify-center rounded-full bg-rose-600 px-1 text-[10px] font-bold text-white ring-2 ring-white">{unread}</span>}
       </PopoverTrigger>
       <PopoverContent className="w-80 overflow-hidden rounded-xl border border-slate-200 bg-white p-0 text-slate-800 shadow-2xl" align="end" sideOffset={8}>
         <div className="flex items-center justify-between border-b border-emerald-900 bg-[#143D32] px-4 py-3 text-white">

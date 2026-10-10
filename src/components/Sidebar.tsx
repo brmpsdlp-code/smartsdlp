@@ -182,7 +182,7 @@ export function Sidebar({ role, userProfile }: SidebarProps & { userProfile: Use
       <div className="p-3 border-t border-emerald-900/60 bg-gov-green-dark/50 space-y-2">
         <Link
           href="/tentang"
-          className="flex items-center justify-center gap-1.5 rounded-md border border-emerald-700/60 bg-emerald-950/30 px-3 py-2 text-[11px] font-semibold text-emerald-100 transition hover:border-emerald-400 hover:bg-emerald-800/70 hover:text-white"
+          className="flex w-full items-center justify-center gap-2.5 rounded-md px-2.5 py-2 text-left text-xs text-emerald-100/80 transition-all hover:bg-emerald-800/50 hover:text-white"
         >
           <span aria-hidden="true">ⓘ</span>
           Tentang Aplikasi
