@@ -1,7 +1,7 @@
 "use client";
 
 import kemEntanLogo from "@/imports/Kementerian_Pertanian_Kementan_Logo.svg";
-import { generateSmartReportExcel, SmartReportItem } from "@/utils/excelExport";
+import { generateSmartReportExcel, SmartReportItem, stripMonthPrefix } from "@/utils/excelExport";
 import { fmtRupiah, Icons } from "@/utils/formatters";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
@@ -271,7 +271,7 @@ export function CetakLaporanPage({
                 <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
                   <span className="text-[11px] font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
                     <span className="w-1.5 h-3 bg-primary rounded-xs" />
-                    KOLOM KIRI — PENANGGUNG JAWAB KEGIATAN
+                    Kolom Kiri
                   </span>
                   <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">
                     Wajib / Utama
@@ -280,20 +280,20 @@ export function CetakLaporanPage({
 
                 <div>
                   <label className="block text-[11px] font-semibold text-slate-700 mb-1">
-                    Label Jabatan Pembuat Laporan
+                    Label Jabatan
                   </label>
-                  <input
-                    type="text"
-                    value={labelPj}
-                    onChange={(e) => setLabelPj(e.target.value)}
-                    className="w-full h-8 px-2.5 text-xs bg-white border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-primary"
-                  />
+                  <textarea
+                     rows={1}
+                     value={labelPj}
+                     onChange={(e) => setLabelPj(e.target.value)}
+                     className="w-full p-2 text-xs bg-white border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-primary resize-none"
+                   />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <div>
                     <label className="block text-[11px] font-semibold text-slate-700 mb-1">
-                      Nama Lengkap &amp; Gelar PJ
+                      Nama Lengkap &amp; Gelar
                     </label>
                     <input
                       type="text"
@@ -305,7 +305,7 @@ export function CetakLaporanPage({
 
                   <div>
                     <label className="block text-[11px] font-semibold text-slate-700 mb-1">
-                      NIP Penanggung Jawab
+                      NIP
                     </label>
                     <input
                       type="text"
@@ -318,7 +318,7 @@ export function CetakLaporanPage({
 
                 <div>
                   <label className="block text-[11px] font-semibold text-slate-700 mb-1">
-                    Jabatan Struktural / Tim
+                    Jabatan Struktural
                   </label>
                   <input
                     type="text"
@@ -340,7 +340,7 @@ export function CetakLaporanPage({
                 <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
                   <span className="text-[11px] font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
                     <span className="w-1.5 h-3 bg-slate-400 rounded-xs" />
-                    KOLOM KANAN — KEPALA BALAI / VERIFIKATOR
+                    Kolom Kanan
                   </span>
                   <span
                     className={`text-[10px] font-bold px-2 py-0.5 rounded ${
@@ -355,7 +355,7 @@ export function CetakLaporanPage({
 
                 <div>
                   <label className="block text-[11px] font-semibold text-slate-700 mb-1">
-                    Label Jabatan Atasan / Verifikator
+                    Label Jabatan
                   </label>
                   <textarea
                     rows={1}
@@ -382,7 +382,7 @@ export function CetakLaporanPage({
 
                   <div>
                     <label className="block text-[11px] font-semibold text-slate-700 mb-1">
-                      NIP Atasan / Verifikator
+                      NIP
                     </label>
                     <input
                       type="text"
@@ -608,7 +608,7 @@ export function CetakLaporanPage({
                     {row.jenis}
                   </td>
                   <td className="border border-black py-1 px-1 text-left leading-snug text-[8px] break-words">
-                    {row.uraian}
+                    {stripMonthPrefix(row.uraian)}
                   </td>
                   <td className="border border-black py-1 px-1 text-right whitespace-nowrap">
                     {fmtRupiah(row.pagu)}
@@ -765,5 +765,9 @@ export function CetakLaporanPage({
     </div>
   );
 }
+
+
+
+
 
 

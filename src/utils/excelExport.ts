@@ -22,7 +22,23 @@ const WHITE = "FFFFFF";
 const BORDER = "000000";
 const MUTED = "374151";
 const rupiahFormat = '"Rp "#,##0';
-const stripMonthPrefix = (value: string) => value.replace(/^[^:]+:\s*/, "");
+const monthPrefixPattern = new RegExp(`^(?:${[
+  "Januari",
+  "Februari",
+  "Maret",
+  "April",
+  "Mei",
+  "Juni",
+  "Juli",
+  "Agustus",
+  "September",
+  "Oktober",
+  "November",
+  "Desember",
+].join("|")}):\\s*`, "i");
+
+export const stripMonthPrefix = (value: string) =>
+  value.replace(monthPrefixPattern, "");
 const safeText = (value: string) => /^[=+\-@]/.test(value) ? `'${value}` : value;
 const textCell = (value: string) => safeText(value);
 

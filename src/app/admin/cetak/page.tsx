@@ -123,27 +123,22 @@ export default async function CetakPage({
   const reportRows = kegiatanList.map((k, idx) => {
     const pagu = Number(k.pagu);
 
-    let rangeStartBulan: number,
-      rangeStartTahun: number,
-      rangeEndBulan: number,
-      rangeEndTahun: number;
+    const rangeStart =
+      selection.type === "bulan"
+        ? selection.tahun * 12 + selection.bulan
+        : selection.tahun * 12 + (selection.semester === 1 ? 1 : 7);
+    const rangeEnd =
+      selection.type === "bulan"
+        ? rangeStart
+        : selection.tahun * 12 + (selection.semester === 1 ? 6 : 12);
 
-    if (selection.type === "bulan") {
-      rangeStartBulan = rangeEndBulan = selection.bulan;
-      rangeStartTahun = rangeEndTahun = selection.tahun;
-    } else {
-      rangeStartBulan = selection.semester === 1 ? 1 : 7;
-      rangeEndBulan = selection.semester === 1 ? 6 : 12;
-      rangeStartTahun = rangeEndTahun = selection.tahun;
-    }
-
+    const periodIndex = (bulan: number, tahun: number) => tahun * 12 + bulan;
     const isBeforeRange = (bulan: number, tahun: number) =>
-      tahun < rangeStartTahun ||
-      (tahun === rangeStartTahun && bulan < rangeStartBulan);
-    const isInRange = (bulan: number, tahun: number) =>
-      tahun === rangeStartTahun &&
-      bulan >= rangeStartBulan &&
-      bulan <= rangeEndBulan;
+      periodIndex(bulan, tahun) < rangeStart;
+    const isInRange = (bulan: number, tahun: number) => {
+      const index = periodIndex(bulan, tahun);
+      return index >= rangeStart && index <= rangeEnd;
+    };
 
     const laporanKegiatan = laporanList.filter((l) => l.kegiatanId === k.id);
 
