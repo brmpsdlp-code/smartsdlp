@@ -882,10 +882,11 @@ export function ManajemenKegiatanPage({
                 )}
 
                 <div className="space-y-1">
-                  <label className="block font-semibold text-slate-700">
+                  <label htmlFor="activity-code" className="block font-semibold text-slate-700">
                     Kode Kegiatan (DIPA)
                   </label>
                   <input
+                    id="activity-code"
                     type="text"
                     required
                     value={formKode}
@@ -895,10 +896,11 @@ export function ManajemenKegiatanPage({
                 </div>
 
                 <div className="space-y-1">
-                  <label className="block font-semibold text-slate-700">
+                  <label htmlFor="activity-name" className="block font-semibold text-slate-700">
                     Nama Kegiatan
                   </label>
                   <input
+                    id="activity-name"
                     type="text"
                     required
                     value={formNama}
@@ -908,13 +910,14 @@ export function ManajemenKegiatanPage({
                 </div>
 
                 <div className="space-y-1">
-                  <label className="block font-semibold text-slate-700">
+                  <label htmlFor="activity-category" className="block font-semibold text-slate-700">
                     Kategori Program Utama{" "}
                     <span className="text-rose-600">*</span>
                   </label>
                   <div className="relative space-y-2">
                     <div className="flex items-center gap-2">
                       <select
+                        id="activity-category"
                         required
                         value={formCategoryId}
                         onChange={(e) => setFormCategoryId(e.target.value)}
@@ -954,10 +957,11 @@ export function ManajemenKegiatanPage({
 
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1">
-                    <label className="block font-semibold text-slate-700">
+                    <label htmlFor="activity-pj" className="block font-semibold text-slate-700">
                       PJ Kegiatan
                     </label>
                     <select
+                      id="activity-pj"
                       value={formPjId}
                       onChange={(e) => setFormPjId(e.target.value)}
                       className="w-full h-9 px-2 text-xs bg-white border border-slate-300 rounded-md"
@@ -971,10 +975,11 @@ export function ManajemenKegiatanPage({
                     </select>
                   </div>
                   <div className="space-y-1">
-                    <label className="block font-semibold text-slate-700">
+                    <label htmlFor="activity-type" className="block font-semibold text-slate-700">
                       Jenis Kegiatan
                     </label>
                     <select
+                      id="activity-type"
                       value={formJenis}
                       onChange={(e) =>
                         setFormJenis(e.target.value as "APBN" | "NON_APBN")
@@ -988,10 +993,11 @@ export function ManajemenKegiatanPage({
                 </div>
 
                 <div className="space-y-1">
-                  <label className="block font-semibold text-slate-700">
+                  <label htmlFor="activity-budget" className="block font-semibold text-slate-700">
                     Pagu Anggaran (Rp)
                   </label>
                   <input
+                    id="activity-budget"
                     type="number"
                     required
                     value={formPagu}

@@ -135,11 +135,12 @@ export function LoginPage() {
           {forgotOpen && <div className="rounded-md border border-slate-200 bg-slate-50 p-3 space-y-2"><p className="text-xs text-slate-600">Masukkan email untuk menerima link reset.</p><button type="button" onClick={handleForgotPassword} disabled={forgotLoading || forgotRetryAfterSeconds > 0} className="w-full rounded bg-slate-700 p-2 text-xs text-white disabled:opacity-50">{forgotRetryAfterSeconds > 0 ? `Coba lagi dalam ${formatCountdown(forgotRetryAfterSeconds)}` : forgotLoading ? "Mengirim..." : "Kirim Link Reset"}</button>{forgotMessage && <p className="text-xs text-slate-600">{forgotMessage}</p>}</div>}
           <form onSubmit={handleSubmit} className="space-y-3" noValidate>
             <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
+              <label htmlFor="login-email" className="block text-xs font-medium text-slate-700 mb-1">
                 Email Instansi
               </label>
               <input
-                type="email"
+                id="login-email"
+                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="nama@pertanian.go.id"
@@ -149,12 +150,13 @@ export function LoginPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
+              <label htmlFor="login-password" className="block text-xs font-medium text-slate-700 mb-1">
                 Kata Sandi
               </label>
               <div className="relative">
                 <input
-                  type={showPass ? "text" : "password"}
+                  id="login-password"
+                   type={showPass ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
@@ -256,6 +258,8 @@ export function LoginPage() {
     </div>
   );
 }
+
+
 
 
 
