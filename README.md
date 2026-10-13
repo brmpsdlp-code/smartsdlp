@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # SMART - BRMP SDLP
 
 Sistem monitoring realisasi anggaran dan capaian kegiatan untuk Balai Besar Perakitan dan Modernisasi Sumber Daya Lahan Pertanian (BRMP SDLP), Kementerian Pertanian RI.
