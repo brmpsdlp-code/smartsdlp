@@ -363,18 +363,25 @@ export function ManajemenKegiatanPage({
   };
 
   // ── Statistik tab wajib lapor ────────────────────────────────────────────
+  const isCountedForCompliance = (k: KegiatanFromDb) =>
+    k.statusAnggaran === "DIBUKA";
+
   const totalWajibDisplay =
     totalWajibCount +
     wajibLaporData.reduce((delta, k) => {
       const overridden = wajibOverride[k.id];
-      if (overridden === undefined || overridden === k.wajib) return delta;
+      if (
+        !isCountedForCompliance(k) ||
+        overridden === undefined ||
+        overridden === k.wajib
+      ) return delta;
       return delta + (overridden ? 1 : -1);
     }, 0);
 
   const sudahLaporDisplay =
     sudahLaporCount +
     wajibLaporData.reduce((delta, k) => {
-      if (!k.sudahLapor) return delta;
+      if (!isCountedForCompliance(k) || !k.sudahLapor) return delta;
       const overridden = wajibOverride[k.id];
       if (overridden === undefined || overridden === k.wajib) return delta;
       return delta + (overridden ? 1 : -1);

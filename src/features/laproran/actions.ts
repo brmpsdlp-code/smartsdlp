@@ -113,13 +113,11 @@ export async function submitLaporan(
         );
 
         if (kegiatan.statusAnggaran === "DIBLOKIR") {
-          if (data.realIni !== 0) {
-            return {
-              success: false,
-              error:
-                "Anggaran kegiatan ini sedang diblokir, realisasi periode ini harus 0.",
-            };
-          }
+          return {
+            success: false,
+            error:
+              "Kegiatan ini sedang diblokir oleh admin. Pelaporan tidak dapat dilakukan sampai status anggaran dibuka kembali. Silakan hubungi admin.",
+          };
         }
 
         const currentRealisasi = BigInt(data.realIni);

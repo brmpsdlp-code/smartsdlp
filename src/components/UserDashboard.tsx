@@ -83,12 +83,20 @@ export function UserDashboard({
   const filteredActivities = useMemo(() => {
     if (filterStatus === "ALL") return sortedActivities;
     if (filterStatus === "BELUM_LAPOR")
-      return sortedActivities.filter((a) => a.status !== "done");
-    return sortedActivities.filter((a) => a.wajib);
+      return sortedActivities.filter(
+        (a) => a.status !== "done" && a.statusAnggaran !== "Diblokir",
+      );
+    return sortedActivities.filter(
+      (a) => a.wajib && a.statusAnggaran !== "Diblokir",
+    );
   }, [sortedActivities, filterStatus]);
 
-  const belumLaporCount = activities.filter((a) => a.status !== "done").length;
-  const wajibCount = activities.filter((a) => a.wajib).length;
+  const belumLaporCount = activities.filter(
+    (a) => a.status !== "done" && a.statusAnggaran !== "Diblokir",
+  ).length;
+  const wajibCount = activities.filter(
+    (a) => a.wajib && a.statusAnggaran !== "Diblokir",
+  ).length;
 
   const historyRows = useMemo(() => {
     if (!historyTarget) return [];

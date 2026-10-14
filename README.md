@@ -400,5 +400,3 @@ Daftar di atas mengikuti data pada halaman `/tentang` di source aplikasi. URL de
 ## Lisensi
 
 Project ini dirilis di bawah [MIT License](LICENSE). Copyright © 2026 Tim Pengembang SMART - BRMP SDLP.
-
->>>>>>> d341a8dd600bda70f0c4fc39bdab1181ab8aa3cf

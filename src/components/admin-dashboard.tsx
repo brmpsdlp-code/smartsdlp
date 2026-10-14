@@ -68,8 +68,12 @@ export function AdminDashboard({
 
   const totalPagu = activities.reduce((a, b) => a + b.pagu, 0);
   const totalReal = activities.reduce((sum, activity) => sum + (metrics[activity.id]?.sdPeriode ?? 0), 0);
-  const totalWajib = activities.filter((a) => a.wajib).length;
-  const sudahLapor = activities.filter((a) => a.wajib && a.sudahLapor).length;
+  const totalWajib = activities.filter(
+    (a) => a.wajib && a.statusAnggaran !== "Diblokir",
+  ).length;
+  const sudahLapor = activities.filter(
+    (a) => a.wajib && a.statusAnggaran !== "Diblokir" && a.sudahLapor,
+  ).length;
   const belumLapor = totalWajib - sudahLapor;
   const persenSerapan = totalPagu > 0 ? (totalReal / totalPagu) * 100 : 0;
   const sisaAnggaran = totalPagu - totalReal;
