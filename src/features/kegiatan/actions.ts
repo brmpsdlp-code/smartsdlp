@@ -14,6 +14,7 @@ const createKegiatanSchema = z.object({
   pagu: z.coerce.number().int().positive("Pagu harus lebih dari 1"),
   pjId: z.string().optional(),
   uraian: z.string().optional(),
+  statusAnggaran: z.enum(["DIBUKA", "DIBLOKIR"]).default("DIBUKA"),
 });
 
 export type CreateKegiatanInput = z.infer<typeof createKegiatanSchema>;
@@ -82,7 +83,7 @@ export async function createKegiatan(
       pagu: BigInt(data.pagu),
       uraian: data.uraian || null,
       pjId: data.pjId || null,
-      statusAnggaran: "DIBUKA",
+      statusAnggaran: data.statusAnggaran,
       wajib: true,
     },
     include: {
@@ -124,6 +125,7 @@ const updateKegiatanSchema = z.object({
   pagu: z.coerce.number().int().positive("Pagu harus lebih dari 0"),
   pjId: z.string().optional(),
   uraian: z.string().optional(),
+  statusAnggaran: z.enum(["DIBUKA", "DIBLOKIR"]).default("DIBUKA"),
 });
 
 export type UpdateKegiatanInput = z.infer<typeof updateKegiatanSchema>;
@@ -204,6 +206,7 @@ export async function updateKegiatan(
       pagu: BigInt(data.pagu),
       uraian: data.uraian || null,
       pjId: data.pjId || null,
+       statusAnggaran: data.statusAnggaran,
     },
     include: {
       pj: { select: { id: true, name: true, email: true } },

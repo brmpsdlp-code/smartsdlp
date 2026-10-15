@@ -199,6 +199,9 @@ export function ManajemenKegiatanPage({
   const [deadlineTime, setDeadlineTime] = useState(deadline.time);
   const [formJenis, setFormJenis] = useState<"APBN" | "NON_APBN">("APBN");
   const [formPagu, setFormPagu] = useState("500000000");
+  const [formStatusAnggaran, setFormStatusAnggaran] = useState<
+    "DIBUKA" | "DIBLOKIR"
+  >("DIBUKA");
   const [formCategoryId, setFormCategoryId] = useState<string>("");
   const [categoryList, setCategoryList] = useState(programCategories);
   const [formError, setFormError] = useState<string | null>(null);
@@ -281,6 +284,7 @@ export function ManajemenKegiatanPage({
     setFormPjId(pjOptions[0]?.id ?? "");
     setFormJenis("APBN");
     setFormPagu("450000000");
+    setFormStatusAnggaran("DIBUKA");
     setFormCategoryId("");
     setModalOpen(true);
   };
@@ -293,6 +297,7 @@ export function ManajemenKegiatanPage({
     setFormPjId(k.pjId ?? pjOptions[0]?.id ?? "");
     setFormJenis(k.jenis === "NON_APBN" ? "NON_APBN" : "APBN");
     setFormPagu(String(k.pagu));
+    setFormStatusAnggaran(k.statusAnggaran);
     setFormCategoryId(k.programCategoryId ?? "");
     setModalOpen(true);
   };
@@ -317,6 +322,7 @@ export function ManajemenKegiatanPage({
             programCategoryId: formCategoryId,
             pagu: Number(formPagu),
             pjId: formPjId || undefined,
+            statusAnggaran: formStatusAnggaran,
           })
         : await createKegiatan({
             kode: formKode,
@@ -325,6 +331,7 @@ export function ManajemenKegiatanPage({
             programCategoryId: formCategoryId,
             pagu: Number(formPagu),
             pjId: formPjId || undefined,
+            statusAnggaran: formStatusAnggaran,
           });
 
       if (!result.success) {
@@ -595,7 +602,7 @@ export function ManajemenKegiatanPage({
                                   getStatusValue(k) === "DIBUKA"
                                     ? "bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100"
                                     : "bg-rose-50 text-rose-700 border-rose-300 hover:bg-rose-100"
-                                }`}
+                               }`}
                                 title="Klik untuk mengubah status"
                               >
                                 {getStatusValue(k) === "DIBUKA"
@@ -751,6 +758,7 @@ export function ManajemenKegiatanPage({
                       <th className="py-2.5 px-3 w-12 text-center">Wajib</th>
                       <th className="py-2.5 px-3">Kode Kegiatan</th>
                       <th className="py-2.5 px-3">Nama Kegiatan</th>
+                       <th className="py-2.5 px-3 text-center">Status Anggaran</th>
                       <th className="py-2.5 px-3">PJ & Kontak</th>
                       <th className="py-2.5 px-3 text-right">Pagu (Rp)</th>
                       <th className="py-2.5 px-3 text-center">Status</th>
@@ -767,7 +775,12 @@ export function ManajemenKegiatanPage({
                             type="checkbox"
                             checked={getWajibValue(k)}
                             onChange={() => handleToggleWajib(k)}
-                            disabled={pendingIds.has(k.id)}
+                             disabled={pendingIds.has(k.id) || k.statusAnggaran === "DIBLOKIR"}
+                             title={
+                               k.statusAnggaran === "DIBLOKIR"
+                                 ? "Kegiatan diblokir, kewajiban lapor otomatis tidak berlaku"
+                                 : undefined
+                             }
                             className="w-4 h-4 text-emerald-800 rounded border-slate-300 focus:ring-emerald-700 cursor-pointer disabled:opacity-50"
                           />
                         </td>
@@ -777,6 +790,12 @@ export function ManajemenKegiatanPage({
                         <td className="py-2.5 px-3 font-medium text-slate-900">
                           {k.nama}
                         </td>
+                         <td className="py-2.5 px-3 text-center">
+                           <Badge
+                             text={k.statusAnggaran === "DIBLOKIR" ? "Diblokir" : "Dibuka"}
+                             color={k.statusAnggaran === "DIBLOKIR" ? "red" : "green"}
+                           />
+                         </td>
                         <td className="py-2.5 px-3 whitespace-nowrap">
                           <span className="font-semibold text-slate-800 block">
                             {k.pj?.name ?? "-"}
@@ -1013,6 +1032,26 @@ export function ManajemenKegiatanPage({
                   />
                   <p className="text-[11px] text-slate-500 font-medium">
                     {fmtRupiah(Number(formPagu))}
+                  </p>
+                </div>
+
+                <div className="space-y-1">
+                  <label htmlFor="activity-budget-status" className="block font-semibold text-slate-700">
+                    Status Anggaran
+                  </label>
+                  <select
+                    id="activity-budget-status"
+                    value={formStatusAnggaran}
+                    onChange={(e) =>
+                      setFormStatusAnggaran(e.target.value as "DIBUKA" | "DIBLOKIR")
+                    }
+                    className="w-full h-9 px-2 text-xs bg-white border border-slate-300 rounded-md"
+                  >
+                    <option value="DIBUKA">Dibuka</option>
+                    <option value="DIBLOKIR">Diblokir</option>
+                  </select>
+                  <p className="text-[11px] text-slate-500">
+                    Kegiatan diblokir tidak dapat menerima laporan baru.
                   </p>
                 </div>
 
