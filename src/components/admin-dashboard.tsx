@@ -459,7 +459,7 @@ export function AdminDashboard({
               </div>
 
               <div className="lg:col-span-5 xl:col-span-4 h-full">
-                <DistribusiPaguWidget activities={activities} categories={categories} metrics={metrics} />
+                <DistribusiPaguWidget activities={activities} categories={categories} metrics={metrics} tahun={reportPeriod.year} />
               </div>
             </div>
           </div>
