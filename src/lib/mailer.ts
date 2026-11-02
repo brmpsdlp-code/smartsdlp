@@ -25,7 +25,7 @@ export function buildEmailTemplate(title: string, bodyHtml: string, cta?: EmailC
 
 export async function sendMail({ to, subject, html, text, from = process.env.SMTP_FROM || `"Support" <${process.env.SMTP_USER}>` }: SendMailOptions) {
   try {
-    const info = await transporter.sendMail({ from, to, subject, text, html, attachments: [{ filename: "logo-kementan.png", path: path.join(process.cwd(), "public/logo-kementan.png"), cid: "kementan-logo" }] });
+    const info = await transporter.sendMail({ from, to, subject, text, html, attachments: [{ filename: "logo-kementan.svg", path: path.join(process.cwd(), "public/logo-kementan.svg"), cid: "kementan-logo" }] });
     return { success: true, messageId: info.messageId };
   } catch (error) {
     console.error("Gagal mengirim email:", error);
