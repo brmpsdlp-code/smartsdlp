@@ -88,7 +88,7 @@ Aplikasi dikembangkan oleh tim mahasiswa magang Universitas Bina Sarana Informat
   - Lihat jejak perubahan dan penghapusan laporan.
   - Cari log berdasarkan file, kegiatan, pemilik, atau alasan.
 - **Cetak dan ekspor** (`/admin/cetak`)
-  - Pilih periode bulanan atau semester.
+  - Pilih tahun anggaran, periode bulanan, semester, atau tahun penuh.
   - Atur informasi penandatanganan dokumen.
   - Cetak atau simpan laporan sebagai PDF melalui fitur print browser.
   - Ekspor laporan ke Excel.
@@ -155,8 +155,8 @@ Versi di atas mengikuti `package.json`. Versi patch aktual dapat berubah setelah
 │   ├── migrations/       # Migration history Prisma
 │   └── *.ts              # Bootstrap admin, seed/helper, dan pemeriksaan database
 ├── e2e/                  # Spec dan helper Playwright untuk auth serta laporan/deadline
-├── deploy/               # Runbook VPS, konfigurasi Nginx, dan unit systemd
-├── docs/                 # Catatan keputusan sistem
+├── deploy/               # Konfigurasi Nginx dan unit systemd
+├── docs/                 # Runbook dan catatan keputusan sistem
 ├── public/               # Asset publik jika tersedia
 ├── package.json          # Script dan dependency project
 └── playwright.config.ts  # Konfigurasi Playwright dan browser project
@@ -177,7 +177,7 @@ Project tidak mendeklarasikan `engines.node` di `package.json`. Runtime yang did
 
 ```bash
 git clone <REPOSITORY_URL>
-cd smart-sdlp-main
+cd smart-sdlp
 bun install
 ```
 
@@ -271,6 +271,10 @@ Migration saat ini berada di:
 
 - `prisma/migrations/00000000000000_baseline`
 - `prisma/migrations/20261008120000_add_notification`
+- `prisma/migrations/20261015150000_add_report_access_override`
+- `prisma/migrations/20261017090000_add_report_access_request`
+- `prisma/migrations/20261017120000_add_audit_data_snapshot`
+- `prisma/migrations/20261028090000_add_tahun_anggaran`
 
 `prisma/seed.ts` saat ini tidak menjalankan seed otomatis. Admin pertama dibuat secara eksplisit melalui script bootstrap berikut.
 
@@ -324,6 +328,15 @@ bun run db:studio
 ```
 
 ## Testing
+
+Unit test dijalankan langsung dengan Bun, bukan `tsx`:
+
+```powershell
+$env:DATABASE_URL="postgresql://u:p@127.0.0.1:1/x"
+bun run src/utils/tahunAnggaran.test.ts
+```
+
+Ulangi untuk setiap `src/**/*.test.ts`. Test memakai top-level await dan tidak membuat koneksi database saat import, tetapi `DATABASE_URL` tetap perlu tersedia.
 
 Playwright memakai Microsoft Edge lokal melalui konfigurasi `channel: "msedge"`, base URL `http://localhost:3000`, satu worker, dan tidak menjalankan `webServer` otomatis. Jalankan server development di terminal pertama:
 
