@@ -117,7 +117,11 @@ async function requireAdminForAction(): Promise<SessionCheck> {
 }
 
 function appUrl() {
-  return process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:3000";
+  const configuredUrl = process.env.BETTER_AUTH_URL;
+  if (!configuredUrl && process.env.NODE_ENV === "production") {
+    throw new Error("BETTER_AUTH_URL is required in production");
+  }
+  return (configuredUrl || "http://localhost:3000").replace(/\/$/, "");
 }
 
 // Email dan notifikasi bersifat pelengkap: kegagalannya tidak boleh

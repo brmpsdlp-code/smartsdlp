@@ -213,8 +213,7 @@ Isi placeholder dengan nilai environment masing-masing. Jangan commit file envir
 | --- | --- | --- |
 | `DATABASE_URL` | Connection string PostgreSQL untuk Prisma. | `postgresql://<USER>:<PASSWORD>@<HOST>:5432/<DATABASE>?sslmode=require` |
 | `BETTER_AUTH_SECRET` | Secret acak untuk Better Auth. Gunakan secret panjang dan unik. | `<LONG_RANDOM_SECRET>` |
-| `BETTER_AUTH_URL` | Origin server aplikasi. | `http://localhost:3000` atau `https://<DOMAIN>` |
-| `NEXT_PUBLIC_BETTER_AUTH_URL` | Origin aplikasi yang dipakai client auth. | `http://localhost:3000` atau `https://<DOMAIN>` |
+| `BETTER_AUTH_URL` | Origin server aplikasi dan production URL Better Auth. Wajib di Vercel; harus sama dengan origin frontend. | `http://localhost:3000` atau `https://<DOMAIN>` |
 | `SMTP_HOST` | Host server SMTP untuk email reset, verifikasi, pengingat, dan notifikasi. | `smtp.<PROVIDER>.com` |
 | `SMTP_PORT` | Port SMTP. | `587` |
 | `SMTP_SECURE` | `true` untuk koneksi secure langsung; `false` untuk koneksi STARTTLS sesuai konfigurasi SMTP. | `false` |

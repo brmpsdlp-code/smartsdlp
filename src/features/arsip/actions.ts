@@ -388,7 +388,11 @@ export async function ingatkanPJ(
     const safeNama = escapeHtml(kegiatan.nama);
     const safePeriode = escapeHtml(periode);
     const linkInput = `/input?kode=${encodeURIComponent(kegiatan.kode)}`;
-    const inputUrl = `${process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:3000"}${linkInput}`;
+    const configuredUrl = process.env.BETTER_AUTH_URL;
+    if (!configuredUrl && process.env.NODE_ENV === "production") {
+      throw new Error("BETTER_AUTH_URL is required in production");
+    }
+    const inputUrl = `${(configuredUrl || "http://localhost:3000").replace(/\/$/, "")}${linkInput}`;
 
     const tabel = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:16px 0;"><tr><td style="padding:8px 0;color:#64748b;width:140px;">Kode Kegiatan</td><td style="padding:8px 0;font-weight:bold;color:#143D32;">${safeKode}</td></tr><tr><td style="padding:8px 0;color:#64748b;">Nama Kegiatan</td><td style="padding:8px 0;font-weight:600;">${safeNama}</td></tr><tr><td style="padding:8px 0;color:#64748b;">Periode</td><td style="padding:8px 0;font-weight:600;">${safePeriode}</td></tr><tr><td style="padding:8px 0;color:#64748b;">Batas waktu</td><td style="padding:8px 0;font-weight:600;">${escapeHtml(batasWaktu)}</td></tr><tr><td style="padding:8px 0;color:#64748b;">Status</td><td style="padding:8px 0;font-weight:bold;color:#e11d48;">BELUM DIUNGGAH</td></tr></table>`;
     const aksesInfo =
