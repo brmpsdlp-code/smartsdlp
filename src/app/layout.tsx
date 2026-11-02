@@ -14,9 +14,9 @@ export const metadata: Metadata = {
   description:
     "Sistem Monitoring, Analisis, Reporting & Tracking — Balai Besar Perakitan dan Modernisasi Sumber Daya Lahan Pertanian (TA 2026)",
   icons: {
-    icon: "/logo-kementan.png",
-    shortcut: "/logo-kementan.png",
-    apple: "/logo-kementan.png",
+    icon: "/logo-kementan.svg",
+    shortcut: "/logo-kementan.svg",
+    apple: "/logo-kementan.svg",
   },
   robots: {
     index: false,
