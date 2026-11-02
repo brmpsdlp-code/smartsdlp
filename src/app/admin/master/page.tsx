@@ -162,6 +162,7 @@ export default async function Page({
       persentaseRealisasi: reportMetrics.get(k.id)?.persentaseRealisasi ?? 0,
       realLalu: k.realLalu !== null ? Number(k.realLalu) : null,
       realIni: k.realIni !== null ? Number(k.realIni) : null,
+       sudahLapor: laporanIds.has(k.id),
        jenis: k.jenis || "APBN",
        programCategory: k.programCategoryRef?.id
           ? k.programCategoryRef.name
