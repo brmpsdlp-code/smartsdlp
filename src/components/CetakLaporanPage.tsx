@@ -27,6 +27,8 @@ interface CetakLaporanPageProps {
   reportRows: ReportRow[];
   currentPeriode: string;
   currentPeriodeLabel: string;
+  yearOptions: number[];
+  yearFullOptions: { value: string; label: string }[];
   monthOptions: { value: string; label: string }[];
   semesterOptions: { value: string; label: string }[];
   currentTahun: number;
@@ -35,6 +37,8 @@ interface CetakLaporanPageProps {
 export function CetakLaporanPage({
   currentPeriode,
   currentPeriodeLabel,
+  yearOptions,
+  yearFullOptions,
   monthOptions,
   reportRows,
   semesterOptions,
@@ -68,6 +72,13 @@ export function CetakLaporanPage({
   const handlePeriodeChange = (value: string) => {
     const next = new URLSearchParams(searchParams.toString());
     next.set("periode", value);
+    router.push(`${pathname}?${next.toString()}`);
+  };
+
+  const handleYearChange = (value: string) => {
+    const next = new URLSearchParams(searchParams.toString());
+    next.set("tahun", value);
+    next.delete("periode");
     router.push(`${pathname}?${next.toString()}`);
   };
 
@@ -119,10 +130,28 @@ export function CetakLaporanPage({
           <div className="flex items-center gap-2 text-xs font-semibold text-slate-700">
             <span>Periode:</span>
             <select
+              value={String(currentTahun)}
+              onChange={(e) => handleYearChange(e.target.value)}
+              className="h-8 px-2.5 text-xs bg-white border border-slate-300 rounded-md font-medium text-slate-800 focus:outline-none focus:ring-1 focus:ring-primary"
+            >
+              {yearOptions.map((tahun) => (
+                <option key={tahun} value={tahun}>
+                  TA {tahun}
+                </option>
+              ))}
+            </select>
+            <select
               value={currentPeriode}
               onChange={(e) => handlePeriodeChange(e.target.value)}
               className="h-8 px-2.5 text-xs bg-white border border-slate-300 rounded-md font-medium text-slate-800 focus:outline-none focus:ring-1 focus:ring-primary"
             >
+              <optgroup label="Tahun penuh">
+                {yearFullOptions.map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </optgroup>
               <optgroup label="Bulanan">
                 {monthOptions.map((o) => (
                   <option key={o.value} value={o.value}>
