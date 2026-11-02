@@ -336,7 +336,7 @@ $env:DATABASE_URL="postgresql://u:p@127.0.0.1:1/x"
 bun run src/utils/tahunAnggaran.test.ts
 ```
 
-Ulangi untuk setiap `src/**/*.test.ts`. Test memakai top-level await dan tidak membuat koneksi database saat import, tetapi `DATABASE_URL` tetap perlu tersedia.
+Semua unit test dapat dijalankan sekaligus dengan `bun run test`. Test memakai top-level await dan tidak membuat koneksi database saat import, tetapi `DATABASE_URL` tetap perlu tersedia.
 
 Playwright memakai Microsoft Edge lokal melalui konfigurasi `channel: "msedge"`, base URL `http://localhost:3000`, satu worker, dan tidak menjalankan `webServer` otomatis. Jalankan server development di terminal pertama:
 
