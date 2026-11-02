@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { Activity } from "@/types";
 import { fmtRupiah, Icons } from "@/utils/formatters";
@@ -47,6 +48,8 @@ interface UserDashboardProps {
   laporanHistory: LaporanHistoryItem[];
   deadline: { day: number; time: string };
   notifications: NotificationItem[];
+  tahunOptions: number[];
+  currentTahun: number;
 }
 
 export function UserDashboard({
@@ -55,11 +58,22 @@ export function UserDashboard({
   laporanHistory,
   deadline,
   notifications,
+  tahunOptions,
+  currentTahun,
 }: UserDashboardProps) {
   const [filterStatus, setFilterStatus] = useState<
     "ALL" | "BELUM_LAPOR" | "WAJIB"
   >("ALL");
   const [historyTarget, setHistoryTarget] = useState<Activity | null>(null);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const handleYearChange = (tahun: string) => {
+    const next = new URLSearchParams(searchParams.toString());
+    next.set("tahun", tahun);
+    router.replace(`${pathname}?${next.toString()}`);
+  };
 
   const totalPagu = activities.reduce((a, b) => a + b.pagu, 0);
   const totalReal = activities.reduce((sum, activity) => sum + (metrics[activity.id]?.sdPeriode ?? 0), 0);
@@ -116,10 +130,24 @@ export function UserDashboard({
           <h2 className="text-lg sm:text-xl font-bold text-slate-800 tracking-tight">
             Beranda
           </h2>
-          <p className="text-xs text-slate-500 mt-1">
-            Penanggung Jawab Kegiatan · Balai Besar Perakitan dan Modernisasi
-            Sumber Daya Lahan Pertanian (TA 2026)
-          </p>
+          <div className="flex items-center gap-2 mt-1">
+            <p className="text-xs text-slate-500">
+              Penanggung Jawab Kegiatan · Balai Besar Perakitan dan Modernisasi
+              Sumber Daya Lahan Pertanian
+            </p>
+            <label className="text-xs font-semibold text-slate-600">
+              TA
+              <select
+                value={String(currentTahun)}
+                onChange={(e) => handleYearChange(e.target.value)}
+                className="ml-1 h-7 rounded border border-slate-300 bg-white px-1.5 text-xs font-semibold text-slate-700"
+              >
+                {tahunOptions.map((tahun) => (
+                  <option key={tahun} value={tahun}>{tahun}</option>
+                ))}
+              </select>
+            </label>
+          </div>
         </div>
         <div className="flex items-center gap-2">
           <NotificationsWithActions items={notifications} />
@@ -286,19 +314,32 @@ export function UserDashboard({
                         <td className="py-3 px-3 text-center">
                           <Badge
                             text={
-                              act.status === "done"
-                                ? "Selesai Lapor"
-                                : "Belum Lapor"
+                              act.statusAnggaran === "Diblokir"
+                                ? "Diblokir"
+                                : act.status === "done"
+                                  ? "Selesai Lapor"
+                                  : "Belum Lapor"
                             }
-                            color={act.status === "done" ? "green" : "red"}
+                            color={
+                              act.statusAnggaran === "Diblokir"
+                                ? "gray"
+                                : act.status === "done"
+                                  ? "green"
+                                  : "red"
+                            }
                           />
                         </td>
                         <td className="py-3 px-3 text-center">
                           <Link
                             href={`/input?kode=${encodeURIComponent(act.kode)}`}
-                            className="inline-block px-2.5 py-1 text-xs font-semibold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 rounded border border-emerald-200 transition cursor-pointer"
+                            aria-disabled={act.statusAnggaran === "Diblokir"}
+                            className={`inline-block px-2.5 py-1 text-xs font-semibold rounded border transition cursor-pointer ${
+                              act.statusAnggaran === "Diblokir"
+                                ? "pointer-events-none border-slate-200 bg-slate-100 text-slate-400"
+                                : "border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100"
+                            }`}
                           >
-                            Lapor
+                            {act.statusAnggaran === "Diblokir" ? "Terkunci" : "Lapor"}
                           </Link>
                         </td>
                       </tr>
