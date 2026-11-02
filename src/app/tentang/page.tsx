@@ -1,13 +1,17 @@
 import { redirect } from "next/navigation";
+import fransAvatar from "@/imports/nft/frans.jpg";
+import rehanAvatar from "@/imports/nft/rehan.jpg";
+import alifAvatar from "@/imports/nft/alif.jpg";
+import haikalAvatar from "@/imports/nft/haikal.jpg";
 import { Badge } from "@/components/ui/badge";
 import { Sidebar } from "@/components/Sidebar";
 import { getActiveSession } from "@/lib/active-session";
 
 const team = [
-  { name: "Frans Muhammed Chan", nim: "19230669", linkedin: "https://linkedin.com/in/frans-muhammed-chan" },
-  { name: "Raihan Naufal Azhar", nim: "10230031", linkedin: "https://linkedin.com/in/raihan-naufal-azhar-898004401" },
-  { name: "Alif Rizki Dhaulagiri", nim: "10230091", linkedin: "https://linkedin.com/in/alif-rizki-dhaulagiri-670b10334" },
-  { name: "Haikal Prasetya Alhakim", nim: "10230047", linkedin: "https://linkedin.com/in/haikal-alhakim-b02626287" },
+  { name: "Frans Muhammed Chan", nim: "19230669", linkedin: "https://linkedin.com/in/frans-muhammed-chan", avatar: fransAvatar },
+  { name: "Raihan Naufal Azhar", nim: "10230031", linkedin: "https://linkedin.com/in/raihan-naufal-azhar-898004401", avatar: rehanAvatar },
+  { name: "Alif Rizki Dhaulagiri", nim: "10230091", linkedin: "https://linkedin.com/in/alif-rizki-dhaulagiri-670b10334", avatar: alifAvatar },
+  { name: "Haikal Prasetya Alhakim", nim: "10230047", linkedin: "https://linkedin.com/in/haikal-alhakim-b02626287", avatar: haikalAvatar },
 ];
 
 function LinkedInIcon() {
@@ -61,12 +65,11 @@ export default async function TentangPage() {
                 key={member.nim}
                 className="group rounded-3xl border border-emerald-100 bg-white p-6 text-center shadow-sm transition-shadow hover:shadow-lg hover:shadow-emerald-950/10"
               >
-                <div
-                  aria-hidden="true"
-                  className="mx-auto flex h-32 w-32 items-center justify-center rounded-3xl border-4 border-emerald-50 bg-emerald-50 text-3xl font-bold text-emerald-800"
-                >
-                  {member.name.split(" ").map((part) => part[0]).slice(0, 2).join("")}
-                </div>
+                <img
+                  src={member.avatar.src}
+                  alt={`Avatar ${member.name}`}
+                  className="mx-auto h-32 w-32 rounded-3xl border-4 border-emerald-50 bg-emerald-50"
+                />
                 <h2 className="mt-5 text-lg font-bold text-emerald-950">{member.name}</h2>
                 <p className="mt-1 text-sm font-medium text-emerald-700">NIM {member.nim}</p>
                 <p className="mt-2 text-xs leading-5 text-slate-500">Universitas Bina Sarana Informatika</p>
