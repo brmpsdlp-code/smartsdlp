@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { aggregateActivityReports } from "@/utils/reportAggregation";
 import { getReportDeadline } from "@/features/app-settings/actions";
 import { getWibYearMonth } from "@/utils/tahunAnggaran";
+import { hitungKepatuhan, statusKepatuhan } from "@/utils/dashboardAdmin";
 
 const PAGE_SIZE = 5;
 const WAJIB_PAGE_SIZE = 5;
@@ -45,6 +46,9 @@ export default async function Page({
   const kategori =
     params.kategori && params.kategori !== "ALL" ? params.kategori : undefined;
   const wajibPage = Math.max(1, Number(params.wpage ?? "1") || 1);
+  const now = new Date();
+  const nowMs = now.getTime();
+  const { tahun: currentYear, bulan: currentMonth } = getWibYearMonth(nowMs);
 
   const where: Prisma.KegiatanWhereInput = {
     ...(q && {
@@ -62,8 +66,8 @@ export default async function Page({
     total,
     wajibRows,
     wajibTotalCount,
-    totalWajibCount,
-    sudahLaporCount,
+    complianceRows,
+    laporanRows,
     pjOptions,
     programCategories,
     deadline,
@@ -91,8 +95,14 @@ export default async function Page({
       take: WAJIB_PAGE_SIZE,
     }),
     prisma.kegiatan.count(), // total SEMUA kegiatan (bukan yang ter-filter)
-    prisma.kegiatan.count({ where: { wajib: true } }),
-    prisma.kegiatan.count({ where: { wajib: true, sudahLapor: true } }),
+    prisma.kegiatan.findMany({
+      where: { tahunAnggaran: currentYear },
+      select: { id: true, wajib: true, statusAnggaran: true },
+    }),
+    prisma.laporan.findMany({
+      where: { periodeTahun: currentYear },
+      select: { kegiatanId: true, periodeBulan: true, periodeTahun: true, realIni: true },
+    }),
 
     prisma.user.findMany({
       where: { isActive: true, role: "USER" },
@@ -117,10 +127,30 @@ export default async function Page({
     redirect(`/admin/master?${next.toString()}`);
   }
 
-  const belumLaporCount = totalWajibCount - sudahLaporCount;
-  const now = new Date();
-  const laporanRows = await prisma.laporan.findMany({ select: { kegiatanId: true, periodeBulan: true, periodeTahun: true, realIni: true } });
-  const reportMetrics = aggregateActivityReports(rows.map((k) => ({ id: k.id, pagu: Number(k.pagu) })), laporanRows.map((l) => ({ ...l, realIni: Number(l.realIni) })), { month: now.getMonth() + 1, year: now.getFullYear() });
+  const laporanUntukMetric = await prisma.laporan.findMany({
+    select: { kegiatanId: true, periodeBulan: true, periodeTahun: true, realIni: true },
+  });
+  const reportMetrics = aggregateActivityReports(
+    rows.map((k) => ({ id: k.id, pagu: Number(k.pagu) })),
+    laporanUntukMetric.map((l) => ({ ...l, realIni: Number(l.realIni) })),
+    { month: currentMonth, year: currentYear },
+  );
+  const laporanIds = new Set(
+    laporanRows
+      .filter((l) => l.periodeBulan === currentMonth)
+      .map((l) => l.kegiatanId),
+  );
+  const compliance = hitungKepatuhan(
+    complianceRows.map((k) => ({
+      wajib: k.wajib,
+      kepatuhan: statusKepatuhan({
+        diblokir: k.statusAnggaran === "DIBLOKIR",
+        sudahLapor: laporanIds.has(k.id),
+        periode: { bulan: currentMonth, tahun: currentYear },
+        nowMs,
+      }),
+    })),
+  );
 
   const serialize = (list: typeof rows) =>
     list.map((k) => ({
@@ -132,6 +162,7 @@ export default async function Page({
       persentaseRealisasi: reportMetrics.get(k.id)?.persentaseRealisasi ?? 0,
       realLalu: k.realLalu !== null ? Number(k.realLalu) : null,
       realIni: k.realIni !== null ? Number(k.realIni) : null,
+       sudahLapor: laporanIds.has(k.id),
        jenis: k.jenis || "APBN",
        programCategory: k.programCategoryRef?.id
           ? k.programCategoryRef.name
@@ -150,15 +181,15 @@ export default async function Page({
       order={order}
       pjOptions={pjOptions}
       programCategories={programCategories}
-      tahunSekarang={getWibYearMonth(now.getTime()).tahun}
+      tahunSekarang={currentYear}
 
       wajibLaporData={serialize(wajibRows)}
       wajibPage={wajibPage}
       wajibPageSize={WAJIB_PAGE_SIZE}
       wajibTotal={wajibTotalCount}
-      totalWajibCount={totalWajibCount}
-      sudahLaporCount={sudahLaporCount}
-      belumLaporCount={belumLaporCount}
+      totalWajibCount={compliance.totalWajib}
+      sudahLaporCount={compliance.sudah}
+      belumLaporCount={compliance.belum}
        deadline={deadline}
     />
   );
