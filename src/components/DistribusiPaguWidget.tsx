@@ -12,6 +12,7 @@ interface DistribusiPaguWidgetProps {
   categories: { name: string; colorKey: string }[];
   metrics: Record<string, { realLalu: number; realIni: number; sdPeriode: number; sisa: number; persentaseRealisasi: number }>;
   onNavigate?: (menu: string) => void;
+  tahun: number;
 }
 
 export function DistribusiPaguWidget({
@@ -19,6 +20,7 @@ export function DistribusiPaguWidget({
   categories,
   metrics,
   onNavigate,
+  tahun,
 }: DistribusiPaguWidgetProps) {
   const [hoveredLabel, setHoveredLabel] = useState<string | null>(null);
   const [selectedProgram, setSelectedProgram] = useState<{
@@ -70,7 +72,7 @@ export function DistribusiPaguWidget({
             </h4>
           </div>
           <span className="text-[11px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-            TA {new Date().getFullYear()}
+            TA {tahun}
           </span>
         </div>
         <p className="text-xs text-slate-500 mb-2">
