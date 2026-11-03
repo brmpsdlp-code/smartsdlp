@@ -32,7 +32,7 @@ Sistem monitoring realisasi anggaran dan capaian kegiatan untuk Balai Besar Pera
 
 ## Tentang Aplikasi
 
-SMART - BRMP SDLP adalah aplikasi web untuk membantu pemantauan kegiatan dan pelaporan realisasi di lingkungan BRMP SDLP. Aplikasi menghubungkan data kegiatan, pagu anggaran, realisasi per periode, Penanggung Jawab (PJ), dokumen pendukung, notifikasi, dan audit pengelolaan laporan dalam satu sistem.
+SMART - BRMP SDLP (Balai Besar Perakitan dan Modernisasi Sumber Daya Lahan Pertanian) adalah aplikasi web untuk membantu pemantauan kegiatan dan pelaporan realisasi di lingkungan BRMP SDLP. Aplikasi menghubungkan data kegiatan, pagu anggaran, realisasi per periode, Penanggung Jawab (PJ), dokumen pendukung, notifikasi, dan audit pengelolaan laporan dalam satu sistem.
 
 Kemampuan yang tersedia di kode aplikasi meliputi:
 
