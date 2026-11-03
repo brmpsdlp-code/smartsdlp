@@ -1,6 +1,6 @@
 # SMART - BRMP SDLP
 
-Sistem monitoring realisasi anggaran dan capaian kegiatan untuk Balai Besar Perakitan dan Modernisasi Sumber Daya Lahan Pertanian (BRMP SDLP), Kementerian Pertanian Republik Indonesia.
+Sistem monitoring realisasi anggaran dan capaian kegiatan untuk Balai Besar Perakitan dan Modernisasi Sumber Daya Lahan Pertanian (BRMP SDLP), Kementerian Pertanian RI.
 
 [![Next.js](https://img.shields.io/badge/Next.js-16.3.3-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -209,37 +209,37 @@ Isi placeholder dengan nilai environment masing-masing. Jangan commit file envir
 
 #### Wajib untuk aplikasi
 
-| Variable | Keterangan | Contoh aman |
-| --- | --- | --- |
-| `DATABASE_URL` | Connection string PostgreSQL untuk Prisma. | `postgresql://<USER>:<PASSWORD>@<HOST>:5432/<DATABASE>?sslmode=require` |
-| `BETTER_AUTH_SECRET` | Secret acak untuk Better Auth. Gunakan secret panjang dan unik. | `<LONG_RANDOM_SECRET>` |
-| `BETTER_AUTH_URL` | Origin server aplikasi dan production URL Better Auth. Wajib di Vercel; harus sama dengan origin frontend. | `http://localhost:3000` atau `https://<DOMAIN>` |
-| `SMTP_HOST` | Host server SMTP untuk email reset, verifikasi, pengingat, dan notifikasi. | `smtp.<PROVIDER>.com` |
-| `SMTP_PORT` | Port SMTP. | `587` |
-| `SMTP_SECURE` | `true` untuk koneksi secure langsung; `false` untuk koneksi STARTTLS sesuai konfigurasi SMTP. | `false` |
-| `SMTP_USER` | Username SMTP. | `<SMTP_USERNAME>` |
-| `SMTP_PASSWORD` | Password atau app password SMTP. | `<SMTP_PASSWORD>` |
-| `SMTP_FROM` | Nama dan alamat pengirim email terverifikasi. | `SMART BRMP SDLP <noreply@<DOMAIN>>` |
+| Variable             | Keterangan                                                                                                 | Contoh aman                                                             |
+| -------------------- | ---------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| `DATABASE_URL`       | Connection string PostgreSQL untuk Prisma.                                                                 | `postgresql://<USER>:<PASSWORD>@<HOST>:5432/<DATABASE>?sslmode=require` |
+| `BETTER_AUTH_SECRET` | Secret acak untuk Better Auth. Gunakan secret panjang dan unik.                                            | `<LONG_RANDOM_SECRET>`                                                  |
+| `BETTER_AUTH_URL`    | Origin server aplikasi dan production URL Better Auth. Wajib di Vercel; harus sama dengan origin frontend. | `http://localhost:3000` atau `https://<DOMAIN>`                         |
+| `SMTP_HOST`          | Host server SMTP untuk email reset, verifikasi, pengingat, dan notifikasi.                                 | `smtp.<PROVIDER>.com`                                                   |
+| `SMTP_PORT`          | Port SMTP.                                                                                                 | `587`                                                                   |
+| `SMTP_SECURE`        | `true` untuk koneksi secure langsung; `false` untuk koneksi STARTTLS sesuai konfigurasi SMTP.              | `false`                                                                 |
+| `SMTP_USER`          | Username SMTP.                                                                                             | `<SMTP_USERNAME>`                                                       |
+| `SMTP_PASSWORD`      | Password atau app password SMTP.                                                                           | `<SMTP_PASSWORD>`                                                       |
+| `SMTP_FROM`          | Nama dan alamat pengirim email terverifikasi.                                                              | `SMART BRMP SDLP <noreply@<DOMAIN>>`                                    |
 
 #### Diperlukan hanya saat bootstrap admin
 
-| Variable | Keterangan | Contoh aman |
-| --- | --- | --- |
-| `BOOTSTRAP_ADMIN_EMAIL` | Email admin pertama yang akan dibuat oleh `prisma/bootstrap-admin.ts`. | `admin@<DOMAIN>` |
-| `BOOTSTRAP_ADMIN_PASSWORD` | Password kuat untuk admin pertama (minimal 12 karakter). | `<ONE_TIME_STRONG_PASSWORD>` |
+| Variable                   | Keterangan                                                             | Contoh aman                  |
+| -------------------------- | ---------------------------------------------------------------------- | ---------------------------- |
+| `BOOTSTRAP_ADMIN_EMAIL`    | Email admin pertama yang akan dibuat oleh `prisma/bootstrap-admin.ts`. | `admin@<DOMAIN>`             |
+| `BOOTSTRAP_ADMIN_PASSWORD` | Password kuat untuk admin pertama (minimal 12 karakter).               | `<ONE_TIME_STRONG_PASSWORD>` |
 
 #### Opsional, diperlukan untuk upload file otomatis ke Google Drive
 
-| Variable | Keterangan | Contoh aman |
-| --- | --- | --- |
-| `GOOGLE_CLIENT_EMAIL` | Email service account Google Cloud dengan akses ke folder/Shared Drive tujuan. | `<SERVICE_ACCOUNT>@<PROJECT>.iam.gserviceaccount.com` |
-| `GOOGLE_PRIVATE_KEY` | Private key service account. Newline di environment ditulis sebagai `\n`. | `-----BEGIN PRIVATE KEY-----\n<KEY>\n-----END PRIVATE KEY-----` |
-| `GOOGLE_DRIVE_FOLDER_ID` | ID folder root Google Drive untuk penyimpanan dokumen. | `<GOOGLE_DRIVE_FOLDER_ID>` |
+| Variable                 | Keterangan                                                                     | Contoh aman                                                     |
+| ------------------------ | ------------------------------------------------------------------------------ | --------------------------------------------------------------- |
+| `GOOGLE_CLIENT_EMAIL`    | Email service account Google Cloud dengan akses ke folder/Shared Drive tujuan. | `<SERVICE_ACCOUNT>@<PROJECT>.iam.gserviceaccount.com`           |
+| `GOOGLE_PRIVATE_KEY`     | Private key service account. Newline di environment ditulis sebagai `\n`.      | `-----BEGIN PRIVATE KEY-----\n<KEY>\n-----END PRIVATE KEY-----` |
+| `GOOGLE_DRIVE_FOLDER_ID` | ID folder root Google Drive untuk penyimpanan dokumen.                         | `<GOOGLE_DRIVE_FOLDER_ID>`                                      |
 
 #### Opsional runtime
 
-| Variable | Keterangan | Contoh |
-| --- | --- | --- |
+| Variable   | Keterangan    | Contoh                          |
+| ---------- | ------------- | ------------------------------- |
 | `NODE_ENV` | Mode runtime. | `development` atau `production` |
 
 Jika Google Drive belum dikonfigurasi, repositori tetap menyediakan opsi menyimpan tautan Google Drive secara manual.
@@ -401,11 +401,11 @@ Langkah lengkap, firewall, user service, PostgreSQL, migrasi, Nginx, systemd, ba
 
 SMART - BRMP SDLP dikembangkan oleh tim mahasiswa magang Universitas Bina Sarana Informatika:
 
-| Nama | NIM |
-| --- | --- |
-| Frans Muhammed Chan | 19230669 |
-| Raihan Naufal Azhar | 10230031 |
-| Alif Rizki Dhaulagiri | 10230091 |
+| Nama                    | NIM      |
+| ----------------------- | -------- |
+| Frans Muhammed Chan     | 19230669 |
+| Raihan Naufal Azhar     | 10230031 |
+| Alif Rizki Dhaulagiri   | 10230091 |
 | Haikal Prasetya Alhakim | 10230047 |
 
 Daftar di atas mengikuti data pada halaman `/tentang` di source aplikasi. URL deployment live tidak disimpan di repository; pada instance aktif, halaman tim tersedia di `https://<DOMAIN>/tentang`.
