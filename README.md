@@ -1,6 +1,6 @@
 # SMART - BRMP SDLP
 
-Sistem monitoring realisasi anggaran dan capaian kegiatan untuk Balai Besar Perakitan dan Modernisasi Sumber Daya Lahan Pertanian (BRMP SDLP), Kementerian Pertanian RI.
+Sistem monitoring realisasi anggaran dan capaian kegiatan untuk Balai Besar Perakitan dan Modernisasi Sumber Daya Lahan Pertanian (BRMP SDLP), Kementerian Pertanian Republik Indonesia.
 
 [![Next.js](https://img.shields.io/badge/Next.js-16.3.3-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
