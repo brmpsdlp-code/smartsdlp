@@ -288,6 +288,7 @@ export type ReportAccessRequestOrderByWithRelationInput = {
   kegiatan?: Prisma.KegiatanOrderByWithRelationInput
   requestedBy?: Prisma.UserOrderByWithRelationInput
   decidedBy?: Prisma.UserOrderByWithRelationInput
+  _relevance?: Prisma.ReportAccessRequestOrderByRelevanceInput
 }
 
 export type ReportAccessRequestWhereUniqueInput = Prisma.AtLeast<{
@@ -449,6 +450,12 @@ export type ReportAccessRequestListRelationFilter = {
 
 export type ReportAccessRequestOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type ReportAccessRequestOrderByRelevanceInput = {
+  fields: Prisma.ReportAccessRequestOrderByRelevanceFieldEnum | Prisma.ReportAccessRequestOrderByRelevanceFieldEnum[]
+  sort: Prisma.SortOrder
+  search: string
 }
 
 export type ReportAccessRequestCountOrderByAggregateInput = {
@@ -981,39 +988,7 @@ export type ReportAccessRequestSelect<ExtArgs extends runtime.Types.Extensions.I
   decidedBy?: boolean | Prisma.ReportAccessRequest$decidedByArgs<ExtArgs>
 }, ExtArgs["result"]["reportAccessRequest"]>
 
-export type ReportAccessRequestSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  kegiatanId?: boolean
-  periodeBulan?: boolean
-  periodeTahun?: boolean
-  reason?: boolean
-  status?: boolean
-  requestedById?: boolean
-  decidedById?: boolean
-  decidedAt?: boolean
-  decisionNote?: boolean
-  createdAt?: boolean
-  kegiatan?: boolean | Prisma.KegiatanDefaultArgs<ExtArgs>
-  requestedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  decidedBy?: boolean | Prisma.ReportAccessRequest$decidedByArgs<ExtArgs>
-}, ExtArgs["result"]["reportAccessRequest"]>
 
-export type ReportAccessRequestSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  kegiatanId?: boolean
-  periodeBulan?: boolean
-  periodeTahun?: boolean
-  reason?: boolean
-  status?: boolean
-  requestedById?: boolean
-  decidedById?: boolean
-  decidedAt?: boolean
-  decisionNote?: boolean
-  createdAt?: boolean
-  kegiatan?: boolean | Prisma.KegiatanDefaultArgs<ExtArgs>
-  requestedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  decidedBy?: boolean | Prisma.ReportAccessRequest$decidedByArgs<ExtArgs>
-}, ExtArgs["result"]["reportAccessRequest"]>
 
 export type ReportAccessRequestSelectScalar = {
   id?: boolean
@@ -1031,16 +1006,6 @@ export type ReportAccessRequestSelectScalar = {
 
 export type ReportAccessRequestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "kegiatanId" | "periodeBulan" | "periodeTahun" | "reason" | "status" | "requestedById" | "decidedById" | "decidedAt" | "decisionNote" | "createdAt", ExtArgs["result"]["reportAccessRequest"]>
 export type ReportAccessRequestInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  kegiatan?: boolean | Prisma.KegiatanDefaultArgs<ExtArgs>
-  requestedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  decidedBy?: boolean | Prisma.ReportAccessRequest$decidedByArgs<ExtArgs>
-}
-export type ReportAccessRequestIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  kegiatan?: boolean | Prisma.KegiatanDefaultArgs<ExtArgs>
-  requestedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  decidedBy?: boolean | Prisma.ReportAccessRequest$decidedByArgs<ExtArgs>
-}
-export type ReportAccessRequestIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   kegiatan?: boolean | Prisma.KegiatanDefaultArgs<ExtArgs>
   requestedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   decidedBy?: boolean | Prisma.ReportAccessRequest$decidedByArgs<ExtArgs>
@@ -1183,30 +1148,6 @@ export interface ReportAccessRequestDelegate<ExtArgs extends runtime.Types.Exten
   createMany<T extends ReportAccessRequestCreateManyArgs>(args?: Prisma.SelectSubset<T, ReportAccessRequestCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
-   * Create many ReportAccessRequests and returns the data saved in the database.
-   * @param {ReportAccessRequestCreateManyAndReturnArgs} args - Arguments to create many ReportAccessRequests.
-   * @example
-   * // Create many ReportAccessRequests
-   * const reportAccessRequest = await prisma.reportAccessRequest.createManyAndReturn({
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Create many ReportAccessRequests and only return the `id`
-   * const reportAccessRequestWithIdOnly = await prisma.reportAccessRequest.createManyAndReturn({
-   *   select: { id: true },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  createManyAndReturn<T extends ReportAccessRequestCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, ReportAccessRequestCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReportAccessRequestPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-  /**
    * Delete a ReportAccessRequest.
    * @param {ReportAccessRequestDeleteArgs} args - Arguments to delete one ReportAccessRequest.
    * @example
@@ -1269,36 +1210,6 @@ export interface ReportAccessRequestDelegate<ExtArgs extends runtime.Types.Exten
    * 
    */
   updateMany<T extends ReportAccessRequestUpdateManyArgs>(args: Prisma.SelectSubset<T, ReportAccessRequestUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
-
-  /**
-   * Update zero or more ReportAccessRequests and returns the data updated in the database.
-   * @param {ReportAccessRequestUpdateManyAndReturnArgs} args - Arguments to update many ReportAccessRequests.
-   * @example
-   * // Update many ReportAccessRequests
-   * const reportAccessRequest = await prisma.reportAccessRequest.updateManyAndReturn({
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Update zero or more ReportAccessRequests and only return the `id`
-   * const reportAccessRequestWithIdOnly = await prisma.reportAccessRequest.updateManyAndReturn({
-   *   select: { id: true },
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  updateManyAndReturn<T extends ReportAccessRequestUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, ReportAccessRequestUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReportAccessRequestPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one ReportAccessRequest.
@@ -1740,29 +1651,6 @@ export type ReportAccessRequestCreateManyArgs<ExtArgs extends runtime.Types.Exte
 }
 
 /**
- * ReportAccessRequest createManyAndReturn
- */
-export type ReportAccessRequestCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ReportAccessRequest
-   */
-  select?: Prisma.ReportAccessRequestSelectCreateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the ReportAccessRequest
-   */
-  omit?: Prisma.ReportAccessRequestOmit<ExtArgs> | null
-  /**
-   * The data used to create many ReportAccessRequests.
-   */
-  data: Prisma.ReportAccessRequestCreateManyInput | Prisma.ReportAccessRequestCreateManyInput[]
-  skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ReportAccessRequestIncludeCreateManyAndReturn<ExtArgs> | null
-}
-
-/**
  * ReportAccessRequest update
  */
 export type ReportAccessRequestUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1804,36 +1692,6 @@ export type ReportAccessRequestUpdateManyArgs<ExtArgs extends runtime.Types.Exte
    * Limit how many ReportAccessRequests to update.
    */
   limit?: number
-}
-
-/**
- * ReportAccessRequest updateManyAndReturn
- */
-export type ReportAccessRequestUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ReportAccessRequest
-   */
-  select?: Prisma.ReportAccessRequestSelectUpdateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the ReportAccessRequest
-   */
-  omit?: Prisma.ReportAccessRequestOmit<ExtArgs> | null
-  /**
-   * The data used to update ReportAccessRequests.
-   */
-  data: Prisma.XOR<Prisma.ReportAccessRequestUpdateManyMutationInput, Prisma.ReportAccessRequestUncheckedUpdateManyInput>
-  /**
-   * Filter which ReportAccessRequests to update
-   */
-  where?: Prisma.ReportAccessRequestWhereInput
-  /**
-   * Limit how many ReportAccessRequests to update.
-   */
-  limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ReportAccessRequestIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

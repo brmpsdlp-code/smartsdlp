@@ -53,9 +53,9 @@ export default async function Page({
   const where: Prisma.KegiatanWhereInput = {
     ...(q && {
       OR: [
-        { nama: { contains: q, mode: "insensitive" } },
-        { kode: { contains: q, mode: "insensitive" } },
-        { pj: { name: { contains: q, mode: "insensitive" } } },
+        { nama: { contains: q } },
+        { kode: { contains: q } },
+        { pj: { name: { contains: q } } },
       ],
     }),
     ...(kategori && { programCategoryRef: { id: kategori } }),

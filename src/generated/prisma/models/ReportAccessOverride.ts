@@ -268,6 +268,7 @@ export type ReportAccessOverrideOrderByWithRelationInput = {
   revokedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   kegiatan?: Prisma.KegiatanOrderByWithRelationInput
   createdBy?: Prisma.UserOrderByWithRelationInput
+  _relevance?: Prisma.ReportAccessOverrideOrderByRelevanceInput
 }
 
 export type ReportAccessOverrideWhereUniqueInput = Prisma.AtLeast<{
@@ -410,6 +411,12 @@ export type ReportAccessOverrideListRelationFilter = {
 
 export type ReportAccessOverrideOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type ReportAccessOverrideOrderByRelevanceInput = {
+  fields: Prisma.ReportAccessOverrideOrderByRelevanceFieldEnum | Prisma.ReportAccessOverrideOrderByRelevanceFieldEnum[]
+  sort: Prisma.SortOrder
+  search: string
 }
 
 export type ReportAccessOverrideKegiatanIdPeriodeBulanPeriodeTahunCompoundUniqueInput = {
@@ -763,33 +770,7 @@ export type ReportAccessOverrideSelect<ExtArgs extends runtime.Types.Extensions.
   createdBy?: boolean | Prisma.ReportAccessOverride$createdByArgs<ExtArgs>
 }, ExtArgs["result"]["reportAccessOverride"]>
 
-export type ReportAccessOverrideSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  kegiatanId?: boolean
-  periodeBulan?: boolean
-  periodeTahun?: boolean
-  openedUntil?: boolean
-  reason?: boolean
-  createdById?: boolean
-  createdAt?: boolean
-  revokedAt?: boolean
-  kegiatan?: boolean | Prisma.KegiatanDefaultArgs<ExtArgs>
-  createdBy?: boolean | Prisma.ReportAccessOverride$createdByArgs<ExtArgs>
-}, ExtArgs["result"]["reportAccessOverride"]>
 
-export type ReportAccessOverrideSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  kegiatanId?: boolean
-  periodeBulan?: boolean
-  periodeTahun?: boolean
-  openedUntil?: boolean
-  reason?: boolean
-  createdById?: boolean
-  createdAt?: boolean
-  revokedAt?: boolean
-  kegiatan?: boolean | Prisma.KegiatanDefaultArgs<ExtArgs>
-  createdBy?: boolean | Prisma.ReportAccessOverride$createdByArgs<ExtArgs>
-}, ExtArgs["result"]["reportAccessOverride"]>
 
 export type ReportAccessOverrideSelectScalar = {
   id?: boolean
@@ -805,14 +786,6 @@ export type ReportAccessOverrideSelectScalar = {
 
 export type ReportAccessOverrideOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "kegiatanId" | "periodeBulan" | "periodeTahun" | "openedUntil" | "reason" | "createdById" | "createdAt" | "revokedAt", ExtArgs["result"]["reportAccessOverride"]>
 export type ReportAccessOverrideInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  kegiatan?: boolean | Prisma.KegiatanDefaultArgs<ExtArgs>
-  createdBy?: boolean | Prisma.ReportAccessOverride$createdByArgs<ExtArgs>
-}
-export type ReportAccessOverrideIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  kegiatan?: boolean | Prisma.KegiatanDefaultArgs<ExtArgs>
-  createdBy?: boolean | Prisma.ReportAccessOverride$createdByArgs<ExtArgs>
-}
-export type ReportAccessOverrideIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   kegiatan?: boolean | Prisma.KegiatanDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.ReportAccessOverride$createdByArgs<ExtArgs>
 }
@@ -951,30 +924,6 @@ export interface ReportAccessOverrideDelegate<ExtArgs extends runtime.Types.Exte
   createMany<T extends ReportAccessOverrideCreateManyArgs>(args?: Prisma.SelectSubset<T, ReportAccessOverrideCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
-   * Create many ReportAccessOverrides and returns the data saved in the database.
-   * @param {ReportAccessOverrideCreateManyAndReturnArgs} args - Arguments to create many ReportAccessOverrides.
-   * @example
-   * // Create many ReportAccessOverrides
-   * const reportAccessOverride = await prisma.reportAccessOverride.createManyAndReturn({
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Create many ReportAccessOverrides and only return the `id`
-   * const reportAccessOverrideWithIdOnly = await prisma.reportAccessOverride.createManyAndReturn({
-   *   select: { id: true },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  createManyAndReturn<T extends ReportAccessOverrideCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, ReportAccessOverrideCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReportAccessOverridePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-  /**
    * Delete a ReportAccessOverride.
    * @param {ReportAccessOverrideDeleteArgs} args - Arguments to delete one ReportAccessOverride.
    * @example
@@ -1037,36 +986,6 @@ export interface ReportAccessOverrideDelegate<ExtArgs extends runtime.Types.Exte
    * 
    */
   updateMany<T extends ReportAccessOverrideUpdateManyArgs>(args: Prisma.SelectSubset<T, ReportAccessOverrideUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
-
-  /**
-   * Update zero or more ReportAccessOverrides and returns the data updated in the database.
-   * @param {ReportAccessOverrideUpdateManyAndReturnArgs} args - Arguments to update many ReportAccessOverrides.
-   * @example
-   * // Update many ReportAccessOverrides
-   * const reportAccessOverride = await prisma.reportAccessOverride.updateManyAndReturn({
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Update zero or more ReportAccessOverrides and only return the `id`
-   * const reportAccessOverrideWithIdOnly = await prisma.reportAccessOverride.updateManyAndReturn({
-   *   select: { id: true },
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  updateManyAndReturn<T extends ReportAccessOverrideUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, ReportAccessOverrideUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReportAccessOverridePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one ReportAccessOverride.
@@ -1505,29 +1424,6 @@ export type ReportAccessOverrideCreateManyArgs<ExtArgs extends runtime.Types.Ext
 }
 
 /**
- * ReportAccessOverride createManyAndReturn
- */
-export type ReportAccessOverrideCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ReportAccessOverride
-   */
-  select?: Prisma.ReportAccessOverrideSelectCreateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the ReportAccessOverride
-   */
-  omit?: Prisma.ReportAccessOverrideOmit<ExtArgs> | null
-  /**
-   * The data used to create many ReportAccessOverrides.
-   */
-  data: Prisma.ReportAccessOverrideCreateManyInput | Prisma.ReportAccessOverrideCreateManyInput[]
-  skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ReportAccessOverrideIncludeCreateManyAndReturn<ExtArgs> | null
-}
-
-/**
  * ReportAccessOverride update
  */
 export type ReportAccessOverrideUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1569,36 +1465,6 @@ export type ReportAccessOverrideUpdateManyArgs<ExtArgs extends runtime.Types.Ext
    * Limit how many ReportAccessOverrides to update.
    */
   limit?: number
-}
-
-/**
- * ReportAccessOverride updateManyAndReturn
- */
-export type ReportAccessOverrideUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ReportAccessOverride
-   */
-  select?: Prisma.ReportAccessOverrideSelectUpdateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the ReportAccessOverride
-   */
-  omit?: Prisma.ReportAccessOverrideOmit<ExtArgs> | null
-  /**
-   * The data used to update ReportAccessOverrides.
-   */
-  data: Prisma.XOR<Prisma.ReportAccessOverrideUpdateManyMutationInput, Prisma.ReportAccessOverrideUncheckedUpdateManyInput>
-  /**
-   * Filter which ReportAccessOverrides to update
-   */
-  where?: Prisma.ReportAccessOverrideWhereInput
-  /**
-   * Limit how many ReportAccessOverrides to update.
-   */
-  limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ReportAccessOverrideIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

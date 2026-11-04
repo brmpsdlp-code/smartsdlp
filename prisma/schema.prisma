@@ -7,7 +7,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
 }
 
 // ── Enums ──────────────────────────────────────────────────────────────────
@@ -26,25 +26,25 @@ model User {
   name          String
   email         String   @unique
   emailVerified Boolean  @default(false)
-  image         String?
+  image         String?  @db.Text
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
   // SMART-SDLP Custom Fields
-  role      UserRole @default(USER)
-  nip       String?  @unique
-  jabatan   String?
-  unitKerja String?
-  isActive  Boolean  @default(true)
-  mustChangePassword Boolean @default(false)
+  role               UserRole @default(USER)
+  nip                String?  @unique
+  jabatan            String?
+  unitKerja          String?
+  isActive           Boolean  @default(true)
+  mustChangePassword Boolean  @default(false)
 
-  sessions          Session[]
-  accounts          Account[]
-  kegiatanSebagaiPJ Kegiatan[] @relation("KegiatanPJ")
-  laporanSubmitted  Laporan[]  @relation("LaporanSubmitter")
-  dokumenUploaded   Dokumen[]  @relation("DokumenUploader")
-  laporans          Laporan[]
-   notifications     Notification[]
+  sessions            Session[]
+  accounts            Account[]
+  kegiatanSebagaiPJ   Kegiatan[]             @relation("KegiatanPJ")
+  laporanSubmitted    Laporan[]              @relation("LaporanSubmitter")
+  dokumenUploaded     Dokumen[]              @relation("DokumenUploader")
+  laporans            Laporan[]
+  notifications       Notification[]
   reportAccessCreated ReportAccessOverride[] @relation("ReportAccessCreatedBy")
   accessRequested     ReportAccessRequest[]  @relation("AccessRequestRequester")
   accessDecided       ReportAccessRequest[]  @relation("AccessRequestDecider")
@@ -69,7 +69,7 @@ model Session {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   ipAddress String?
-  userAgent String?
+  userAgent String?  @db.Text
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -83,12 +83,12 @@ model Account {
   providerId            String
   userId                String
   user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  accessToken           String?
-  refreshToken          String?
-  idToken               String?
+  accessToken           String?   @db.Text
+  refreshToken          String?   @db.Text
+  idToken               String?   @db.Text
   accessTokenExpiresAt  DateTime?
   refreshTokenExpiresAt DateTime?
-  scope                 String?
+  scope                 String?   @db.Text
   password              String?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
@@ -103,7 +103,7 @@ model Account {
 model Verification {
   id         String    @id @default(cuid())
   identifier String
-  value      String
+  value      String    @db.Text
   expiresAt  DateTime
   createdAt  DateTime? @default(now())
   updatedAt  DateTime? @updatedAt
@@ -125,11 +125,11 @@ enum StatusAnggaran {
 }
 
 model AppSettings {
-  id                String   @id @default(cuid())
-  reportDeadlineDay Int      @default(25)
-  reportDeadlineTime String  @default("23:59")
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  id                 String   @id @default(cuid())
+  reportDeadlineDay  Int      @default(25)
+  reportDeadlineTime String   @default("23:59")
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   @@map("app_settings")
 }
@@ -148,32 +148,32 @@ model ProgramCategory {
 }
 
 model Kegiatan {
-  id              String         @id @default(cuid())
-  kode            String         @unique
-  nama            String
-  jenis           JenisAnggaran?
-  programCategory   String?
-  programCategoryId String?
+  id                 String           @id @default(cuid())
+  kode               String           @unique
+  nama               String
+  jenis              JenisAnggaran?
+  programCategory    String?
+  programCategoryId  String?
   programCategoryRef ProgramCategory? @relation(fields: [programCategoryId], references: [id], onDelete: Restrict)
-  pagu            BigInt
-  realisasi       BigInt         @default(0)
-  fisik           Int?           @default(0)
-  uraian          String?
-  statusAnggaran  StatusAnggaran @default(DIBUKA)
+  pagu               BigInt
+  realisasi          BigInt           @default(0)
+  fisik              Int?             @default(0)
+  uraian             String?          @db.Text
+  statusAnggaran     StatusAnggaran   @default(DIBUKA)
   // Tahun anggaran: laporan kegiatan ini hanya sah untuk periode di tahun tersebut.
-  tahunAnggaran   Int
-  realLalu        BigInt?        @default(0)
-  realIni         BigInt?        @default(0)
-  wajib           Boolean        @default(false)
-  sudahLapor      Boolean        @default(false)
+  tahunAnggaran      Int
+  realLalu           BigInt?          @default(0)
+  realIni            BigInt?          @default(0)
+  wajib              Boolean          @default(false)
+  sudahLapor         Boolean          @default(false)
 
   pjId String?
   pj   User?   @relation("KegiatanPJ", fields: [pjId], references: [id])
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  laporan   Laporan[]
-  dokumen   Dokumen[]
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+  laporan         Laporan[]
+  dokumen         Dokumen[]
   accessOverrides ReportAccessOverride[]
   accessRequests  ReportAccessRequest[]
 
@@ -190,7 +190,7 @@ model Laporan {
   periodeBulan Int
   periodeTahun Int
 
-  uraian         String
+  uraian         String         @db.Text
   fisik          Float
   statusAnggaran StatusAnggaran @default(DIBUKA)
 
@@ -212,15 +212,15 @@ model Laporan {
 }
 
 model Notification {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   type      String
   title     String
-  message   String
-  href      String?
+  message   String    @db.Text
+  href      String?   @db.Text
   readAt    DateTime?
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
 
   @@index([userId, readAt, createdAt])
   @@map("notification")
@@ -229,14 +229,14 @@ model Notification {
 model AuditLog {
   id           String   @id @default(cuid())
   action       String   @default("DELETE_LAPORAN")
-  namaFile     String
+  namaFile     String   @db.Text
   kodeKegiatan String
   namaKegiatan String
   pemilikNama  String
   pemilikEmail String
   adminNama    String
   adminEmail   String
-  alasan       String
+  alasan       String   @db.Text
   notifStatus  String   @default("Terkirim ke Email")
   dataSnapshot Json?
   createdAt    DateTime @default(now())
@@ -257,9 +257,9 @@ enum KategoriDokumen {
 
 model Dokumen {
   id       String          @id @default(cuid())
-  nama     String
+  nama     String          @db.Text
   kategori KategoriDokumen @default(SK)
-  fileUrl  String?
+  fileUrl  String?         @db.Text
   fileType String?         @default("pdf")
   ukuran   String?         @default("1.2 MB")
   tanggal  DateTime        @default(now())
@@ -285,7 +285,7 @@ model ReportAccessOverride {
   periodeBulan Int
   periodeTahun Int
   openedUntil  DateTime
-  reason       String
+  reason       String    @db.Text
   createdById  String?
   createdBy    User?     @relation("ReportAccessCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
   createdAt    DateTime  @default(now())
@@ -310,14 +310,14 @@ model ReportAccessRequest {
   kegiatan      Kegiatan            @relation(fields: [kegiatanId], references: [id], onDelete: Cascade)
   periodeBulan  Int
   periodeTahun  Int
-  reason        String
+  reason        String              @db.Text
   status        AccessRequestStatus @default(PENDING)
   requestedById String
   requestedBy   User                @relation("AccessRequestRequester", fields: [requestedById], references: [id], onDelete: Cascade)
   decidedById   String?
   decidedBy     User?               @relation("AccessRequestDecider", fields: [decidedById], references: [id], onDelete: SetNull)
   decidedAt     DateTime?
-  decisionNote  String?
+  decisionNote  String?             @db.Text
   createdAt     DateTime            @default(now())
 
   @@index([status])

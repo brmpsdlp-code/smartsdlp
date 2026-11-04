@@ -47,7 +47,7 @@ Contoh:
     }
 
     const user = await prisma.user.findFirst({
-      where: { email: { equals: targetEmail, mode: "insensitive" } },
+      where: { email: { equals: targetEmail } },
     });
 
     if (!user) {

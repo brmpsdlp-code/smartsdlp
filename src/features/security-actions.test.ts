@@ -13,6 +13,8 @@ import {
 } from "@/features/akses-lapor/actions";
 import { getMyNotifications, markMyNotificationsRead } from "@/features/notifications/actions";
 
+
+async function main() {
 // Mock helper
 function setSession(user: { id: string; name: string; email: string; role: string; mustChangePassword: boolean; isActive: boolean } | null) {
   if (!user) {
@@ -421,3 +423,10 @@ const ingatkanTahunSalah = await ingatkanPJ("keg-1", 5, 1999);
 assert.equal(ingatkanTahunSalah.success, false);
 
 console.log("ingatkan PJ security checks passed");
+
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

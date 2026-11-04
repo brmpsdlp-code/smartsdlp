@@ -181,6 +181,7 @@ export type AuthAttemptOrderByWithRelationInput = {
   identifier?: Prisma.SortOrder
   kind?: Prisma.SortOrder
   attemptedAt?: Prisma.SortOrder
+  _relevance?: Prisma.AuthAttemptOrderByRelevanceInput
 }
 
 export type AuthAttemptWhereUniqueInput = Prisma.AtLeast<{
@@ -262,6 +263,12 @@ export type AuthAttemptUncheckedUpdateManyInput = {
   attemptedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type AuthAttemptOrderByRelevanceInput = {
+  fields: Prisma.AuthAttemptOrderByRelevanceFieldEnum | Prisma.AuthAttemptOrderByRelevanceFieldEnum[]
+  sort: Prisma.SortOrder
+  search: string
+}
+
 export type AuthAttemptCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   identifier?: Prisma.SortOrder
@@ -292,19 +299,7 @@ export type AuthAttemptSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   attemptedAt?: boolean
 }, ExtArgs["result"]["authAttempt"]>
 
-export type AuthAttemptSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  identifier?: boolean
-  kind?: boolean
-  attemptedAt?: boolean
-}, ExtArgs["result"]["authAttempt"]>
 
-export type AuthAttemptSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  identifier?: boolean
-  kind?: boolean
-  attemptedAt?: boolean
-}, ExtArgs["result"]["authAttempt"]>
 
 export type AuthAttemptSelectScalar = {
   id?: boolean
@@ -441,30 +436,6 @@ export interface AuthAttemptDelegate<ExtArgs extends runtime.Types.Extensions.In
   createMany<T extends AuthAttemptCreateManyArgs>(args?: Prisma.SelectSubset<T, AuthAttemptCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
-   * Create many AuthAttempts and returns the data saved in the database.
-   * @param {AuthAttemptCreateManyAndReturnArgs} args - Arguments to create many AuthAttempts.
-   * @example
-   * // Create many AuthAttempts
-   * const authAttempt = await prisma.authAttempt.createManyAndReturn({
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Create many AuthAttempts and only return the `id`
-   * const authAttemptWithIdOnly = await prisma.authAttempt.createManyAndReturn({
-   *   select: { id: true },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  createManyAndReturn<T extends AuthAttemptCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, AuthAttemptCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthAttemptPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-  /**
    * Delete a AuthAttempt.
    * @param {AuthAttemptDeleteArgs} args - Arguments to delete one AuthAttempt.
    * @example
@@ -527,36 +498,6 @@ export interface AuthAttemptDelegate<ExtArgs extends runtime.Types.Extensions.In
    * 
    */
   updateMany<T extends AuthAttemptUpdateManyArgs>(args: Prisma.SelectSubset<T, AuthAttemptUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
-
-  /**
-   * Update zero or more AuthAttempts and returns the data updated in the database.
-   * @param {AuthAttemptUpdateManyAndReturnArgs} args - Arguments to update many AuthAttempts.
-   * @example
-   * // Update many AuthAttempts
-   * const authAttempt = await prisma.authAttempt.updateManyAndReturn({
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Update zero or more AuthAttempts and only return the `id`
-   * const authAttemptWithIdOnly = await prisma.authAttempt.updateManyAndReturn({
-   *   select: { id: true },
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  updateManyAndReturn<T extends AuthAttemptUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, AuthAttemptUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthAttemptPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one AuthAttempt.
@@ -964,25 +905,6 @@ export type AuthAttemptCreateManyArgs<ExtArgs extends runtime.Types.Extensions.I
 }
 
 /**
- * AuthAttempt createManyAndReturn
- */
-export type AuthAttemptCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the AuthAttempt
-   */
-  select?: Prisma.AuthAttemptSelectCreateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the AuthAttempt
-   */
-  omit?: Prisma.AuthAttemptOmit<ExtArgs> | null
-  /**
-   * The data used to create many AuthAttempts.
-   */
-  data: Prisma.AuthAttemptCreateManyInput | Prisma.AuthAttemptCreateManyInput[]
-  skipDuplicates?: boolean
-}
-
-/**
  * AuthAttempt update
  */
 export type AuthAttemptUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1008,32 +930,6 @@ export type AuthAttemptUpdateArgs<ExtArgs extends runtime.Types.Extensions.Inter
  * AuthAttempt updateMany
  */
 export type AuthAttemptUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * The data used to update AuthAttempts.
-   */
-  data: Prisma.XOR<Prisma.AuthAttemptUpdateManyMutationInput, Prisma.AuthAttemptUncheckedUpdateManyInput>
-  /**
-   * Filter which AuthAttempts to update
-   */
-  where?: Prisma.AuthAttemptWhereInput
-  /**
-   * Limit how many AuthAttempts to update.
-   */
-  limit?: number
-}
-
-/**
- * AuthAttempt updateManyAndReturn
- */
-export type AuthAttemptUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the AuthAttempt
-   */
-  select?: Prisma.AuthAttemptSelectUpdateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the AuthAttempt
-   */
-  omit?: Prisma.AuthAttemptOmit<ExtArgs> | null
   /**
    * The data used to update AuthAttempts.
    */

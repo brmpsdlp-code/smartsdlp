@@ -87,7 +87,7 @@ export default async function TentangPage() {
           </section>
 
           <footer className="mt-12 border-t border-emerald-100 pt-5 text-center text-xs text-slate-400">
-            Versi 1.0 · dibangun dengan Next.js, Prisma, PostgreSQL
+            Versi 1.0 · dibangun dengan Next.js, Prisma, MySQL
           </footer>
         </div>
       </main>

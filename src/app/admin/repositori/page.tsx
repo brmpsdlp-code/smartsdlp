@@ -42,10 +42,10 @@ export default async function RepositoriRoute({
   const where: Prisma.DokumenWhereInput = {
     ...(q && {
       OR: [
-        { nama: { contains: q, mode: "insensitive" } },
-        { kegiatan: { kode: { contains: q, mode: "insensitive" } } },
-        { kegiatan: { nama: { contains: q, mode: "insensitive" } } },
-        { uploader: { name: { contains: q, mode: "insensitive" } } },
+        { nama: { contains: q } },
+        { kegiatan: { kode: { contains: q } } },
+        { kegiatan: { nama: { contains: q } } },
+        { uploader: { name: { contains: q } } },
       ],
     }),
     ...(kategoriParam && { kategori: kategoriParam as any }),

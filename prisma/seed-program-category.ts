@@ -27,7 +27,7 @@ async function main() {
     const name = kegiatan.programCategory?.trim();
     if (!name) continue;
     const category = await prisma.programCategory.findFirst({
-      where: { name: { equals: name, mode: "insensitive" } },
+      where: { name: { equals: name } },
     });
     if (!category) throw new Error(`Kategori tidak ditemukan untuk ${kegiatan.kode}: ${name}`);
     await prisma.kegiatan.update({

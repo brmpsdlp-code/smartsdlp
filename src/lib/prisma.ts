@@ -1,14 +1,12 @@
 import { PrismaClient } from "@/generated/prisma/client";
-import { PrismaNeon } from "@prisma/adapter-neon";
+import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
 const createPrismaClient = () => {
-  const adapter = new PrismaNeon({
-    connectionString: process.env.DATABASE_URL || "",
-  });
+  const adapter = new PrismaMariaDb(process.env.DATABASE_URL!);
   return new PrismaClient({ adapter });
 };
 

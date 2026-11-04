@@ -32,11 +32,11 @@ export default async function AuditLogRoute({
   const where: Prisma.AuditLogWhereInput = {
     ...(q && {
       OR: [
-        { namaFile: { contains: q, mode: "insensitive" } },
-        { kodeKegiatan: { contains: q, mode: "insensitive" } },
-        { namaKegiatan: { contains: q, mode: "insensitive" } },
-        { pemilikNama: { contains: q, mode: "insensitive" } },
-        { alasan: { contains: q, mode: "insensitive" } },
+        { namaFile: { contains: q } },
+        { kodeKegiatan: { contains: q } },
+        { namaKegiatan: { contains: q } },
+        { pemilikNama: { contains: q } },
+        { alasan: { contains: q } },
       ],
     }),
   };

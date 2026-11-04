@@ -24,7 +24,7 @@ for (const file of files) {
     stdio: "inherit",
     env: {
       ...process.env,
-      DATABASE_URL: process.env.DATABASE_URL ?? "postgresql://u:p@127.0.0.1:1/x",
+      DATABASE_URL: process.env.DATABASE_URL ?? "mysql://u:p@127.0.0.1:1/x",
     },
   });
 }
