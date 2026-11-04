@@ -331,6 +331,7 @@ export type LaporanOrderByWithRelationInput = {
   kegiatan?: Prisma.KegiatanOrderByWithRelationInput
   submittedBy?: Prisma.UserOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
+  _relevance?: Prisma.LaporanOrderByRelevanceInput
 }
 
 export type LaporanWhereUniqueInput = Prisma.AtLeast<{
@@ -523,6 +524,12 @@ export type LaporanListRelationFilter = {
 
 export type LaporanOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type LaporanOrderByRelevanceInput = {
+  fields: Prisma.LaporanOrderByRelevanceFieldEnum | Prisma.LaporanOrderByRelevanceFieldEnum[]
+  sort: Prisma.SortOrder
+  search: string
 }
 
 export type LaporanKegiatanIdPeriodeBulanPeriodeTahunCompoundUniqueInput = {
@@ -1142,45 +1149,7 @@ export type LaporanSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   user?: boolean | Prisma.Laporan$userArgs<ExtArgs>
 }, ExtArgs["result"]["laporan"]>
 
-export type LaporanSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  kegiatanId?: boolean
-  periodeBulan?: boolean
-  periodeTahun?: boolean
-  uraian?: boolean
-  fisik?: boolean
-  statusAnggaran?: boolean
-  realLalu?: boolean
-  realIni?: boolean
-  realisasi?: boolean
-  submittedById?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-  userId?: boolean
-  kegiatan?: boolean | Prisma.KegiatanDefaultArgs<ExtArgs>
-  submittedBy?: boolean | Prisma.Laporan$submittedByArgs<ExtArgs>
-  user?: boolean | Prisma.Laporan$userArgs<ExtArgs>
-}, ExtArgs["result"]["laporan"]>
 
-export type LaporanSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  kegiatanId?: boolean
-  periodeBulan?: boolean
-  periodeTahun?: boolean
-  uraian?: boolean
-  fisik?: boolean
-  statusAnggaran?: boolean
-  realLalu?: boolean
-  realIni?: boolean
-  realisasi?: boolean
-  submittedById?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-  userId?: boolean
-  kegiatan?: boolean | Prisma.KegiatanDefaultArgs<ExtArgs>
-  submittedBy?: boolean | Prisma.Laporan$submittedByArgs<ExtArgs>
-  user?: boolean | Prisma.Laporan$userArgs<ExtArgs>
-}, ExtArgs["result"]["laporan"]>
 
 export type LaporanSelectScalar = {
   id?: boolean
@@ -1201,16 +1170,6 @@ export type LaporanSelectScalar = {
 
 export type LaporanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "kegiatanId" | "periodeBulan" | "periodeTahun" | "uraian" | "fisik" | "statusAnggaran" | "realLalu" | "realIni" | "realisasi" | "submittedById" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["laporan"]>
 export type LaporanInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  kegiatan?: boolean | Prisma.KegiatanDefaultArgs<ExtArgs>
-  submittedBy?: boolean | Prisma.Laporan$submittedByArgs<ExtArgs>
-  user?: boolean | Prisma.Laporan$userArgs<ExtArgs>
-}
-export type LaporanIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  kegiatan?: boolean | Prisma.KegiatanDefaultArgs<ExtArgs>
-  submittedBy?: boolean | Prisma.Laporan$submittedByArgs<ExtArgs>
-  user?: boolean | Prisma.Laporan$userArgs<ExtArgs>
-}
-export type LaporanIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   kegiatan?: boolean | Prisma.KegiatanDefaultArgs<ExtArgs>
   submittedBy?: boolean | Prisma.Laporan$submittedByArgs<ExtArgs>
   user?: boolean | Prisma.Laporan$userArgs<ExtArgs>
@@ -1356,30 +1315,6 @@ export interface LaporanDelegate<ExtArgs extends runtime.Types.Extensions.Intern
   createMany<T extends LaporanCreateManyArgs>(args?: Prisma.SelectSubset<T, LaporanCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
-   * Create many Laporans and returns the data saved in the database.
-   * @param {LaporanCreateManyAndReturnArgs} args - Arguments to create many Laporans.
-   * @example
-   * // Create many Laporans
-   * const laporan = await prisma.laporan.createManyAndReturn({
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Create many Laporans and only return the `id`
-   * const laporanWithIdOnly = await prisma.laporan.createManyAndReturn({
-   *   select: { id: true },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  createManyAndReturn<T extends LaporanCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, LaporanCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LaporanPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-  /**
    * Delete a Laporan.
    * @param {LaporanDeleteArgs} args - Arguments to delete one Laporan.
    * @example
@@ -1442,36 +1377,6 @@ export interface LaporanDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    * 
    */
   updateMany<T extends LaporanUpdateManyArgs>(args: Prisma.SelectSubset<T, LaporanUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
-
-  /**
-   * Update zero or more Laporans and returns the data updated in the database.
-   * @param {LaporanUpdateManyAndReturnArgs} args - Arguments to update many Laporans.
-   * @example
-   * // Update many Laporans
-   * const laporan = await prisma.laporan.updateManyAndReturn({
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Update zero or more Laporans and only return the `id`
-   * const laporanWithIdOnly = await prisma.laporan.updateManyAndReturn({
-   *   select: { id: true },
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  updateManyAndReturn<T extends LaporanUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, LaporanUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LaporanPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one Laporan.
@@ -1916,29 +1821,6 @@ export type LaporanCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * Laporan createManyAndReturn
- */
-export type LaporanCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Laporan
-   */
-  select?: Prisma.LaporanSelectCreateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the Laporan
-   */
-  omit?: Prisma.LaporanOmit<ExtArgs> | null
-  /**
-   * The data used to create many Laporans.
-   */
-  data: Prisma.LaporanCreateManyInput | Prisma.LaporanCreateManyInput[]
-  skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.LaporanIncludeCreateManyAndReturn<ExtArgs> | null
-}
-
-/**
  * Laporan update
  */
 export type LaporanUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1980,36 +1862,6 @@ export type LaporanUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Laporans to update.
    */
   limit?: number
-}
-
-/**
- * Laporan updateManyAndReturn
- */
-export type LaporanUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Laporan
-   */
-  select?: Prisma.LaporanSelectUpdateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the Laporan
-   */
-  omit?: Prisma.LaporanOmit<ExtArgs> | null
-  /**
-   * The data used to update Laporans.
-   */
-  data: Prisma.XOR<Prisma.LaporanUpdateManyMutationInput, Prisma.LaporanUncheckedUpdateManyInput>
-  /**
-   * Filter which Laporans to update
-   */
-  where?: Prisma.LaporanWhereInput
-  /**
-   * Limit how many Laporans to update.
-   */
-  limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.LaporanIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

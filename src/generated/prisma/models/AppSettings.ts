@@ -224,6 +224,7 @@ export type AppSettingsOrderByWithRelationInput = {
   reportDeadlineTime?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  _relevance?: Prisma.AppSettingsOrderByRelevanceInput
 }
 
 export type AppSettingsWhereUniqueInput = Prisma.AtLeast<{
@@ -317,6 +318,12 @@ export type AppSettingsUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type AppSettingsOrderByRelevanceInput = {
+  fields: Prisma.AppSettingsOrderByRelevanceFieldEnum | Prisma.AppSettingsOrderByRelevanceFieldEnum[]
+  sort: Prisma.SortOrder
+  search: string
+}
+
 export type AppSettingsCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   reportDeadlineDay?: Prisma.SortOrder
@@ -367,21 +374,7 @@ export type AppSettingsSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   updatedAt?: boolean
 }, ExtArgs["result"]["appSettings"]>
 
-export type AppSettingsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  reportDeadlineDay?: boolean
-  reportDeadlineTime?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-}, ExtArgs["result"]["appSettings"]>
 
-export type AppSettingsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  reportDeadlineDay?: boolean
-  reportDeadlineTime?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-}, ExtArgs["result"]["appSettings"]>
 
 export type AppSettingsSelectScalar = {
   id?: boolean
@@ -520,30 +513,6 @@ export interface AppSettingsDelegate<ExtArgs extends runtime.Types.Extensions.In
   createMany<T extends AppSettingsCreateManyArgs>(args?: Prisma.SelectSubset<T, AppSettingsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
-   * Create many AppSettings and returns the data saved in the database.
-   * @param {AppSettingsCreateManyAndReturnArgs} args - Arguments to create many AppSettings.
-   * @example
-   * // Create many AppSettings
-   * const appSettings = await prisma.appSettings.createManyAndReturn({
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Create many AppSettings and only return the `id`
-   * const appSettingsWithIdOnly = await prisma.appSettings.createManyAndReturn({
-   *   select: { id: true },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  createManyAndReturn<T extends AppSettingsCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, AppSettingsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AppSettingsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-  /**
    * Delete a AppSettings.
    * @param {AppSettingsDeleteArgs} args - Arguments to delete one AppSettings.
    * @example
@@ -606,36 +575,6 @@ export interface AppSettingsDelegate<ExtArgs extends runtime.Types.Extensions.In
    * 
    */
   updateMany<T extends AppSettingsUpdateManyArgs>(args: Prisma.SelectSubset<T, AppSettingsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
-
-  /**
-   * Update zero or more AppSettings and returns the data updated in the database.
-   * @param {AppSettingsUpdateManyAndReturnArgs} args - Arguments to update many AppSettings.
-   * @example
-   * // Update many AppSettings
-   * const appSettings = await prisma.appSettings.updateManyAndReturn({
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Update zero or more AppSettings and only return the `id`
-   * const appSettingsWithIdOnly = await prisma.appSettings.updateManyAndReturn({
-   *   select: { id: true },
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  updateManyAndReturn<T extends AppSettingsUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, AppSettingsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AppSettingsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one AppSettings.
@@ -1044,25 +983,6 @@ export type AppSettingsCreateManyArgs<ExtArgs extends runtime.Types.Extensions.I
 }
 
 /**
- * AppSettings createManyAndReturn
- */
-export type AppSettingsCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the AppSettings
-   */
-  select?: Prisma.AppSettingsSelectCreateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the AppSettings
-   */
-  omit?: Prisma.AppSettingsOmit<ExtArgs> | null
-  /**
-   * The data used to create many AppSettings.
-   */
-  data: Prisma.AppSettingsCreateManyInput | Prisma.AppSettingsCreateManyInput[]
-  skipDuplicates?: boolean
-}
-
-/**
  * AppSettings update
  */
 export type AppSettingsUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1088,32 +1008,6 @@ export type AppSettingsUpdateArgs<ExtArgs extends runtime.Types.Extensions.Inter
  * AppSettings updateMany
  */
 export type AppSettingsUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * The data used to update AppSettings.
-   */
-  data: Prisma.XOR<Prisma.AppSettingsUpdateManyMutationInput, Prisma.AppSettingsUncheckedUpdateManyInput>
-  /**
-   * Filter which AppSettings to update
-   */
-  where?: Prisma.AppSettingsWhereInput
-  /**
-   * Limit how many AppSettings to update.
-   */
-  limit?: number
-}
-
-/**
- * AppSettings updateManyAndReturn
- */
-export type AppSettingsUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the AppSettings
-   */
-  select?: Prisma.AppSettingsSelectUpdateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the AppSettings
-   */
-  omit?: Prisma.AppSettingsOmit<ExtArgs> | null
   /**
    * The data used to update AppSettings.
    */

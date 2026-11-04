@@ -13,7 +13,7 @@ export async function createProgramCategory(input: { name: string }) {
   try {
     const name = input.name.trim();
     if (!name || name.toLowerCase() === fallback.toLowerCase()) return { success: false, error: "Nama kategori tidak valid." };
-    const exists = await prisma.programCategory.findFirst({ where: { name: { equals: name, mode: "insensitive" } } });
+    const exists = await prisma.programCategory.findFirst({ where: { name: { equals: name } } });
     if (exists) return { success: false, error: "Nama kategori sudah digunakan." };
     const colors = CATEGORY_COLORS.map((color) => color.key);
     const category = await prisma.$transaction(async (tx) => {
@@ -38,7 +38,7 @@ export async function updateProgramCategory(id: string, input: { name: string; s
     const name = input.name.trim();
     const current = await prisma.programCategory.findUnique({ where: { id } });
     if (!current || current.name === fallback || !name || name === fallback) return { success: false, error: "Kategori fallback tidak boleh diubah." };
-    const exists = await prisma.programCategory.findFirst({ where: { name: { equals: name, mode: "insensitive" }, NOT: { id } } });
+    const exists = await prisma.programCategory.findFirst({ where: { name: { equals: name }, NOT: { id } } });
     if (exists) return { success: false, error: "Nama kategori sudah digunakan." };
     await prisma.programCategory.update({ where: { id }, data: { name, sortOrder: input.sortOrder, colorKey: input.colorKey.trim() || "muted", isActive: input.isActive } });
     await recordAdminAudit({ action: "UPDATE_PROGRAM_CATEGORY", adminName: admin.user.name, adminEmail: admin.user.email, alasan: `Kategori: ${name}` });

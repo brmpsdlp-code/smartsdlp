@@ -22,7 +22,7 @@ export const auth = betterAuth({
       ? [configuredOrigin]
       : [configuredOrigin, "http://localhost:3000", "http://127.0.0.1:3000"],
   database: prismaAdapter(prisma, {
-    provider: "postgresql",
+    provider: "mysql",
   }),
   session: {
     expiresIn: 60 * 60 * 12,

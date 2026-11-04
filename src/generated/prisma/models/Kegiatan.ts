@@ -382,6 +382,7 @@ export type KegiatanOrderByWithRelationInput = {
   dokumen?: Prisma.DokumenOrderByRelationAggregateInput
   accessOverrides?: Prisma.ReportAccessOverrideOrderByRelationAggregateInput
   accessRequests?: Prisma.ReportAccessRequestOrderByRelationAggregateInput
+  _relevance?: Prisma.KegiatanOrderByRelevanceInput
 }
 
 export type KegiatanWhereUniqueInput = Prisma.AtLeast<{
@@ -643,6 +644,12 @@ export type KegiatanListRelationFilter = {
 
 export type KegiatanOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type KegiatanOrderByRelevanceInput = {
+  fields: Prisma.KegiatanOrderByRelevanceFieldEnum | Prisma.KegiatanOrderByRelevanceFieldEnum[]
+  sort: Prisma.SortOrder
+  search: string
 }
 
 export type KegiatanCountOrderByAggregateInput = {
@@ -1825,53 +1832,7 @@ export type KegiatanSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   _count?: boolean | Prisma.KegiatanCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["kegiatan"]>
 
-export type KegiatanSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  kode?: boolean
-  nama?: boolean
-  jenis?: boolean
-  programCategory?: boolean
-  programCategoryId?: boolean
-  pagu?: boolean
-  realisasi?: boolean
-  fisik?: boolean
-  uraian?: boolean
-  statusAnggaran?: boolean
-  tahunAnggaran?: boolean
-  realLalu?: boolean
-  realIni?: boolean
-  wajib?: boolean
-  sudahLapor?: boolean
-  pjId?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-  programCategoryRef?: boolean | Prisma.Kegiatan$programCategoryRefArgs<ExtArgs>
-  pj?: boolean | Prisma.Kegiatan$pjArgs<ExtArgs>
-}, ExtArgs["result"]["kegiatan"]>
 
-export type KegiatanSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  kode?: boolean
-  nama?: boolean
-  jenis?: boolean
-  programCategory?: boolean
-  programCategoryId?: boolean
-  pagu?: boolean
-  realisasi?: boolean
-  fisik?: boolean
-  uraian?: boolean
-  statusAnggaran?: boolean
-  tahunAnggaran?: boolean
-  realLalu?: boolean
-  realIni?: boolean
-  wajib?: boolean
-  sudahLapor?: boolean
-  pjId?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-  programCategoryRef?: boolean | Prisma.Kegiatan$programCategoryRefArgs<ExtArgs>
-  pj?: boolean | Prisma.Kegiatan$pjArgs<ExtArgs>
-}, ExtArgs["result"]["kegiatan"]>
 
 export type KegiatanSelectScalar = {
   id?: boolean
@@ -1904,14 +1865,6 @@ export type KegiatanInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   accessOverrides?: boolean | Prisma.Kegiatan$accessOverridesArgs<ExtArgs>
   accessRequests?: boolean | Prisma.Kegiatan$accessRequestsArgs<ExtArgs>
   _count?: boolean | Prisma.KegiatanCountOutputTypeDefaultArgs<ExtArgs>
-}
-export type KegiatanIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  programCategoryRef?: boolean | Prisma.Kegiatan$programCategoryRefArgs<ExtArgs>
-  pj?: boolean | Prisma.Kegiatan$pjArgs<ExtArgs>
-}
-export type KegiatanIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  programCategoryRef?: boolean | Prisma.Kegiatan$programCategoryRefArgs<ExtArgs>
-  pj?: boolean | Prisma.Kegiatan$pjArgs<ExtArgs>
 }
 
 export type $KegiatanPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2062,30 +2015,6 @@ export interface KegiatanDelegate<ExtArgs extends runtime.Types.Extensions.Inter
   createMany<T extends KegiatanCreateManyArgs>(args?: Prisma.SelectSubset<T, KegiatanCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
-   * Create many Kegiatans and returns the data saved in the database.
-   * @param {KegiatanCreateManyAndReturnArgs} args - Arguments to create many Kegiatans.
-   * @example
-   * // Create many Kegiatans
-   * const kegiatan = await prisma.kegiatan.createManyAndReturn({
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Create many Kegiatans and only return the `id`
-   * const kegiatanWithIdOnly = await prisma.kegiatan.createManyAndReturn({
-   *   select: { id: true },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  createManyAndReturn<T extends KegiatanCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, KegiatanCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KegiatanPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-  /**
    * Delete a Kegiatan.
    * @param {KegiatanDeleteArgs} args - Arguments to delete one Kegiatan.
    * @example
@@ -2148,36 +2077,6 @@ export interface KegiatanDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * 
    */
   updateMany<T extends KegiatanUpdateManyArgs>(args: Prisma.SelectSubset<T, KegiatanUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
-
-  /**
-   * Update zero or more Kegiatans and returns the data updated in the database.
-   * @param {KegiatanUpdateManyAndReturnArgs} args - Arguments to update many Kegiatans.
-   * @example
-   * // Update many Kegiatans
-   * const kegiatan = await prisma.kegiatan.updateManyAndReturn({
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Update zero or more Kegiatans and only return the `id`
-   * const kegiatanWithIdOnly = await prisma.kegiatan.updateManyAndReturn({
-   *   select: { id: true },
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  updateManyAndReturn<T extends KegiatanUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, KegiatanUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KegiatanPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one Kegiatan.
@@ -2630,29 +2529,6 @@ export type KegiatanCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
- * Kegiatan createManyAndReturn
- */
-export type KegiatanCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Kegiatan
-   */
-  select?: Prisma.KegiatanSelectCreateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the Kegiatan
-   */
-  omit?: Prisma.KegiatanOmit<ExtArgs> | null
-  /**
-   * The data used to create many Kegiatans.
-   */
-  data: Prisma.KegiatanCreateManyInput | Prisma.KegiatanCreateManyInput[]
-  skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.KegiatanIncludeCreateManyAndReturn<ExtArgs> | null
-}
-
-/**
  * Kegiatan update
  */
 export type KegiatanUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2694,36 +2570,6 @@ export type KegiatanUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many Kegiatans to update.
    */
   limit?: number
-}
-
-/**
- * Kegiatan updateManyAndReturn
- */
-export type KegiatanUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Kegiatan
-   */
-  select?: Prisma.KegiatanSelectUpdateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the Kegiatan
-   */
-  omit?: Prisma.KegiatanOmit<ExtArgs> | null
-  /**
-   * The data used to update Kegiatans.
-   */
-  data: Prisma.XOR<Prisma.KegiatanUpdateManyMutationInput, Prisma.KegiatanUncheckedUpdateManyInput>
-  /**
-   * Filter which Kegiatans to update
-   */
-  where?: Prisma.KegiatanWhereInput
-  /**
-   * Limit how many Kegiatans to update.
-   */
-  limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.KegiatanIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

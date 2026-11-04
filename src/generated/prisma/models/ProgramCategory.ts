@@ -244,6 +244,7 @@ export type ProgramCategoryOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   kegiatan?: Prisma.KegiatanOrderByRelationAggregateInput
+  _relevance?: Prisma.ProgramCategoryOrderByRelevanceInput
 }
 
 export type ProgramCategoryWhereUniqueInput = Prisma.AtLeast<{
@@ -360,6 +361,12 @@ export type ProgramCategoryUncheckedUpdateManyInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ProgramCategoryOrderByRelevanceInput = {
+  fields: Prisma.ProgramCategoryOrderByRelevanceFieldEnum | Prisma.ProgramCategoryOrderByRelevanceFieldEnum[]
+  sort: Prisma.SortOrder
+  search: string
 }
 
 export type ProgramCategoryCountOrderByAggregateInput = {
@@ -520,25 +527,7 @@ export type ProgramCategorySelect<ExtArgs extends runtime.Types.Extensions.Inter
   _count?: boolean | Prisma.ProgramCategoryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["programCategory"]>
 
-export type ProgramCategorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  name?: boolean
-  sortOrder?: boolean
-  colorKey?: boolean
-  isActive?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-}, ExtArgs["result"]["programCategory"]>
 
-export type ProgramCategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  name?: boolean
-  sortOrder?: boolean
-  colorKey?: boolean
-  isActive?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-}, ExtArgs["result"]["programCategory"]>
 
 export type ProgramCategorySelectScalar = {
   id?: boolean
@@ -555,8 +544,6 @@ export type ProgramCategoryInclude<ExtArgs extends runtime.Types.Extensions.Inte
   kegiatan?: boolean | Prisma.ProgramCategory$kegiatanArgs<ExtArgs>
   _count?: boolean | Prisma.ProgramCategoryCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type ProgramCategoryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type ProgramCategoryIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $ProgramCategoryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ProgramCategory"
@@ -689,30 +676,6 @@ export interface ProgramCategoryDelegate<ExtArgs extends runtime.Types.Extension
   createMany<T extends ProgramCategoryCreateManyArgs>(args?: Prisma.SelectSubset<T, ProgramCategoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
-   * Create many ProgramCategories and returns the data saved in the database.
-   * @param {ProgramCategoryCreateManyAndReturnArgs} args - Arguments to create many ProgramCategories.
-   * @example
-   * // Create many ProgramCategories
-   * const programCategory = await prisma.programCategory.createManyAndReturn({
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Create many ProgramCategories and only return the `id`
-   * const programCategoryWithIdOnly = await prisma.programCategory.createManyAndReturn({
-   *   select: { id: true },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  createManyAndReturn<T extends ProgramCategoryCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, ProgramCategoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgramCategoryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-  /**
    * Delete a ProgramCategory.
    * @param {ProgramCategoryDeleteArgs} args - Arguments to delete one ProgramCategory.
    * @example
@@ -775,36 +738,6 @@ export interface ProgramCategoryDelegate<ExtArgs extends runtime.Types.Extension
    * 
    */
   updateMany<T extends ProgramCategoryUpdateManyArgs>(args: Prisma.SelectSubset<T, ProgramCategoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
-
-  /**
-   * Update zero or more ProgramCategories and returns the data updated in the database.
-   * @param {ProgramCategoryUpdateManyAndReturnArgs} args - Arguments to update many ProgramCategories.
-   * @example
-   * // Update many ProgramCategories
-   * const programCategory = await prisma.programCategory.updateManyAndReturn({
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Update zero or more ProgramCategories and only return the `id`
-   * const programCategoryWithIdOnly = await prisma.programCategory.updateManyAndReturn({
-   *   select: { id: true },
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  updateManyAndReturn<T extends ProgramCategoryUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, ProgramCategoryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgramCategoryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one ProgramCategory.
@@ -1240,25 +1173,6 @@ export type ProgramCategoryCreateManyArgs<ExtArgs extends runtime.Types.Extensio
 }
 
 /**
- * ProgramCategory createManyAndReturn
- */
-export type ProgramCategoryCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ProgramCategory
-   */
-  select?: Prisma.ProgramCategorySelectCreateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the ProgramCategory
-   */
-  omit?: Prisma.ProgramCategoryOmit<ExtArgs> | null
-  /**
-   * The data used to create many ProgramCategories.
-   */
-  data: Prisma.ProgramCategoryCreateManyInput | Prisma.ProgramCategoryCreateManyInput[]
-  skipDuplicates?: boolean
-}
-
-/**
  * ProgramCategory update
  */
 export type ProgramCategoryUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1288,32 +1202,6 @@ export type ProgramCategoryUpdateArgs<ExtArgs extends runtime.Types.Extensions.I
  * ProgramCategory updateMany
  */
 export type ProgramCategoryUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * The data used to update ProgramCategories.
-   */
-  data: Prisma.XOR<Prisma.ProgramCategoryUpdateManyMutationInput, Prisma.ProgramCategoryUncheckedUpdateManyInput>
-  /**
-   * Filter which ProgramCategories to update
-   */
-  where?: Prisma.ProgramCategoryWhereInput
-  /**
-   * Limit how many ProgramCategories to update.
-   */
-  limit?: number
-}
-
-/**
- * ProgramCategory updateManyAndReturn
- */
-export type ProgramCategoryUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ProgramCategory
-   */
-  select?: Prisma.ProgramCategorySelectUpdateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the ProgramCategory
-   */
-  omit?: Prisma.ProgramCategoryOmit<ExtArgs> | null
   /**
    * The data used to update ProgramCategories.
    */

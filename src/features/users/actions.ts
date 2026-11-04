@@ -29,7 +29,7 @@ export async function createAdminUser(input: {
   if (!parsed.success)
     return { success: false as const, error: parsed.error.issues[0].message };
   const existing = await prisma.user.findFirst({
-    where: { email: { equals: parsed.data.email, mode: "insensitive" } },
+    where: { email: { equals: parsed.data.email } },
   });
   if (existing)
     return {

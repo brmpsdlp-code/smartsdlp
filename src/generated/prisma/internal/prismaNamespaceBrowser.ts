@@ -325,20 +325,123 @@ export const NullableJsonNullValueInput = {
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
-export const QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
-} as const
-
-export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
-
-
 export const NullsOrder = {
   first: 'first',
   last: 'last'
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const UserOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  image: 'image',
+  nip: 'nip',
+  jabatan: 'jabatan',
+  unitKerja: 'unitKerja'
+} as const
+
+export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
+
+
+export const AuthAttemptOrderByRelevanceFieldEnum = {
+  id: 'id',
+  identifier: 'identifier',
+  kind: 'kind'
+} as const
+
+export type AuthAttemptOrderByRelevanceFieldEnum = (typeof AuthAttemptOrderByRelevanceFieldEnum)[keyof typeof AuthAttemptOrderByRelevanceFieldEnum]
+
+
+export const SessionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  token: 'token',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  userId: 'userId'
+} as const
+
+export type SessionOrderByRelevanceFieldEnum = (typeof SessionOrderByRelevanceFieldEnum)[keyof typeof SessionOrderByRelevanceFieldEnum]
+
+
+export const AccountOrderByRelevanceFieldEnum = {
+  id: 'id',
+  accountId: 'accountId',
+  providerId: 'providerId',
+  userId: 'userId',
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
+  idToken: 'idToken',
+  scope: 'scope',
+  password: 'password',
+  issuer: 'issuer'
+} as const
+
+export type AccountOrderByRelevanceFieldEnum = (typeof AccountOrderByRelevanceFieldEnum)[keyof typeof AccountOrderByRelevanceFieldEnum]
+
+
+export const VerificationOrderByRelevanceFieldEnum = {
+  id: 'id',
+  identifier: 'identifier',
+  value: 'value'
+} as const
+
+export type VerificationOrderByRelevanceFieldEnum = (typeof VerificationOrderByRelevanceFieldEnum)[keyof typeof VerificationOrderByRelevanceFieldEnum]
+
+
+export const AppSettingsOrderByRelevanceFieldEnum = {
+  id: 'id',
+  reportDeadlineTime: 'reportDeadlineTime'
+} as const
+
+export type AppSettingsOrderByRelevanceFieldEnum = (typeof AppSettingsOrderByRelevanceFieldEnum)[keyof typeof AppSettingsOrderByRelevanceFieldEnum]
+
+
+export const ProgramCategoryOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name',
+  colorKey: 'colorKey'
+} as const
+
+export type ProgramCategoryOrderByRelevanceFieldEnum = (typeof ProgramCategoryOrderByRelevanceFieldEnum)[keyof typeof ProgramCategoryOrderByRelevanceFieldEnum]
+
+
+export const KegiatanOrderByRelevanceFieldEnum = {
+  id: 'id',
+  kode: 'kode',
+  nama: 'nama',
+  programCategory: 'programCategory',
+  programCategoryId: 'programCategoryId',
+  uraian: 'uraian',
+  pjId: 'pjId'
+} as const
+
+export type KegiatanOrderByRelevanceFieldEnum = (typeof KegiatanOrderByRelevanceFieldEnum)[keyof typeof KegiatanOrderByRelevanceFieldEnum]
+
+
+export const LaporanOrderByRelevanceFieldEnum = {
+  id: 'id',
+  kegiatanId: 'kegiatanId',
+  uraian: 'uraian',
+  submittedById: 'submittedById',
+  userId: 'userId'
+} as const
+
+export type LaporanOrderByRelevanceFieldEnum = (typeof LaporanOrderByRelevanceFieldEnum)[keyof typeof LaporanOrderByRelevanceFieldEnum]
+
+
+export const NotificationOrderByRelevanceFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  title: 'title',
+  message: 'message',
+  href: 'href'
+} as const
+
+export type NotificationOrderByRelevanceFieldEnum = (typeof NotificationOrderByRelevanceFieldEnum)[keyof typeof NotificationOrderByRelevanceFieldEnum]
 
 
 export const JsonNullValueFilter = {
@@ -348,4 +451,64 @@ export const JsonNullValueFilter = {
 } as const
 
 export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+export const QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+} as const
+
+export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const AuditLogOrderByRelevanceFieldEnum = {
+  id: 'id',
+  action: 'action',
+  namaFile: 'namaFile',
+  kodeKegiatan: 'kodeKegiatan',
+  namaKegiatan: 'namaKegiatan',
+  pemilikNama: 'pemilikNama',
+  pemilikEmail: 'pemilikEmail',
+  adminNama: 'adminNama',
+  adminEmail: 'adminEmail',
+  alasan: 'alasan',
+  notifStatus: 'notifStatus'
+} as const
+
+export type AuditLogOrderByRelevanceFieldEnum = (typeof AuditLogOrderByRelevanceFieldEnum)[keyof typeof AuditLogOrderByRelevanceFieldEnum]
+
+
+export const DokumenOrderByRelevanceFieldEnum = {
+  id: 'id',
+  nama: 'nama',
+  fileUrl: 'fileUrl',
+  fileType: 'fileType',
+  ukuran: 'ukuran',
+  kegiatanId: 'kegiatanId',
+  uploaderId: 'uploaderId'
+} as const
+
+export type DokumenOrderByRelevanceFieldEnum = (typeof DokumenOrderByRelevanceFieldEnum)[keyof typeof DokumenOrderByRelevanceFieldEnum]
+
+
+export const ReportAccessOverrideOrderByRelevanceFieldEnum = {
+  id: 'id',
+  kegiatanId: 'kegiatanId',
+  reason: 'reason',
+  createdById: 'createdById'
+} as const
+
+export type ReportAccessOverrideOrderByRelevanceFieldEnum = (typeof ReportAccessOverrideOrderByRelevanceFieldEnum)[keyof typeof ReportAccessOverrideOrderByRelevanceFieldEnum]
+
+
+export const ReportAccessRequestOrderByRelevanceFieldEnum = {
+  id: 'id',
+  kegiatanId: 'kegiatanId',
+  reason: 'reason',
+  requestedById: 'requestedById',
+  decidedById: 'decidedById',
+  decisionNote: 'decisionNote'
+} as const
+
+export type ReportAccessRequestOrderByRelevanceFieldEnum = (typeof ReportAccessRequestOrderByRelevanceFieldEnum)[keyof typeof ReportAccessRequestOrderByRelevanceFieldEnum]
 

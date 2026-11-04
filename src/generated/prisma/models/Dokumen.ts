@@ -248,6 +248,7 @@ export type DokumenOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   kegiatan?: Prisma.KegiatanOrderByWithRelationInput
   uploader?: Prisma.UserOrderByWithRelationInput
+  _relevance?: Prisma.DokumenOrderByRelevanceInput
 }
 
 export type DokumenWhereUniqueInput = Prisma.AtLeast<{
@@ -407,6 +408,12 @@ export type DokumenListRelationFilter = {
 
 export type DokumenOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type DokumenOrderByRelevanceInput = {
+  fields: Prisma.DokumenOrderByRelevanceFieldEnum | Prisma.DokumenOrderByRelevanceFieldEnum[]
+  sort: Prisma.SortOrder
+  search: string
 }
 
 export type DokumenCountOrderByAggregateInput = {
@@ -782,37 +789,7 @@ export type DokumenSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   uploader?: boolean | Prisma.Dokumen$uploaderArgs<ExtArgs>
 }, ExtArgs["result"]["dokumen"]>
 
-export type DokumenSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  nama?: boolean
-  kategori?: boolean
-  fileUrl?: boolean
-  fileType?: boolean
-  ukuran?: boolean
-  tanggal?: boolean
-  kegiatanId?: boolean
-  uploaderId?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-  kegiatan?: boolean | Prisma.Dokumen$kegiatanArgs<ExtArgs>
-  uploader?: boolean | Prisma.Dokumen$uploaderArgs<ExtArgs>
-}, ExtArgs["result"]["dokumen"]>
 
-export type DokumenSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  nama?: boolean
-  kategori?: boolean
-  fileUrl?: boolean
-  fileType?: boolean
-  ukuran?: boolean
-  tanggal?: boolean
-  kegiatanId?: boolean
-  uploaderId?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-  kegiatan?: boolean | Prisma.Dokumen$kegiatanArgs<ExtArgs>
-  uploader?: boolean | Prisma.Dokumen$uploaderArgs<ExtArgs>
-}, ExtArgs["result"]["dokumen"]>
 
 export type DokumenSelectScalar = {
   id?: boolean
@@ -830,14 +807,6 @@ export type DokumenSelectScalar = {
 
 export type DokumenOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nama" | "kategori" | "fileUrl" | "fileType" | "ukuran" | "tanggal" | "kegiatanId" | "uploaderId" | "createdAt" | "updatedAt", ExtArgs["result"]["dokumen"]>
 export type DokumenInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  kegiatan?: boolean | Prisma.Dokumen$kegiatanArgs<ExtArgs>
-  uploader?: boolean | Prisma.Dokumen$uploaderArgs<ExtArgs>
-}
-export type DokumenIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  kegiatan?: boolean | Prisma.Dokumen$kegiatanArgs<ExtArgs>
-  uploader?: boolean | Prisma.Dokumen$uploaderArgs<ExtArgs>
-}
-export type DokumenIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   kegiatan?: boolean | Prisma.Dokumen$kegiatanArgs<ExtArgs>
   uploader?: boolean | Prisma.Dokumen$uploaderArgs<ExtArgs>
 }
@@ -978,30 +947,6 @@ export interface DokumenDelegate<ExtArgs extends runtime.Types.Extensions.Intern
   createMany<T extends DokumenCreateManyArgs>(args?: Prisma.SelectSubset<T, DokumenCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
-   * Create many Dokumen and returns the data saved in the database.
-   * @param {DokumenCreateManyAndReturnArgs} args - Arguments to create many Dokumen.
-   * @example
-   * // Create many Dokumen
-   * const dokumen = await prisma.dokumen.createManyAndReturn({
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Create many Dokumen and only return the `id`
-   * const dokumenWithIdOnly = await prisma.dokumen.createManyAndReturn({
-   *   select: { id: true },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  createManyAndReturn<T extends DokumenCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, DokumenCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DokumenPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-  /**
    * Delete a Dokumen.
    * @param {DokumenDeleteArgs} args - Arguments to delete one Dokumen.
    * @example
@@ -1064,36 +1009,6 @@ export interface DokumenDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    * 
    */
   updateMany<T extends DokumenUpdateManyArgs>(args: Prisma.SelectSubset<T, DokumenUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
-
-  /**
-   * Update zero or more Dokumen and returns the data updated in the database.
-   * @param {DokumenUpdateManyAndReturnArgs} args - Arguments to update many Dokumen.
-   * @example
-   * // Update many Dokumen
-   * const dokumen = await prisma.dokumen.updateManyAndReturn({
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Update zero or more Dokumen and only return the `id`
-   * const dokumenWithIdOnly = await prisma.dokumen.updateManyAndReturn({
-   *   select: { id: true },
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  updateManyAndReturn<T extends DokumenUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, DokumenUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DokumenPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one Dokumen.
@@ -1534,29 +1449,6 @@ export type DokumenCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * Dokumen createManyAndReturn
- */
-export type DokumenCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Dokumen
-   */
-  select?: Prisma.DokumenSelectCreateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the Dokumen
-   */
-  omit?: Prisma.DokumenOmit<ExtArgs> | null
-  /**
-   * The data used to create many Dokumen.
-   */
-  data: Prisma.DokumenCreateManyInput | Prisma.DokumenCreateManyInput[]
-  skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.DokumenIncludeCreateManyAndReturn<ExtArgs> | null
-}
-
-/**
  * Dokumen update
  */
 export type DokumenUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1598,36 +1490,6 @@ export type DokumenUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Dokumen to update.
    */
   limit?: number
-}
-
-/**
- * Dokumen updateManyAndReturn
- */
-export type DokumenUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Dokumen
-   */
-  select?: Prisma.DokumenSelectUpdateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the Dokumen
-   */
-  omit?: Prisma.DokumenOmit<ExtArgs> | null
-  /**
-   * The data used to update Dokumen.
-   */
-  data: Prisma.XOR<Prisma.DokumenUpdateManyMutationInput, Prisma.DokumenUncheckedUpdateManyInput>
-  /**
-   * Filter which Dokumen to update
-   */
-  where?: Prisma.DokumenWhereInput
-  /**
-   * Limit how many Dokumen to update.
-   */
-  limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.DokumenIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
