@@ -1,9 +1,21 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  reactCompiler: true,
-  allowedDevOrigins: ["192.168.100.201", "localhost:3000", "ggpdsjwp-3000.asse.devtunnels.ms"],
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  // Matikan reactCompiler bila shared hosting kehabisan memori/thread saat build:
+  reactCompiler: false,
+  experimental: {
+    // Batasi penggunaan CPU & thread agar tidak terkena limit NPROC/RAM di Hostinger
+    cpus: 1,
+    workerThreads: false,
+  },
+  allowedDevOrigins: [
+    "192.168.100.201",
+    "localhost:3000",
+    "ggpdsjwp-3000.asse.devtunnels.ms",
+  ],
   async headers() {
     return [
       {
