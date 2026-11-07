@@ -8,6 +8,7 @@ import {
   createDokumenWithFormData,
   deleteDokumen,
 } from "@/features/repositori/actions";
+import { isValidGoogleDriveUrl } from "@/lib/gdrive-url";
 
 export interface DokumenItem {
   id: string;
@@ -126,15 +127,11 @@ export function RepositoriPage({
       return;
     }
 
-    // 2. Validasi Tautan Google Drive
-    const gdrivePattern =
-      /^https?:\/\/(drive\.google\.com\/(file\/d\/|drive\/folders\/|drive\/u\/\d+\/folders\/|open\?id=)|docs\.google\.com\/(document\/d\/|spreadsheets\/d\/|presentation\/d\/|forms\/d\/))[a-zA-Z0-9_-]+/i;
-
     if (!customLink.trim()) {
       toast.error("Tautan Google Drive wajib diisi.");
       return;
     }
-    if (!gdrivePattern.test(customLink.trim())) {
+    if (!isValidGoogleDriveUrl(customLink.trim())) {
       toast.error(
         "Format tautan Google Drive tidak valid! Pastikan diawali dengan https://drive.google.com/file/d/...",
       );
@@ -150,7 +147,6 @@ export function RepositoriPage({
       "kegiatanId",
       newKegiatanId !== "NONE" ? newKegiatanId : "",
     );
-    formData.append("uploadMode", "link");
     formData.append("customLink", customLink.trim());
 
     // 4. Eksekusi Server Action
@@ -209,8 +205,8 @@ export function RepositoriPage({
             Dokumen
           </h2>
           <p className="text-xs text-slate-500 mt-1">
-            Pusat penyimpanan SK, DIPA, Kontrak, Laporan, dan Surat Dinas
-            BRMP SDLP (Terintegrasi Google Drive)
+            Pusat penyimpanan SK, DIPA, Kontrak, Laporan, dan Surat Dinas BRMP
+            SDLP (Terintegrasi Google Drive)
           </p>
         </div>
         <button
@@ -298,7 +294,7 @@ export function RepositoriPage({
               <option value="SK">SK / Surat Tugas</option>
               <option value="DIPA">DIPA / POK</option>
               <option value="KONTRAK">Kontrak / SPK</option>
-                    <option value="LAPORAN">Laporan</option>
+              <option value="LAPORAN">Laporan</option>
               <option value="ESURAT">E-Surat</option>
               <option value="LAINNYA">Lainnya</option>
             </select>
@@ -553,12 +549,14 @@ export function RepositoriPage({
                   customLink.trim(),
                 ) ? (
                   <p className="text-[10.5px] text-rose-600 font-medium">
-                    ⚠️ Tautan tidak valid. Format harus berupa link Google
-                    Drive atau Google Docs resmi.
+                    ⚠️ Tautan tidak valid. Format harus berupa link Google Drive
+                    atau Google Docs resmi.
                   </p>
                 ) : (
                   <p className="text-[10px] text-slate-400">
-                    Contoh: https://drive.google.com/file/d/1a2b3c.../view (Pastikan izin akses dokumen di GDrive disetel &apos;Siapa saja yang memiliki link&apos;)
+                    Contoh: https://drive.google.com/file/d/1a2b3c.../view
+                    (Pastikan izin akses dokumen di GDrive disetel &apos;Siapa
+                    saja yang memiliki link&apos;)
                   </p>
                 )}
               </div>
@@ -600,7 +598,7 @@ export function RepositoriPage({
                     <option value="SK">SK / Surat Tugas</option>
                     <option value="DIPA">DIPA / POK</option>
                     <option value="KONTRAK">Kontrak / SPK</option>
-              <option value="LAPORAN">Laporan</option>
+                    <option value="LAPORAN">Laporan</option>
                     <option value="ESURAT">E-Surat</option>
                     <option value="LAINNYA">Lainnya</option>
                   </select>
@@ -716,4 +714,3 @@ export function RepositoriPage({
     </div>
   );
 }
-
